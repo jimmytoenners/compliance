@@ -2715,6 +2715,10 @@ func (s *Store) GetVendors(ctx context.Context) ([]Vendor, error) {
 		vendors = append(vendors, v)
 	}
 
+	if vendors == nil {
+		vendors = make([]Vendor, 0)
+	}
+
 	return vendors, nil
 }
 
