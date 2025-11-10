@@ -1,6 +1,6 @@
 # GRC Platform - Master Progress
 
-**Last Updated:** 2025-11-10 22:03 CET
+**Last Updated:** 2025-11-10 22:23 CET
 
 ## Overview
 GRC (Governance, Risk & Compliance) Platform with frontend applications and Go backend.
@@ -9,6 +9,97 @@ GRC (Governance, Risk & Compliance) Platform with frontend applications and Go b
 
 ### Completed Tasks
 
+#### 2025-11-10 22:23: Control Standards Library Populated
+- **Expanded seed.go with ISO27001 and NIS-2 Controls**
+  - Added 25 ISO/IEC 27001:2022 controls covering Organizational and Technological Controls
+  - Added 15 NIS-2 Directive controls covering Cybersecurity Risk Management, Reporting Obligations, and Management Responsibility
+  - Existing 21 CIS v8 IG1 controls maintained
+  - **Total: 61 controls** across 3 major compliance frameworks
+  
+- **ISO/IEC 27001:2022 Controls** (25 controls)
+  - **Organizational Controls** (10 controls)
+    - A.5.1: Policies for information security
+    - A.5.2: Information security roles and responsibilities
+    - A.5.3: Segregation of duties
+    - A.5.7: Threat intelligence
+    - A.5.10: Acceptable use of information and other associated assets
+    - A.5.15: Access control
+    - A.5.16: Identity management
+    - A.5.17: Authentication information
+    - A.5.23: Information security for use of cloud services
+    - A.5.30: ICT readiness for business continuity
+  - **Technological Controls** (15 controls)
+    - A.8.1: User endpoint devices
+    - A.8.2: Privileged access rights
+    - A.8.3: Information access restriction
+    - A.8.4: Access to source code
+    - A.8.5: Secure authentication
+    - A.8.9: Configuration management
+    - A.8.10: Information deletion
+    - A.8.11: Data masking
+    - A.8.12: Data leakage prevention
+    - A.8.16: Monitoring activities
+    - A.8.23: Web filtering
+    - A.8.24: Use of cryptography
+    - A.8.28: Secure coding
+    - A.8.31: Separation of development, test and production environments
+    - A.8.34: Protection of information systems during audit testing
+    
+- **NIS-2 Directive Controls** (15 controls)
+  - **Cybersecurity Risk Management** (8 controls)
+    - Art6.1: Risk analysis and information system security policies
+    - Art6.2: Incident handling
+    - Art6.3: Business continuity and crisis management
+    - Art6.4: Supply chain security
+    - Art6.5: Security in network and information systems acquisition, development and maintenance
+    - Art6.6: Policies and procedures for the use of cryptography and encryption
+    - Art6.7: Human resources security, access control policies and asset management
+    - Art6.8: Multi-factor authentication and secured voice, video and text communications
+  - **Reporting Obligations** (4 controls)
+    - Art21.1: Early warning notification (24 hours)
+    - Art21.2: Incident notification (72 hours)
+    - Art21.3: Final report (1 month)
+    - Art21.4: Significant cyber threat reporting
+  - **Management Responsibility** (2 controls)
+    - Art20.1: Management body approval and oversight
+    - Art20.2: Training obligations for management
+  - **Voluntary Information Sharing** (1 control)
+    - Art23.1: Voluntary sharing of cyber threat information
+    
+- **CIS v8 IG1 Controls** (21 controls - existing)
+  - Maintained all existing CIS controls covering:
+    - Inventory and Control of Hardware Assets (CIS-1.x)
+    - Inventory and Control of Software Assets (CIS-2.x)
+    - Data Protection (CIS-3.x)
+    - Access Control Management (CIS-4.x, CIS-6.x)
+    - Account Management (CIS-5.x)
+    - Continuous Vulnerability Management (CIS-7.x)
+    - Audit Log Management (CIS-8.x)
+    - Email and Web Browser Protections (CIS-9.x)
+    - Network Infrastructure Management (CIS-10.x through CIS-13.x)
+    - Secure Configuration (CIS-14.x, CIS-15.x)
+    - Maintenance, Monitoring, and Analysis of Audit Logs (CIS-16.x through CIS-18.x)
+    - Incident Response and Management (CIS-19.x)
+    - Penetration Testing (CIS-20.x)
+    
+- **Database Verification**
+  - ✅ Seeded 61 controls on backend startup
+  - ✅ Database query confirmed: 21 CIS v8 IG1, 25 ISO/IEC 27001:2022, 15 NIS-2 Directive
+  - ✅ All controls inserted with ON CONFLICT DO NOTHING to prevent duplicates
+  - ✅ Controls available via GET /api/v1/controls/library endpoint
+  
+- **Seed Function Enhancement**
+  - Updated SeedControlLibrary() function signature to reflect all 3 standards
+  - Combined all controls into single allControls slice for unified insertion
+  - Enhanced logging to show breakdown by standard: "Successfully seeded 61 controls (21 CIS, 25 ISO27001, 15 NIS-2)"
+  - Maintains backward compatibility with existing CIS controls
+  
+- **Next Steps**
+  - Consider adding more controls from each standard as needed
+  - ISO 27001 has 93 total controls (Annex A) - 25 most critical implemented
+  - NIS-2 has additional technical implementation requirements beyond core articles
+  - CIS has IG2 and IG3 levels for more mature organizations
+  
 #### 2025-11-10 22:03: Vendor Risk Management Module COMPLETE (Priority 6)
 - **Database Schema** (schema.sql)
   - vendors table with comprehensive vendor information (name, category, risk tier, status, contact info, contract dates, owner)
