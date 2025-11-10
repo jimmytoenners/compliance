@@ -1,28 +1,29 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const [customerRef, setCustomerRef] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
+
+  // Check if already authenticated on mount
+  useEffect(() => {
+    const savedRef = localStorage.getItem('customerRef');
+    if (savedRef) {
+      router.push('/tickets');
+    }
+  }, [router]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (customerRef.trim()) {
       // For demo purposes, accept any customer reference
       // In production, this would validate against a customer database
-      setIsAuthenticated(true);
       localStorage.setItem('customerRef', customerRef.trim());
       router.push('/tickets');
     }
   };
-
-  if (isAuthenticated) {
-    router.push('/tickets');
-    return null;
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
