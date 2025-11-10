@@ -2291,9 +2291,8 @@ func (s *ApiServer) HandleCreateVendor(w http.ResponseWriter, r *http.Request) {
 	}
 
 	entityType := "vendor"
-	changes, _ := json.Marshal(vendor)
-	changesStr := string(changes)
-	s.store.LogAudit(r.Context(), &userID, "VENDOR_CREATED", &entityType, &vendor.ID, changesStr, nil)
+	changes := map[string]interface{}{"vendor_id": vendor.ID, "name": vendor.Name, "category": vendor.Category}
+	s.store.LogAudit(r.Context(), &userID, "VENDOR_CREATED", &entityType, &vendor.ID, changes, nil)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
@@ -2336,9 +2335,7 @@ func (s *ApiServer) HandleUpdateVendor(w http.ResponseWriter, r *http.Request) {
 
 	userID := r.Context().Value(UserIDKey).(string)
 	entityType := "vendor"
-	changesJSON, _ := json.Marshal(updates)
-	changesStr := string(changesJSON)
-	s.store.LogAudit(r.Context(), &userID, "VENDOR_UPDATED", &entityType, &id, changesStr, nil)
+	s.store.LogAudit(r.Context(), &userID, "VENDOR_UPDATED", &entityType, &id, updates, nil)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"status": "updated"})
@@ -2353,7 +2350,7 @@ func (s *ApiServer) HandleDeleteVendor(w http.ResponseWriter, r *http.Request) {
 
 	userID := r.Context().Value(UserIDKey).(string)
 	entityType := "vendor"
-	s.store.LogAudit(r.Context(), &userID, "VENDOR_DELETED", &entityType, &id, "", nil)
+	s.store.LogAudit(r.Context(), &userID, "VENDOR_DELETED", &entityType, &id, nil, nil)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"status": "deleted"})
@@ -2389,9 +2386,8 @@ func (s *ApiServer) HandleCreateVendorAssessment(w http.ResponseWriter, r *http.
 	}
 
 	entityType := "vendor_assessment"
-	changes, _ := json.Marshal(assessment)
-	changesStr := string(changes)
-	s.store.LogAudit(r.Context(), &userID, "VENDOR_ASSESSMENT_CREATED", &entityType, &assessment.ID, changesStr, nil)
+	changes := map[string]interface{}{"assessment_id": assessment.ID, "vendor_id": assessment.VendorID, "status": assessment.Status}
+	s.store.LogAudit(r.Context(), &userID, "VENDOR_ASSESSMENT_CREATED", &entityType, &assessment.ID, changes, nil)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
@@ -2438,7 +2434,8 @@ func (s *ApiServer) HandleCreateVendorControlMapping(w http.ResponseWriter, r *h
 
 	userID := r.Context().Value(UserIDKey).(string)
 	entityType := "vendor"
-	s.store.LogAudit(r.Context(), &userID, "VENDOR_CONTROL_MAPPED", &entityType, &mapping.VendorID, mapping.ControlID, nil)
+	changes := map[string]interface{}{"vendor_id": mapping.VendorID, "control_id": mapping.ControlID}
+	s.store.LogAudit(r.Context(), &userID, "VENDOR_CONTROL_MAPPED", &entityType, &mapping.VendorID, changes, nil)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"status": "created"})
@@ -2462,7 +2459,8 @@ func (s *ApiServer) HandleDeleteVendorControlMapping(w http.ResponseWriter, r *h
 
 	userID := r.Context().Value(UserIDKey).(string)
 	entityType := "vendor"
-	s.store.LogAudit(r.Context(), &userID, "VENDOR_CONTROL_UNMAPPED", &entityType, &mapping.VendorID, mapping.ControlID, nil)
+	changes := map[string]interface{}{"vendor_id": mapping.VendorID, "control_id": mapping.ControlID}
+	s.store.LogAudit(r.Context(), &userID, "VENDOR_CONTROL_UNMAPPED", &entityType, &mapping.VendorID, changes, nil)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"status": "deleted"})
