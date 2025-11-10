@@ -45,7 +45,7 @@ export default function TicketsPage() {
 
   const fetchTickets = async (ref: string) => {
     try {
-      const response = await fetch(`http://localhost:8081/api/v1/tickets/external/${ref}`, {
+      const response = await fetch(`http://localhost:8080/api/v1/tickets/external/${ref}`, {
         headers: {
           'X-API-Key': 'test-api-key',
         },
@@ -70,7 +70,7 @@ export default function TicketsPage() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:8081/api/v1/tickets/external', {
+      const response = await fetch('http://localhost:8080/api/v1/tickets/external', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ export default function TicketsPage() {
   const handleViewTicket = async (ticket: Ticket) => {
     setSelectedTicket(ticket);
     try {
-      const response = await fetch(`http://localhost:8081/api/v1/tickets/${ticket.id}`, {
+      const response = await fetch(`http://localhost:8080/api/v1/tickets/${ticket.id}`, {
         headers: {
           'X-API-Key': 'test-api-key',
         },
