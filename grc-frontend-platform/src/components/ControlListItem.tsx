@@ -2,10 +2,11 @@ interface Control {
   id: string;
   name: string;
   description: string;
-  framework: string;
-  activated: boolean;
+  standard: string;
+  family: string;
+  activated?: boolean;
   due_date?: string;
-  status: 'compliant' | 'non-compliant' | 'pending';
+  status?: 'compliant' | 'non-compliant' | 'pending';
 }
 
 interface ControlListItemProps {
@@ -40,15 +41,22 @@ export default function ControlListItem({
         <div className="flex-1">
           <div className="flex items-center space-x-3">
             <h3 className="text-lg font-medium text-gray-900">{control.name}</h3>
-            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(control.status)}`}>
-              {control.status}
-            </span>
+            {control.status && (
+              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(control.status)}`}>
+                {control.status}
+              </span>
+            )}
           </div>
           <p className="mt-2 text-sm text-gray-600">{control.description}</p>
           <div className="mt-3 flex items-center space-x-4 text-sm text-gray-500">
-            <span>Framework: {control.framework}</span>
+            <span className="font-medium text-indigo-600">{control.standard}</span>
+            <span className="text-gray-400">•</span>
+            <span>{control.family}</span>
             {control.due_date && (
-              <span>Due: {new Date(control.due_date).toLocaleDateString()}</span>
+              <>
+                <span className="text-gray-400">•</span>
+                <span>Due: {new Date(control.due_date).toLocaleDateString()}</span>
+              </>
             )}
           </div>
         </div>

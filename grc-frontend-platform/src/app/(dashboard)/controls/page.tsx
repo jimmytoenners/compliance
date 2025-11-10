@@ -10,10 +10,11 @@ interface Control {
   id: string;
   name: string;
   description: string;
-  framework: string;
-  activated: boolean;
+  standard: string; // Changed from framework to match backend
+  family: string;
+  activated?: boolean;
   due_date?: string;
-  status: 'compliant' | 'non-compliant' | 'pending';
+  status?: 'compliant' | 'non-compliant' | 'pending';
   evidence?: Array<{
     id: string;
     description: string;
@@ -79,21 +80,40 @@ export default function ControlsPage() {
   const handleActivate = async (controlId: string) => {
     if (isSubmitting) return; // Prevent concurrent submissions
 
+    // Get current user ID from token (decoded from useAuthStore)
+    const { user } = useAuthStore.getState();
+    if (!user) {
+      alert('User not authenticated');
+      return;
+    }
+
+    // Prompt for review interval
+    const reviewDays = prompt('Enter review interval in days (e.g., 90, 180, 365):', '90');
+    if (!reviewDays || isNaN(parseInt(reviewDays))) {
+      return;
+    }
+
     setIsSubmitting(true);
     try {
-      const response = await fetch(`http://localhost:8080/api/v1/activated`, {
+      const response = await fetch(`http://localhost:8080/api/v1/controls/activated`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ control_id: controlId }),
+        body: JSON.stringify({ 
+          control_library_id: controlId,
+          owner_id: user.id,
+          review_interval_days: parseInt(reviewDays)
+        }),
       });
 
       if (response.ok) {
+        alert('Control activated successfully!');
         await fetchControls(); // Refresh the list
       } else {
-        alert('Failed to activate control. Please try again.');
+        const errorText = await response.text();
+        alert(`Failed to activate control: ${errorText}`);
       }
     } catch (error) {
       console.error('Failed to activate control:', error);

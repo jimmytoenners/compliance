@@ -2,10 +2,11 @@ interface Control {
   id: string;
   name: string;
   description: string;
-  framework: string;
-  activated: boolean;
+  standard: string;
+  family: string;
+  activated?: boolean;
   due_date?: string;
-  status: 'compliant' | 'non-compliant' | 'pending';
+  status?: 'compliant' | 'non-compliant' | 'pending';
   evidence?: Array<{
     id: string;
     description: string;
@@ -44,10 +45,17 @@ export default function ControlDetailsView({
         <div>
           <h2 className="text-2xl font-bold text-gray-900">{control.name}</h2>
           <div className="mt-2 flex items-center space-x-4">
-            <span className="text-sm text-gray-600">Framework: {control.framework}</span>
-            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(control.status)}`}>
-              {control.status}
-            </span>
+            <span className="text-sm font-medium text-indigo-600">{control.standard}</span>
+            <span className="text-gray-400">•</span>
+            <span className="text-sm text-gray-600">{control.family}</span>
+            {control.status && (
+              <>
+                <span className="text-gray-400">•</span>
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(control.status)}`}>
+                  {control.status}
+                </span>
+              </>
+            )}
           </div>
         </div>
         <button
