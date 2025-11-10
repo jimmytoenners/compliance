@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -247,6 +248,206 @@ func (s *ApiServer) HandleGetControlLibrary(w http.ResponseWriter, r *http.Reque
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(controls)
+}
+
+// HandleCreateControlLibraryItem handles POST /api/v1/controls/library (admin only)
+func (s *ApiServer) HandleCreateControlLibraryItem(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Invalid method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	userID, _ := r.Context().Value(UserIDKey).(string)
+
+	var control ControlLibraryItem
+	if err := json.NewDecoder(r.Body).Decode(&control); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	if control.ID == "" || control.Standard == "" || control.Family == "" || control.Name == "" || control.Description == "" {
+		http.Error(w, "Missing required fields", http.StatusBadRequest)
+		return
+	}
+
+	newControl, err := s.store.CreateControlLibraryItem(r.Context(), control)
+	if err != nil {
+		if strings.Contains(err.Error(), "duplicate key") {
+			http.Error(w, "Control ID already exists", http.StatusConflict)
+			return
+		}
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	// Audit log
+	changes := map[string]interface{}{"control_id": control.ID, "standard": control.Standard}
+	entityType := "control_library"
+	s.store.LogAudit(r.Context(), &userID, "CONTROL_LIBRARY_CREATED", &entityType, &newControl.ID, changes, nil)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(newControl)
+}
+
+// HandleUpdateControlLibraryItem handles PUT /api/v1/controls/library/{id} (admin only)
+func (s *ApiServer) HandleUpdateControlLibraryItem(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPut {
+		http.Error(w, "Invalid method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	userID, _ := r.Context().Value(UserIDKey).(string)
+	controlID := strings.TrimPrefix(r.URL.Path, "/api/v1/controls/library/")
+
+	if controlID == "" {
+		http.Error(w, "Missing control ID", http.StatusBadRequest)
+		return
+	}
+
+	var control ControlLibraryItem
+	if err := json.NewDecoder(r.Body).Decode(&control); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	if control.Standard == "" || control.Family == "" || control.Name == "" || control.Description == "" {
+		http.Error(w, "Missing required fields", http.StatusBadRequest)
+		return
+	}
+
+	updated, err := s.store.UpdateControlLibraryItem(r.Context(), controlID, control)
+	if err != nil {
+		if err.Error() == "control not found" {
+			http.Error(w, "Control not found", http.StatusNotFound)
+			return
+		}
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	// Audit log
+	changes := map[string]interface{}{"control_id": controlID, "standard": control.Standard}
+	entityType := "control_library"
+	s.store.LogAudit(r.Context(), &userID, "CONTROL_LIBRARY_UPDATED", &entityType, &updated.ID, changes, nil)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(updated)
+}
+
+// HandleDeleteControlLibraryItem handles DELETE /api/v1/controls/library/{id} (admin only)
+func (s *ApiServer) HandleDeleteControlLibraryItem(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodDelete {
+		http.Error(w, "Invalid method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	userID, _ := r.Context().Value(UserIDKey).(string)
+	controlID := strings.TrimPrefix(r.URL.Path, "/api/v1/controls/library/")
+
+	if controlID == "" {
+		http.Error(w, "Missing control ID", http.StatusBadRequest)
+		return
+	}
+
+	err := s.store.DeleteControlLibraryItem(r.Context(), controlID)
+	if err != nil {
+		if err.Error() == "control not found" {
+			http.Error(w, "Control not found", http.StatusNotFound)
+			return
+		}
+		if strings.Contains(err.Error(), "cannot delete control") {
+			http.Error(w, err.Error(), http.StatusConflict)
+			return
+		}
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	// Audit log
+	changes := map[string]interface{}{"control_id": controlID}
+	entityType := "control_library"
+	s.store.LogAudit(r.Context(), &userID, "CONTROL_LIBRARY_DELETED", &entityType, &controlID, changes, nil)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"status": "deleted"})
+}
+
+// HandleImportControls handles POST /api/v1/controls/library/import (admin only)
+func (s *ApiServer) HandleImportControls(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Invalid method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	userID, _ := r.Context().Value(UserIDKey).(string)
+
+	var req struct {
+		Controls        []ControlLibraryItem `json:"controls"`
+		ReplaceExisting bool                 `json:"replace_existing"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid JSON", http.StatusBadRequest)
+		return
+	}
+
+	if len(req.Controls) == 0 {
+		http.Error(w, "No controls provided", http.StatusBadRequest)
+		return
+	}
+
+	// Validate controls
+	for i, control := range req.Controls {
+		if control.ID == "" || control.Standard == "" || control.Name == "" {
+			http.Error(w, fmt.Sprintf("Invalid control at index %d: missing required fields", i), http.StatusBadRequest)
+			return
+		}
+	}
+
+	count, err := s.store.BulkImportControls(r.Context(), req.Controls, req.ReplaceExisting)
+	if err != nil {
+		http.Error(w, "Import failed: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Audit log
+	changes := map[string]interface{}{
+		"total_controls":    len(req.Controls),
+		"imported_count":    count,
+		"replace_existing": req.ReplaceExisting,
+	}
+	entityType := "control_library"
+	s.store.LogAudit(r.Context(), &userID, "CONTROL_LIBRARY_BULK_IMPORT", &entityType, nil, changes, nil)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"imported_count": count,
+		"total_sent":     len(req.Controls),
+	})
+}
+
+// HandleExportControls handles GET /api/v1/controls/library/export
+func (s *ApiServer) HandleExportControls(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Invalid method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	controls, err := s.store.GetControlLibrary(r.Context())
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Disposition", "attachment; filename=control-library-export.json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"controls":      controls,
+		"exported_at":   time.Now().Format(time.RFC3339),
+		"total_count":   len(controls),
+		"export_version": "1.0",
+	})
 }
 
 // HandleActivatedControls routes GET and POST for /api/v1/controls/activated

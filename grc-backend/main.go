@@ -101,8 +101,15 @@ func main() {
 	protected.HandleFunc("/notifications", apiServer.HandleGetNotifications).Methods("GET", "OPTIONS")
 	protected.HandleFunc("/notifications/{id}/read", apiServer.HandleMarkNotificationAsRead).Methods("POST", "OPTIONS")
 	protected.HandleFunc("/controls/library", apiServer.HandleGetControlLibrary).Methods("GET", "OPTIONS")
+	protected.HandleFunc("/controls/library/export", apiServer.HandleExportControls).Methods("GET", "OPTIONS") // Export controls
 	protected.HandleFunc("/controls/activated", apiServer.HandleActivatedControls).Methods("GET", "OPTIONS")
 	protected.HandleFunc("/controls/activated/{id}", apiServer.HandleSpecificActivatedControl).Methods("GET", "OPTIONS") // GET is for all users
+
+	// Admin-only Control Library Management routes
+	admin.HandleFunc("/controls/library", apiServer.HandleCreateControlLibraryItem).Methods("POST", "OPTIONS")
+	admin.HandleFunc("/controls/library/import", apiServer.HandleImportControls).Methods("POST", "OPTIONS")
+	admin.HandleFunc("/controls/library/{id}", apiServer.HandleUpdateControlLibraryItem).Methods("PUT", "OPTIONS")
+	admin.HandleFunc("/controls/library/{id}", apiServer.HandleDeleteControlLibraryItem).Methods("DELETE", "OPTIONS")
 	protected.HandleFunc("/tickets/internal", apiServer.HandleCreateInternalTicket).Methods("POST", "OPTIONS")
 	protected.HandleFunc("/tickets", apiServer.HandleGetTickets).Methods("GET", "OPTIONS")
 	protected.HandleFunc("/tickets/{id}", apiServer.HandleGetTicket).Methods("GET", "OPTIONS")

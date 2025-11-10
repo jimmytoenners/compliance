@@ -244,6 +244,143 @@ func (s *Store) GetControlLibrary(ctx context.Context) ([]ControlLibraryItem, er
 	return controls, nil
 }
 
+// CreateControlLibraryItem creates a new control in the library
+func (s *Store) CreateControlLibraryItem(ctx context.Context, control ControlLibraryItem) (*ControlLibraryItem, error) {
+	query := `
+		INSERT INTO control_library (id, standard, family, name, description)
+		VALUES ($1, $2, $3, $4, $5)
+		RETURNING id, standard, family, name, description
+	`
+	var newControl ControlLibraryItem
+	err := s.db.QueryRow(ctx, query,
+		control.ID,
+		control.Standard,
+		control.Family,
+		control.Name,
+		control.Description,
+	).Scan(
+		&newControl.ID,
+		&newControl.Standard,
+		&newControl.Family,
+		&newControl.Name,
+		&newControl.Description,
+	)
+	if err != nil {
+		log.Printf("Error inserting control_library: %v", err)
+		return nil, err
+	}
+	return &newControl, nil
+}
+
+// UpdateControlLibraryItem updates an existing control in the library
+func (s *Store) UpdateControlLibraryItem(ctx context.Context, id string, control ControlLibraryItem) (*ControlLibraryItem, error) {
+	query := `
+		UPDATE control_library
+		SET standard = $2, family = $3, name = $4, description = $5
+		WHERE id = $1
+		RETURNING id, standard, family, name, description
+	`
+	var updated ControlLibraryItem
+	err := s.db.QueryRow(ctx, query,
+		id,
+		control.Standard,
+		control.Family,
+		control.Name,
+		control.Description,
+	).Scan(
+		&updated.ID,
+		&updated.Standard,
+		&updated.Family,
+		&updated.Name,
+		&updated.Description,
+	)
+	if err != nil {
+		if err.Error() == "no rows in result set" {
+			return nil, fmt.Errorf("control not found")
+		}
+		log.Printf("Error updating control_library: %v", err)
+		return nil, err
+	}
+	return &updated, nil
+}
+
+// DeleteControlLibraryItem deletes a control from the library
+func (s *Store) DeleteControlLibraryItem(ctx context.Context, id string) error {
+	// Check if control is activated anywhere
+	var count int
+	err := s.db.QueryRow(ctx, "SELECT COUNT(*) FROM activated_controls WHERE control_library_id = $1", id).Scan(&count)
+	if err != nil {
+		log.Printf("Error checking activated_controls: %v", err)
+		return err
+	}
+	if count > 0 {
+		return fmt.Errorf("cannot delete control: it is activated in %d places", count)
+	}
+
+	query := `DELETE FROM control_library WHERE id = $1`
+	result, err := s.db.Exec(ctx, query, id)
+	if err != nil {
+		log.Printf("Error deleting control_library: %v", err)
+		return err
+	}
+	if result.RowsAffected() == 0 {
+		return fmt.Errorf("control not found")
+	}
+	return nil
+}
+
+// BulkImportControls imports multiple controls at once
+func (s *Store) BulkImportControls(ctx context.Context, controls []ControlLibraryItem, replaceExisting bool) (int, error) {
+	tx, err := s.db.Begin(ctx)
+	if err != nil {
+		return 0, err
+	}
+	defer tx.Rollback(ctx)
+
+	insertedCount := 0
+	for _, control := range controls {
+		var query string
+		if replaceExisting {
+			query = `
+				INSERT INTO control_library (id, standard, family, name, description)
+				VALUES ($1, $2, $3, $4, $5)
+				ON CONFLICT (id) DO UPDATE
+				SET standard = EXCLUDED.standard,
+					family = EXCLUDED.family,
+					name = EXCLUDED.name,
+					description = EXCLUDED.description
+			`
+		} else {
+			query = `
+				INSERT INTO control_library (id, standard, family, name, description)
+				VALUES ($1, $2, $3, $4, $5)
+				ON CONFLICT (id) DO NOTHING
+			`
+		}
+
+		result, err := tx.Exec(ctx, query,
+			control.ID,
+			control.Standard,
+			control.Family,
+			control.Name,
+			control.Description,
+		)
+		if err != nil {
+			log.Printf("Error importing control %s: %v", control.ID, err)
+			return 0, err
+		}
+		if result.RowsAffected() > 0 {
+			insertedCount++
+		}
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return 0, err
+	}
+
+	return insertedCount, nil
+}
+
 // ActivateControl inserts a new active control into the database
 func (s *Store) ActivateControl(ctx context.Context, req ActivateControlRequest) (*ActivatedControl, error) {
 	query := `
