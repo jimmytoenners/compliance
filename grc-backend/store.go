@@ -2844,6 +2844,10 @@ func (s *Store) GetVendorAssessments(ctx context.Context, vendorID string) ([]Ve
 		assessments = append(assessments, va)
 	}
 
+	if assessments == nil {
+		assessments = make([]VendorAssessment, 0)
+	}
+
 	return assessments, nil
 }
 
@@ -2870,6 +2874,10 @@ func (s *Store) GetVendorControls(ctx context.Context, vendorID string) ([]Mappe
 			return nil, err
 		}
 		controls = append(controls, mc)
+	}
+
+	if controls == nil {
+		controls = make([]MappedControl, 0)
 	}
 
 	return controls, nil
