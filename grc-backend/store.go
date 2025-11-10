@@ -387,7 +387,7 @@ func (s *Store) ActivateControl(ctx context.Context, req ActivateControlRequest)
 		INSERT INTO activated_controls
 		(control_library_id, owner_id, status, review_interval_days, next_review_due_date)
 		VALUES
-		($1, $2, 'active', $3, CURRENT_DATE + INTERVAL '1 day' * $3)
+		($1, $2, 'active', $3, CURRENT_DATE + ($3 || ' days')::INTERVAL)
 		RETURNING id, control_library_id, owner_id, status, review_interval_days,
 		 last_reviewed_at, next_review_due_date, created_at, updated_at;
 	`
