@@ -1,0 +1,101 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-grc_db}
+      POSTGRES_USER: ${POSTGRES_USER:-grc_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./grc-backend/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./grc-backend/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-grc_user} -d ${POSTGRES_DB:-grc_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - grc-network
+
+  backend:
+    image: grc-backend:latest
+    build:
+      context: ./grc-backend
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-grc_user}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-grc_db}?sslmode=disable
+      JWT_SECRET: ${JWT_SECRET}
+      API_PORT: 8080
+      EXTERNAL_API_KEY: ${EXTERNAL_API_KEY}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+    ports:
+      - "${API_PORT:-8080}:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - grc-network
+
+  frontend-platform:
+    image: grc-frontend-platform:latest
+    build:
+      context: ./grc-frontend-platform
+      dockerfile: Dockerfile
+    environment:
+      NEXT_PUBLIC_API_URL: http://backend:8080/api/v1
+    ports:
+      - "${PLATFORM_PORT:-3000}:3000"
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - grc-network
+
+  frontend-portal:
+    image: grc-frontend-portal:latest
+    build:
+      context: ./grc-frontend-portal
+      dockerfile: Dockerfile
+    environment:
+      NEXT_PUBLIC_API_URL: http://backend:8080/api/v1
+      NEXT_PUBLIC_API_KEY: ${EXTERNAL_API_KEY}
+    ports:
+      - "${PORTAL_PORT:-3001}:3001"
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - grc-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  grc-network:
+    driver: bridge

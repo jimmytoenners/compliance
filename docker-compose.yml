@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: grc_db
+      POSTGRES_USER: grc_user
+      POSTGRES_PASSWORD: grc_password
+    ports:
+      - "5444:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U grc_user -d grc_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./grc-backend
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgres://grc_user:grc_password@db:5432/grc_db?sslmode=disable
+      JWT_SECRET: your-jwt-secret-here
+      API_PORT: 3053
+    ports:
+      - "3053:3053"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./grc-backend:/app
+
+  frontend-platform:
+    build:
+      context: ./grc-frontend-platform
+      dockerfile: Dockerfile
+    ports:
+      - "3040:3040"
+    depends_on:
+      - backend
+
+  frontend-portal:
+    build:
+      context: ./grc-frontend-portal
+      dockerfile: Dockerfile
+    ports:
+      - "3050:3050"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

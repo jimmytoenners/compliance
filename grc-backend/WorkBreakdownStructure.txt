@@ -1,0 +1,389 @@
+﻿Project Work Breakdown Structure & Implementation Plan
+
+
+Project: GRC-Core & ITSM Platform (On-Premise)
+Version: 1.1 (EU Requirements Update)
+________________
+
+
+1. Executive Summary & Estimation Methodology
+
+
+This document outlines the complete work breakdown and implementation plan for building the on-premise GRC & ITSM Platform. The project is structured into distinct phases, designed to be executed by a multi-disciplinary team.
+Estimation Methodology:
+All effort is estimated in man-hours. This is a direct estimate of the time required for a single, qualified professional (e.g., a senior developer, a UX designer) to complete the task.
+It is important to note that estimating software development in hours is inherently complex and subject to change. These estimates are provided for planning and budgeting purposes and represent our professional judgment, not a fixed-price guarantee. The total hours for a phase can be distributed across a team; for example, a 160-hour phase can be completed by two people in two weeks (80 hours each).
+Total Estimated Effort: 1,212 Man-Hours
+________________
+
+
+2. Project Governance & Tooling (Critical Success Factors)
+
+
+Before development begins, a "real plan" requires a framework for management, communication, and quality control.
+* Core Team Roles (Assumed):
+   * Project Manager: Owns the schedule, budget, and this WBS.
+   * Lead Backend Engineer (Go): Owns the API, database, and backend logic.
+   * Lead Frontend Engineer (Next.js): Owns the UI/UX implementation for both internal and external platforms.
+   * UX/UI Designer: Owns the user-flow, wireframes, and high-fidelity mockups.
+   * QA Engineer: Owns the test plan, automation, and bug-tracking.
+* Recommended Toolchain:
+   * Project Management: Jira, Asana, or OpenProject for managing tasks, sprints, and this WBS.
+   * Code Repositories: Bitbucket or GitLab (3 separate repos: grc-backend, grc-frontend-platform, grc-frontend-portal).
+   * API Documentation: Swagger/OpenAPI. The Go backend should auto-generate an openapi.json file to serve as the "contract" for the frontend team.
+   * UI Component Library: Storybook. The Next.js projects should use Storybook to build and document UI components in isolation, ensuring consistency and speeding up development.
+* Project Cadence (Agile):
+   * Sprints: Two-week development cycles.
+   * Meetings: Daily Stand-ups (15 min), Sprint Planning (start of sprint), Sprint Review (end of sprint).
+________________
+
+
+3. Phase 0: Foundation & Project Setup
+
+
+Goal: Establish the technical foundation, development environment, and project standards.
+Total Estimated Effort: 48 Man-Hours
+WBS ID
+	Task
+	Description
+	Effort (Hours)
+	0.1
+	Project Management Setup
+	Configure the Jira/Asana board with all phases and tasks from this WBS.
+	8
+	0.2
+	Version Control Setup
+	Create the three Git repositories. Establish branching strategy (e.g., GitFlow).
+	4
+	0.3
+	CI/CD Pipeline (Initial)
+	Set up a basic CI pipeline (e.g., GitHub Actions) for all 3 repos to run linters and unit tests on commit.
+	12
+	0.4
+	Local Dev Environment
+	Create the master docker-compose.yml for local development (Go, Postgres, 2x Next.js).
+	8
+	0.5
+	API Design Standard
+	Initialize the Swagger/OpenAPI spec. This file will be the "source of truth" for the API.
+	8
+	0.6
+	UI Component Library Setup
+	Install and configure Storybook for both Next.js projects.
+	8
+	________________
+
+
+4. Phase 1: UX/UI Design
+
+
+Goal: Research, design, and validate the complete user experience before a line of UI code is written.
+Total Estimated Effort: 144 Man-Hours
+WBS ID
+	Task
+	Description
+	Effort (Hours)
+	1.1
+	Discovery & User Flows
+	Map the user journeys for the three key roles: Admin, Internal User, and External Customer.
+	24
+	1.2
+	Low-Fidelity Wireframes
+	Create simple, block-level wireframes for every screen defined in the blueprint (Dashboard, GRC List, Control Detail, Evidence Form, Ticket List, Ticket Detail, Portal Submit, Portal List, Doc Editor, Asset Registry, GDPR ROPA, etc.).
+	40
+	1.3
+	High-Fidelity Mockups
+	Develop pixel-perfect mockups (e.g., in Figma) based on the approved wireframes. This is the visual "contract" for the frontend developers.
+	48
+	1.4
+	Component Design System
+	Finalize the atomic components (buttons, inputs, tables, modals) that will be built in Storybook.
+	16
+	1.5
+	Clickable Prototype
+	Link the mockups together to create a clickable prototype for final stakeholder review and usability testing.
+	16
+	________________
+
+
+5. Phase 2: Core Backend & GRC Module
+
+
+Goal: Build the database, authentication, and the core GRC-engine API.
+Total Estimated Effort: 156 Man-Hours
+WBS ID
+	Task
+	Description
+	Effort (Hours)
+	2.1
+	Database Schema Setup
+	Execute the complete PostgreSQL DDL script from the blueprint (Appendix A) in the dev database.
+	8
+	2.2
+	Migration System
+	Integrate golang-migrate. Convert the DDL script into the first 001_initial_schema.up.sql migration file.
+	12
+	2.3
+	Core Auth & RBAC
+	Implement user sign-up/login (JWT-based). Create the core middleware to check for admin vs. user roles and inject user_id into the context.[1]
+	32
+	2.4
+	GRC Backend (API)
+	Implement all Go API endpoints for the GRC module as defined in the blueprint (GET /library, POST/GET /activated, POST /evidence, etc.).[1]
+	64
+	2.5
+	GRC Seeder (CIS)
+	Create a database seeder script to populate the control_library table with the 56 CIS IG1 controls.[1]
+	8
+	2.5.1
+	(New) EU Control Research
+	Research and format the control libraries for NIS 2, eIDAS, and SOC 2 into JSON or CSV files.
+	16
+	2.5.2
+	(New) Update Seeder Logic
+	Update the Go backend startup seeder to read and load all new control files (CIS, NIS 2, eIDAS, SOC 2) into the control_library table.
+	4
+	2.6
+	Testing (Backend)
+	Write unit tests (Go) and integration tests (Go + Test Database) for all GRC API endpoints and business logic.
+	12
+	________________
+
+
+6. Phase 3: Core Frontend (GRC Module)
+
+
+Goal: Build the internal platform's user interface for the GRC module, based on the Phase 1 designs.
+Total Estimated Effort: 112 Man-Hours
+WBS ID
+	Task
+	Description
+	Effort (Hours)
+	3.1
+	Next.js Shell (Platform)
+	Build the main application shell: login page, main navigation, and header.
+	16
+	3.2
+	Auth & State Management
+	Implement login/logout flows. Set up global state management (e.g., Zustand, Redux) for user and auth data.
+	16
+	3.3
+	GRC UI (Components)
+	Build the reusable GRC components (e.g., ControlListItem, EvidenceForm, ControlDetailsView) in Storybook based on mockups.
+	40
+	3.4
+	GRC UI (Integration)
+	Assemble the components into full pages (Dashboard, Control List) and connect them to the Go backend API endpoints.
+	32
+	3.5
+	Testing (Frontend)
+	Write component-level unit tests using Jest and React Testing Library.
+	8
+	________________
+
+
+7. Phase 4: ITSM Module (Backend & Frontend)
+
+
+Goal: Build the complete, two-part ticketing system (internal and external).
+Total Estimated Effort: 200 Man-Hours
+WBS ID
+	Task
+	Description
+	Effort (Hours)
+	4.1
+	Backend (Internal API)
+	Implement all internal ITSM endpoints: POST /tickets/internal, GET /tickets, GET /tickets/{id}, PUT /tickets/{id}, POST /comments.[1]
+	48
+	4.2
+	Backend (External API)
+	Implement the critical POST /tickets/external endpoint. This must include a separate API-key authentication mechanism.
+	24
+	4.3
+	Frontend (Platform UI)
+	Build the internal UI for staff: Ticket list/dashboard, ticket detail view, internal commenting.
+	64
+	4.4
+	Frontend (Portal)
+	Build the entire separate Next.js external portal app: Customer login, "Submit Ticket" form, "My Tickets" list, and comment view (filtering out internal notes).[1]
+	48
+	4.5
+	Testing (All)
+	Write unit/integration tests for the backend APIs and component tests for the new frontend UIs.
+	16
+	________________
+
+
+8. Phase 5: Supporting Modules (Docs & Assets)
+
+
+Goal: Build the "glue" modules that link GRC and ITSM together.
+Total Estimated Effort: 120 Man-Hours
+WBS ID
+	Task
+	Description
+	Effort (Hours)
+	5.1
+	Backend (Assets API)
+	Implement all endpoints for /api/v1/assets and /api/v1/mappings/asset-to-control.[1]
+	24
+	5.2
+	Backend (Documents API)
+	Implement all endpoints for /api/v1/documents, /versions, /acknowledge, and /mappings/document-to-control.[1]
+	32
+	5.3
+	Frontend (Assets UI)
+	Build the UI for the Asset Registry (list, create, edit, delete assets).
+	24
+	5.4
+	Frontend (Documents UI)
+	Build the UI for Document Management (list, rich-text editor, version history, "Read & Acknowledge" workflow).
+	24
+	5.5
+	Frontend (Mapping UI)
+	Build the crucial UI (e.g., in a modal) for linking Documents and Assets to GRC Controls.
+	16
+	________________
+
+
+9. (New) Phase 5.5: GDPR ROPA Module
+
+
+Goal: Build the dedicated register for GDPR Article 30 (Record of Processing Activities).
+Total Estimated Effort: 56 Man-Hours
+WBS ID
+	Task
+	Description
+	Effort (Hours)
+	5.5.1
+	Backend (ROPA API)
+	Implement all admin-only CRUD endpoints for /api/v1/gdpr/ropa (POST, GET, PUT, DELETE/soft-delete).
+	24
+	5.5.2
+	Frontend (ROPA UI)
+	Build the admin-only UI (table view, form) to create, view, update, and archive ROPA records.
+	24
+	5.5.3
+	Testing (ROPA)
+	Write unit/integration tests for the new API and component tests for the new UI.
+	8
+	________________
+
+
+10. Phase 6: Proactive Systems & Integration
+
+
+Goal: Implement the systems that make the platform "smart" and fully audit-ready.
+Total Estimated Effort: 128 Man-Hours
+WBS ID
+	Task
+	Description
+	Effort (Hours)
+	6.1
+	Backend (Audit Log)
+	(Critical Task) Create the audit_log table. Refactor all "write" endpoints (from Phases 2, 4, 5, 5.5) to call a new LogAudit(...) function on every state change.[1]
+	48
+	6.2
+	Backend (Notifications)
+	Create notifications table. Build the background cron job (Go worker) to scan for due controls. Build the GET /notifications API [[1]}.
+	32
+	6.3
+	Backend (Dashboard)
+	Implement the GET /api/v1/dashboard/summary endpoint, including all the complex SQL aggregate queries (COUNT, PERCENT, etc.).[1]
+	24
+	6.4
+	Frontend (Integration)
+	Build the main Dashboard UI (graphs, stats). Add the "Notification Bell" component to the main shell. Build the "Audit Log Viewer" (Admin-only).
+	24
+	________________
+
+
+11. Phase 7: Quality Assurance & E2E Testing
+
+
+Goal: Validate the entire application from a user's perspective and ensure all modules are integrated correctly.
+Total Estimated Effort: 96 Man-Hours
+WBS ID
+	Task
+	Description
+	Effort (Hours)
+	7.1
+	Test Plan Definition
+	Write formal E2E test plans based on the Gherkin user stories from the blueprint.
+	16
+	7.2
+	Automation Setup
+	Select and configure an E2E testing framework. (Recommendation: Playwright for its modern architecture and excellent Next.js support).
+	16
+	7.3
+	E2E Scripting
+	Write automated test scripts for the primary user flows (e.g., "Admin logs in, activates a control, user submits evidence," "Customer submits ticket, admin invalidates it").
+	32
+	7.4
+	Bug Bash & Remediation
+	Perform full, manual exploratory testing of the integrated application. Log all bugs in the project management tool.
+	24
+	7.5
+	Performance Testing
+	Conduct basic load testing (e.g., using k6 or vegeta) against the Go API to identify bottlenecks.
+	8
+	________________
+
+
+12. Phase 8: Packaging & Documentation (On-Premise)
+
+
+Goal: Package the application for customer deployment and write all required documentation.
+Total Estimated Effort: 120 Man-Hours
+WBS ID
+	Task
+	Description
+	Effort (Hours)
+	8.1
+	Production Dockerfiles
+	Create optimized, multi-stage Dockerfiles for production (static Go binary, optimized Next.js builds).
+	24
+	8.2
+	Docker Compose (Prod)
+	Create the final docker-compose.yml for customer deployment.
+	16
+	8.3
+	Configuration & Secrets
+	Ensure 100% of configuration (DB URL, JWT Secret) is handled by an .env file. Create a well-commented .env.example file.
+	16
+	8.4
+	Admin Doc: Install Guide
+	Write the Installation Guide (PDF/Markdown) for the client's IT admin. (Prerequisites, how to set .env, how to run docker compose up).
+	24
+	8.5
+	Admin Doc: Config Guide
+	Write the Configuration Guide (how to set up the first admin user, API keys for the portal, SMTP for notifications).
+	16
+	8.6
+	User Doc: User Manual
+	Write the User Manual for the end-users (Admin, User) explaining how to use the platform's features (GRC, ITSM, etc.).
+	24
+	________________
+
+
+13. Phase 9: Project Handover & Closure
+
+
+Goal: Formally deliver the completed project and transfer knowledge.
+Total Estimated Effort: 32 Man-Hours
+WBS ID
+	Task
+	Description
+	Effort (Hours)
+	9.1
+	Handover Knowledge Transfer
+	Conduct a formal handover session with the client/maintenance team, walking through the architecture, code, and deployment process.
+	16
+	9.2
+	Deliverable Transfer
+	Package and securely transfer all deliverables: final source code, Docker package, and all documentation.
+	8
+	9.3
+	Project Retrospective
+	Conduct an internal team retrospective to document lessons learned for future projects.
+	8

@@ -1,0 +1,1797 @@
+﻿Technical Blueprint: Integrated GRC & ITSM Platform
+
+
+This document constitutes the comprehensive technical specification and system architecture blueprint for the "GRC-Core & ITSM Platform". It is designed to serve as the direct foundation for an AI-agent-based development team and provides an exhaustive definition of the system's architecture, data model, API contracts, and reference implementations for an on-premise, single-tenant product.
+
+
+Part 1: System Architecture and Core Principles
+
+
+This section defines the platform's high-level architecture and the cross-cutting systems fundamental to security and compliance.
+
+
+1.1 Project Goals and Vision
+
+
+The platform's vision is to create a single, unified software system that serves as a central nervous system for compliance, process management, and technical support (ITSM). The system is designed to be a sellable, on-premise product that can be installed for individual clients, guiding them from a "zero point" to a fully audit-ready compliance posture.[1]
+The primary business goals are:
+1. Compliance Automation: To guide an organization in implementing and reporting on recognized compliance standards, specifically ISO 27001 and CIS Controls (Implementation Group 1).[1]
+2. Process Centralization: To act as the "Single Source of Truth" for all internal processes and policies, with a critical focus on Incident Response (IR).[1]
+3. Audit Readiness: To generate all necessary documentation and logs required for an external audit. This is achieved by documenting that processes exist, that processes are followed, that controls exist, and that these controls are verifiably performed.[1]
+4. Secure Case Management: To provide a two-part ITSM system that securely and completely isolates internal cases from external customer cases.[1]
+5. On-Premise Product: The system must be built as a self-contained, installable package (e.g., via Docker) that a client can run on their own infrastructure.
+
+
+1.2 High-Level System Architecture: The Isolated Two-Part System
+
+
+The system will be built as two distinct applications to maximize security. This is the core security principle of the platform.[1]
+1. Platform (Internal): The core system. It handles GRC, documentation, internal tickets, and all admin functions for the organization.
+2. Portal (External): A lightweight application (frontend) that exclusively handles customer-created cases. This application must never have direct access to the internal database.[1]
+3. REST API (The Bridge): The only permitted communication from the Portal (External) to the Platform (Internal) is via a strictly defined and secured REST API. The API is responsible for validating, sanitizing, and securely forwarding case data to the internal ITSM module.[1]
+This C4 system context diagram illustrates this single-tenant, on-premise architecture:
+
+
+Code snippet
+
+
+
+
+C4Context
+   title System Architecture: The Isolated Two-Part System (On-Premise)
+   
+   Enterprise_Boundary(eb_client, "Client's On-Premise Environment") {
+       System_Boundary(sb_platform, "GRC-Core & ITSM Platform (Internal)") {
+           System(platform, "Platform (Internal)", "Next.js Frontend")
+           System(backend, "Go Backend", "REST API, GRC Engine, ITSM Logic")
+           SystemDb(db, "PostgreSQL Database", "Dedicated DB for this installation")
+       }
+
+       Person(admin, "Admin User", "Configures compliance, assigns controls, sees all cases.")
+       Person(user, "Internal User", "Performs control checklists, creates internal cases, reads policies.")
+       
+       Rel(admin, platform, "Uses (HTTPS)")
+       Rel(user, platform, "Uses (HTTPS)")
+       Rel(platform, backend, "Calls (HTTPS/gRPC)")
+       Rel(backend, db, "Reads/Writes (SQL)")
+   }
+
+   Enterprise_Boundary(eb_customer, "Client's Customer") {
+       Person(customer, "External Customer", "Creates and tracks support cases.")
+       System(portal, "Customer Portal (External)", "Next.js Frontend. No direct DB access.")
+
+       Rel(customer, portal, "Uses (HTTPS)")
+       Rel_D(portal, backend, "Only Communication Path (Secured REST API)")
+   }
+
+
+
+1.3 Technical Stack
+
+
+The technical stack for the system is locked in as follows [1]:
+* Backend: Go (Golang)
+* Database: PostgreSQL
+* Frontend (Platform & Portal): Next.js
+All data exchange via the API must use standardized JSON schemas to ensure integrity and interoperability.[1]
+
+
+1.4 Fundamental Principle 1: Audit & Immutability
+
+
+A defining requirement for the platform is that "deleting is forbidden".[1] This is a universal data principle that applies to all modules and is critical for audit readiness.
+* Implementation: Data must never be hard-deleted. Soft-delete mechanisms will be used:
+   * Tickets: Given status invalidated.[1]
+   * Active Controls: Given status inactive.
+   * Document Versions: Given status archived.
+* Evidence (Audit Log): To provide irrefutable proof of all actions, a universal audit_log system will be implemented.[1] This system captures every state change within the platform.
+
+
+Database Model (audit_log)
+
+
+A central audit_log table will be created.[1]
+Column
+	Type
+	Description
+	id
+	UUID
+	Primary Key.
+	performed_at
+	TIMESTAMPTZ
+	Timestamp of the action (automatic NOW()).
+	user_id
+	UUID
+	The user who performed the action (FK to users.id). NULL for system actions.
+	action_type
+	TEXT
+	What happened? E.g., 'USER_LOGIN_FAILURE', 'CONTROL_ACTIVATED', 'TICKET_STATUS_CHANGED'.
+	target_entity_type
+	TEXT
+	What entity type was affected? E.g., 'ticket', 'document', 'activated_control'.
+	target_entity_id
+	TEXT
+	The UUID of the affected entity.
+	changes
+	JSONB
+	Stores "before" and "after" states. E.g., {"old_status": "new", "new_status": "in_progress"}.
+	ip_address
+	INET
+	The IP address from which the request originated.
+	
+
+1.5 Fundamental Principle 2: Access Control (RBAC)
+
+
+The system will enforce a strict Role-Based Access Control (RBAC) model with two defined roles: admin and user.[1]
+
+
+Backend Requirement (Go Middleware)
+
+
+All access to /api/v1/* (except the external API call POST /api/v1/tickets/external) will be validated by a global Go middleware stack:
+1. AuthN Middleware: Validates a JWT from the Authorization header.
+2. Context Injection: Extracts user_id and role from the JWT and places them into the request context (r.Context()) for all subsequent handlers.
+3. If invalid, returns 401 Unauthorized.
+
+
+Permission Matrix [1]
+
+
+All API handlers must enforce these rules by checking the role in the request context.
+Role
+	API Endpoint
+	Action
+	Allowed?
+	Notes
+	admin
+	ALL
+	ALL
+	Yes
+	Full CRUD on all systems.
+	user
+	POST /.../activated/{id}/evidence
+	Create (Evidence)
+	Yes
+	Condition: Only for controls where the user is owner_id.
+	user
+	GET /controls/library
+	Read
+	Yes
+	
+
+	user
+	GET /controls/activated
+	Read
+	Yes
+	
+
+	user
+	POST /controls/activated
+	Create
+	No
+	Return 403 Forbidden. Only 'admin' may activate controls.
+	user
+	POST /documents
+	Create
+	No
+	Return 403 Forbidden. Only 'admin' may create documents.
+	user
+	GET /documents/{id}
+	Read
+	Yes
+	Condition: May only see published versions.
+	user
+	POST /versions/{id}/acknowledge
+	Create (Acknowledge)
+	Yes
+	
+
+	user
+	POST /tickets/internal
+	Create
+	Yes
+	
+
+	user
+	GET /tickets
+	Read
+	Conditional
+	Return only cases where created_by_user_id = 'me' OR assigned_to_user_id = 'me'.
+	portal
+	POST /tickets/external
+	Create
+	Yes
+	Requires separate API-key auth, not user token.
+	portal
+	ALL OTHERS
+	ALL
+	No
+	Return 401 Unauthorized.
+	
+
+Part 2: Complete Database Model (PostgreSQL)
+
+
+This section defines the complete data structure for the single-tenant, on-premise installation. The full, executable DDL script is in Appendix A.
+
+
+2.1 Logical Data Model (Entity-Relationship Diagram)
+
+
+This ER diagram illustrates the logical relationships. All tenant_id columns have been removed.
+
+
+Code snippet
+
+
+
+
+erDiagram
+   users {
+       UUID id PK
+       TEXT email UNIQUE
+       TEXT name
+       TEXT role "'admin' or 'user'"
+   }
+
+   control_library {
+       TEXT id PK "Global, e.g., 'CIS-4.1'"
+       TEXT standard
+       TEXT family
+       TEXT name
+       TEXT description
+   }
+
+   activated_controls {
+       UUID id PK
+       TEXT control_library_id FK "Points to control_library"
+       UUID owner_id FK "Points to users"
+       TEXT status "'active', 'inactive'"
+       INT review_interval_days
+       DATE next_review_due_date
+   }
+
+   control_evidence_log {
+       UUID id PK
+       UUID activated_control_id FK "Points to activated_controls"
+       UUID performed_by_id FK "Points to users"
+       TEXT compliance_status
+       TEXT notes
+       TEXT evidence_link
+   }
+
+   documents {
+       UUID id PK
+       TEXT title
+       UUID owner_id FK "Points to users"
+       UUID published_version_id FK "Points to document_versions"
+   }
+
+   document_versions {
+       UUID id PK
+       UUID document_id FK "Points to documents"
+       INT version_number
+       TEXT body_content
+       TEXT status "'draft', 'published', 'archived'"
+       UUID created_by_user_id FK "Points to users"
+   }
+
+   document_control_mapping {
+       UUID document_id FK "Points to documents"
+       UUID activated_control_id FK "Points to activated_controls"
+   }
+
+   document_read_acknowledgements {
+       UUID document_version_id FK "Points to document_versions"
+       UUID user_id FK "Points to users"
+   }
+
+   assets {
+       UUID id PK
+       TEXT name
+       TEXT asset_type "'Server', 'Software'"
+       UUID owner_id FK "Points to users"
+   }
+
+   asset_control_mapping {
+       UUID asset_id FK "Points to assets"
+       UUID activated_control_id FK "Points to activated_controls"
+   }
+
+   tickets {
+       UUID id PK
+       SERIAL sequential_id UNIQUE "e.g., T-1001"
+       TEXT ticket_type "'internal' or 'external'"
+       TEXT title
+       TEXT status "'new', 'resolved', 'invalidated'"
+       UUID created_by_user_id FK "Points to users (nullable)"
+       UUID assigned_to_user_id FK "Points to users (nullable)"
+       TEXT external_customer_ref "(nullable)"
+       UUID activated_control_id FK "Points to activated_controls (nullable)"
+       UUID document_id FK "Points to documents (nullable)"
+       UUID asset_id FK "Points to assets (nullable)"
+   }
+
+   ticket_comments {
+       UUID id PK
+       UUID ticket_id FK "Points to tickets"
+       TEXT body
+       BOOLEAN is_internal_note "CRITICAL: Hides from customer"
+       UUID comment_by_user_id FK "Points to users (nullable)"
+   }
+
+   notifications {
+       UUID id PK
+       UUID user_id FK "Points to users"
+       TEXT message
+       TEXT link_url
+       BOOLEAN is_read
+   }
+
+   audit_log {
+       UUID id PK
+       UUID user_id FK "Points to users (nullable)"
+       TEXT action_type
+       TEXT target_entity_type
+       TEXT target_entity_id
+       JSONB changes
+   }
+   
+   gdpr_ropa {
+       UUID id PK
+       TEXT activity_name
+       TEXT department
+       TEXT data_controller_details
+       TEXT data_categories
+       TEXT data_subject_categories
+       TEXT recipients
+       TEXT third_country_transfers
+       TEXT retention_period
+       TEXT security_measures
+       TEXT status
+   }
+
+   users |
+
+|--o{ activated_controls : "owns"
+   users |
+
+|--o{ control_evidence_log : "performed"
+   users |
+
+|--o{ documents : "owns"
+   users |
+
+|--o{ document_versions : "created"
+   users |
+
+|--o{ document_read_acknowledgements : "read"
+   users |
+
+|--o{ assets : "owns"
+   users |
+
+|--o{ tickets : "created"
+   users |
+
+|--o{ tickets : "assigned"
+   users |
+
+|--o{ ticket_comments : "commented"
+   users |
+
+|--o{ notifications : "receives"
+   users |
+
+|--o{ audit_log : "performed"
+   
+   control_library |o--o{ activated_controls : "is basis for"
+   
+   activated_controls |
+
+|--o{ control_evidence_log : "has evidence"
+   activated_controls |o--|{ document_control_mapping : "is covered by"
+   activated_controls |o--|{ asset_control_mapping : "applies to"
+   activated_controls |o--o{ tickets : "relates to"
+
+   documents |
+
+|--o{ document_versions : "has version"
+   documents |o--|{ document_control_mapping : "covers"
+   documents |o--o{ tickets : "relates to"
+   
+   document_versions |
+
+|--o{ document_read_acknowledgements : "is acknowledged by"
+   
+   assets |o--|{ asset_control_mapping : "is subject to"
+   assets |o--o{ tickets : "relates to"
+
+   tickets |
+
+|--o{ ticket_comments : "has comment"
+
+
+
+Part 3: Module Specification: GRC (Governance, Risk & Compliance)
+
+
+
+
+3.1 Functional Description
+
+
+This module is the platform's brain and the focal point for all compliance work. It drives the central GRC cycle [1]:
+1. Load: The system is pre-loaded with a global control library (control_library), specifically CIS Controls Implementation Group 1 (56 controls) and the ISO 27001 framework.[1] (See also Part 11 for expansions).
+2. Activate: An 'Admin' user browses the library and activates the controls their company must adhere to. Upon activation, an 'owner' (from the users table) and a review_interval_days are assigned. This creates a record in activated_controls.
+3. Execute & Prove: When a control's next_review_due_date approaches, the system notifies (see Part 7) the owner. The owner performs the required action (e.g., reviews firewall rules) and submits evidence (notes, file links) to the platform.[1]
+4. Report: The system receives this evidence and creates an immutable record in control_evidence_log. It simultaneously updates the corresponding activated_controls record with a new last_reviewed_at and a recalculated next_review_due_date.[1]
+
+
+3.2 API Specification (Go Backend)
+
+
+Method
+	Path
+	Description
+	Role
+	GET
+	/api/v1/controls/library
+	Fetches the master library of available controls.
+	user
+	POST
+	/api/v1/controls/activated
+	Activates a new control from the library.
+	admin
+	GET
+	/api/v1/controls/activated
+	Fetches a list of all actively monitored controls.
+	user
+	PUT
+	/api/v1/controls/activated/{id}
+	Updates an active control (e.g., change owner or interval).
+	admin
+	DELETE
+	/api/v1/controls/activated/{id}
+	Deactivates a control (Soft-delete: SET status = 'inactive').
+	admin
+	GET
+	/api/v1/controls/activated/{id}/evidence
+	Fetches the full evidence history for one specific control.
+	admin
+	POST
+	/api/v1/controls/activated/{id}/evidence
+	Core Action: Submits new evidence for a control.
+	user (owner only)
+	
+
+JSON Schemas (Examples)
+
+
+Request Body for POST /api/v1/controls/activated :
+
+
+JSON
+
+
+
+
+{
+ "control_library_id": "CIS-4.1",
+ "owner_id": "uuid-for-user-a",
+ "review_interval_days": 90
+}
+
+Request Body for POST /api/v1/controls/activated/{id}/evidence :
+
+
+JSON
+
+
+
+
+{
+ "compliance_status": "compliant",
+ "notes": "All password change procedures followed per document 'Password Policy v1.2'. Log file attached.",
+ "evidence_link": "https://[storage-url]/evidence-file-xyz.log"
+}
+
+
+
+3.3 Acceptance Criteria (Gherkin)
+
+
+
+
+Epic 1: GRC Control Library
+
+
+User Story 1.1: Loading of CIS Controls
+* As an Administrator
+* I want the CIS Controls (Implementation Group 1) to be automatically loaded into the control_library table at system startup
+* So that I can immediately begin activating and assigning controls.
+* Acceptance Criteria (Gherkin):
+Gherkin
+Scenario: System starts up for the first time
+ Given a new and empty PostgreSQL database
+ When the Go backend application starts for the first time
+ Then the 'control_library' table in the database must contain all CIS Controls for IG1
+ And each control must have an id, description, family, and standard (e.g., "CIS v8 IG1")
+
+User Story 1.2: Activation and Assignment of a Control
+   * As an Administrator
+   * I want to be able to "activate" a specific control from the library and assign it an owner and a review interval
+   * So that the system knows who is responsible and when the control must be evaluated.
+   * Acceptance Criteria (Gherkin):
+Gherkin
+Scenario: Administrator activates a control
+ Given I am logged in as an 'admin'
+ When I view the list of "Inactive Controls"
+ And I click "Activate" next to "CIS 4.1: Password Management"
+ And I select "User A" as Owner
+ And I set the Interval to "Quarterly"
+ And I press "Save"
+ Then "CIS 4.1" must be moved to the "Active Controls" list
+ And a record must be created in 'activated_controls'
+ And the system must create an 'audit_log' entry for this action
+
+User Story 1.3: Submission of Evidence for a Control
+      * As a Control Owner (a User)
+      * I want to submit evidence that I have performed an assigned control evaluation
+      * So that my action is logged in the system and the control's next review date is updated.
+      * Acceptance Criteria (Gherkin):
+Gherkin
+Scenario: A control owner submits a complete evaluation
+ Given I am logged in as "User A"
+ And I am the 'owner' of the 'activated_control' with ID "act-uuid-123" (for "CIS 4.1")
+ And this control has 'review_interval_days' set to 90
+ When I submit a request to provide evidence for "act-uuid-123"
+ And the request includes 'compliance_status' = "compliant"
+ And the request includes 'notes' = "All password change procedures followed, log file attached."
+ Then the system must create a new row in the 'control_evidence_log' table
+ And this new row must be linked to "act-uuid-123" and my user ID
+ And the system must update the row for "act-uuid-123" in the 'activated_controls' table
+ And its 'last_reviewed_at' field must be set to the current time
+ And its 'next_review_due_date' must be recalculated to (current time + 90 days)
+
+
+
+Part 4: Module Specification: Process & Documentation Management
+
+
+
+
+4.1 Functional Description
+
+
+This module is the organization's central knowledge base and "Single Source of Truth" for all approved processes and policies. Its primary purpose is to create the direct, provable link between an abstract GRC control and the concrete process document that describes how the organization complies with it.[1]
+An auditor can ask: "How do you comply with CIS 10 (Incident Response)?" The answer is found by:
+         1. Looking up "CIS 10" in activated_controls.
+         2. Following the mapping in document_control_mapping to find the "Incident Response Plan" (documents).
+         3. Fetching the published_version_id and displaying the current document from document_versions.
+         4. Showing all acknowledgments from document_read_acknowledgements to prove that all relevant employees have read the plan.
+This module also supports AI-assisted document generation (as requested in the initial discussion [1]) and "Read & Acknowledge" functionality.
+
+
+4.2 API Specification (Go Backend)
+
+
+Method
+	Path
+	Description
+	Role
+	POST
+	/api/v1/documents
+	Creates a new "document container" (e.g., "Password Policy").
+	admin
+	GET
+	/api/v1/documents
+	Fetches a list of all top-level documents.
+	user
+	GET
+	/api/v1/documents/{id}
+	Fetches details and the currently published version of a document.
+	user
+	POST
+	/api/v1/documents/{id}/versions
+	Creates a new 'draft' version of a document.
+	admin
+	PUT
+	/api/v1/documents/{doc_id}/versions/{version_id}/publish
+	Publishes a specific draft, making it the new official version.
+	admin
+	GET
+	/api/v1/documents/{id}/versions
+	Fetches the full version history for a document (for audit).
+	admin
+	POST
+	/api/v1/versions/{id}/acknowledge
+	A 'user' acknowledges they have read a specific version.
+	user
+	POST
+	/api/v1/mappings/document-to-control
+	Critical: Maps a document to an activated_control.
+	admin
+	DELETE
+	/api/v1/mappings/document-to-control
+	Removes a mapping.
+	admin
+	
+
+Part 5: Module Specification: Asset Management
+
+
+
+
+5.1 Functional Description
+
+
+This module is fundamental to achieving real compliance with standards like CIS and ISO 27001.[1] It enables the registration and management of all of the organization's assets (hardware, software, data) in the assets table.
+This module acts as the "glue" between the abstract GRC module and the concrete ITSM module.[1]
+         1. GRC Link: Via the asset_control_mapping table, an activated_control (e.g., "CIS 3.1: Data Protection") can be mapped directly to the assets it covers (e.g., "Production Database").
+         2. ITSM Link: The tickets table is updated with an asset_id (FK). This allows an incident (e.g., a ticket titled "Server down") to be linked directly to the specific asset ("PROD-WEB-01") it affects.
+
+
+5.2 API Specification (Go Backend) [1]
+
+
+Method
+	Path
+	Description
+	Role
+	POST
+	/api/v1/assets
+	Creates a new asset in the registry.
+	admin
+	GET
+	/api/v1/assets
+	Fetches a list of all assets.
+	user
+	GET
+	/api/v1/assets/{id}
+	Fetches details for one asset (incl. linked controls and cases).
+	user
+	PUT
+	/api/v1/assets/{id}
+	Updates an asset's metadata.
+	admin
+	DELETE
+	/api/v1/assets/{id}
+	Soft-delete: Sets the asset's status = 'decommissioned'.
+	admin
+	POST
+	/api/v1/mappings/asset-to-control
+	Maps an asset to an activated_control.
+	admin
+	DELETE
+	/api/v1/mappings/asset-to-control
+	Removes a mapping.
+	admin
+	
+
+Part 6: Module Specification: ITSM & Ticketing System
+
+
+
+
+6.1 Functional Description
+
+
+This module handles all case management and is built on the "Isolated Two-Part System" principle.[1] All cases are stored in the central tickets table.
+         * Logical Separation: The ticket_type ('internal' vs. 'external') field provides logical separation.[1]
+         * External API: The POST /api/v1/tickets/external API is the only source that can create 'external' cases. This endpoint must be secured with an API key, not a user session.[1]
+         * Immutability: Deletion is impossible. A 'DELETE' request (or "Invalidate" button press) must result in an UPDATE setting the case's status = 'invalidated'.[1]
+         * Compliance Integration: The tickets table contains activated_control_id (FK) and asset_id (FK). This allows an "Incident" ticket to be linked directly to the GRC control it violated and the asset it affected.
+         * Secure Communication: The ticket_comments table includes an is_internal_note (boolean) flag. The API layer serving data to the external customer portal must filter and never return comments where this flag is true.
+
+
+6.2 API Specification (Go Backend)
+
+
+Method
+	Path
+	Description
+	Role
+	POST
+	/api/v1/tickets/internal
+	An internal 'user' creates a case (IT support, incident, etc.).
+	user
+	POST
+	/api/v1/tickets/external
+	The external 'portal' creates a customer case.
+	portal (API key)
+	GET
+	/api/v1/tickets
+	Fetches a list of cases (with filters, e.g., ?type=external).
+	user (filtered) / admin (all)
+	GET
+	/api/v1/tickets/{id}
+	Fetches all details for one case (incl. all comments internally).
+	user (limited) / admin (all)
+	PUT
+	/api/v1/tickets/{id}
+	Updates a case (status, assignment, GRC-link, asset-link).
+	admin
+	DELETE
+	/api/v1/tickets/{id}
+	Soft-delete: Sets case status = 'invalidated'.
+	admin
+	POST
+	/api/v1/tickets/{id}/comments
+	Adds a comment (with is_internal_note flag).
+	user / portal
+	
+
+Part 7: Module Specification: Notification & Reporting
+
+
+
+
+7.1 Functional Description
+
+
+This module transforms the platform from a passive registry into a proactive management tool.[1]
+         * Notifications: A background worker (Go cron job) must run periodically (e.g., daily). This worker is responsible for [1]:
+         1. Scanning the activated_controls table for records where status = 'active'.
+         2. For each record, check if next_review_due_date is within the warning window (e.g., NOW() + 7 days).
+         3. If yes, INSERT a new row into the notifications table for the correct owner_id.
+         * Reporting: A simple dashboard API must provide a real-time overview for management.[1]
+
+
+7.2 API Specification (Go Backend) [1]
+
+
+Method
+	Path
+	Description
+	Role
+	GET
+	/api/v1/dashboard/summary
+	Fetches the aggregated data for the management dashboard.
+	admin
+	GET
+	/api/v1/notifications
+	Fetches all unread notifications for the logged-in user (uses user_id from context).
+	user
+	POST
+	/api/v1/notifications/{id}/read
+	Marks a specific notification as is_read = true.
+	user
+	
+
+JSON Response Schema (Dashboard) [1]
+
+
+Response Body for GET /api/v1/dashboard/summary :
+
+
+JSON
+
+
+
+
+{
+ "compliance_score_percent": 85.2, 
+ // Calculation: ((total_active - overdue) / total_active) * 100
+ "controls_total_active": 54, 
+ // Calculation: COUNT(*) FROM activated_controls WHERE status = 'active'
+ "controls_overdue": 3,  
+ // Calculation: COUNT(*) FROM activated_controls WHERE status = 'active' AND next_review_due_date < NOW()
+ "controls_due_soon": 7, 
+ // Calculation: COUNT(*) FROM activated_controls WHERE status = 'active' AND next_review_due_date BETWEEN NOW() AND NOW() + '7 days'
+ "tickets_open_internal": 12, 
+ // Calculation: COUNT(*) FROM tickets WHERE ticket_type = 'internal' AND status IN ('new', 'in_progress')
+ "tickets_open_external": 4, 
+ // Calculation: COUNT(*) FROM tickets WHERE ticket_type = 'external' AND status IN ('new', 'in_progress')
+ "policies_awaiting_acknowledgement": 15 
+ // Calculation: Number of acknowledgments the specific 'user' is missing.
+}
+
+
+
+Part 8: Implementation Plan
+
+
+This outlines a phased implementation plan, structured in sprints, to guide development.
+
+
+Sprint 0: Foundation & Core Setup
+
+
+         * Goal: Establish the core application, database, and authentication.
+         * Tasks:
+         1. Execute the complete PostgreSQL DDL script (Appendix A).
+         2. Implement core authentication:
+         * User sign-up (for the first admin).
+         * User login (issues a JWT).
+         3. Implement the core Go middleware:
+         * AuthN middleware (validates JWT).
+         * Context middleware (extracts user_id, role and injects into r.Context()).
+         4. Implement basic users table API (invite, list, change role).
+
+
+Sprint 1: GRC Core Module
+
+
+         * Goal: Build the GRC cycle.
+         * Tasks:
+         1. Build a database seeder to populate the control_library table with CIS IG1 controls.
+         2. Implement all API endpoints specified in Part 3 (GRC).
+         3. Build the Next.js frontend UI for:
+         * Viewing the control library.
+         * Activating and assigning controls (Admin).
+         * The evidence submission form (User).
+
+
+Sprint 2: ITSM & Ticketing (Internal)
+
+
+         * Goal: Build the internal case management system.
+         * Tasks:
+         1. Implement all API endpoints specified in Part 6 (ITSM) except POST /api/v1/tickets/external.
+         2. Implement API endpoints for ticket comments.
+         3. Build the Next.js frontend UI for:
+         * Creating an internal ticket.
+         * A list/board view of all tickets (Admin).
+         * A detailed ticket view with a comment thread.
+
+
+Sprint 3: External Portal & API
+
+
+         * Goal: Enable customers to submit cases.
+         * Tasks:
+         1. Build the separate, external-facing Next.js "Portal" application.[1]
+         2. Implement POST /api/v1/tickets/external. This endpoint must use API-key authentication.
+         3. Implement external-facing API endpoints for customers to check case status (must filter out is_internal_note = true comments).
+         4. Build the Portal UI (case submission form, "My Cases" list).
+
+
+Sprint 4: Document & Asset Management
+
+
+         * Goal: Integrate process documentation and asset tracking.
+         * Tasks:
+         1. Implement all API endpoints for Part 4 (Documents) and Part 5 (Assets).
+         2. Build the UI for:
+         * Asset registry (CRUD for assets).
+         * Document editor (drafting, publishing, versioning).
+         * Mapping UI: A critical interface to link documents and assets to GRC controls.
+         * "Read & Acknowledge" workflow for users.
+
+
+Sprint 5: Supporting Systems (Audit & Notifications)
+
+
+         * Goal: Make the platform proactive and audit-ready.
+         * Tasks:
+         1. Implement the audit_log system (see Part 1.4).[1]
+         2. Refactor all existing store functions (Sprints 1-4) to call the LogAudit(...) function on every state change.
+         3. Implement the notifications system (see Part 7) [1]:
+         * Build the background worker (cron job).
+         * Build the GET /api/v1/notifications API.
+         * Add the "notification bell" to the frontend UI.
+         4. Implement the GET /api/v1/dashboard/summary API and build the main dashboard UI.
+
+
+Part 9: On-Premise Deployment & Packaging Strategy
+
+
+This section explicitly defines the strategy for packaging and deploying the application as an on-premise solution for customers. The goal is a simple, repeatable installation process.
+
+
+9.1 Packaging Strategy: Docker Compose
+
+
+The entire application will be packaged as a set of Docker containers, orchestrated by a single docker-compose.yml file. This provides a consistent environment and simplifies installation to a single docker compose up command.
+The docker-compose.yml file will define (at minimum) three services:
+         1. backend (Go Application):
+         * Dockerfile: Will compile the Go application into a single static binary and copy it into a minimal alpine or scratch container.
+         * Responsibilities: Runs the API server.
+         2. frontend (Next.js Platform):
+         * Dockerfile: Will build the Next.js application (npm run build) and install the Node.js server to run it (npm run start).
+         * Responsibilities: Serves the internal admin/user platform.
+         3. portal (Next.js Portal):
+         * Dockerfile: A separate Next.js application, built and run in its own container.
+         * Responsibilities: Serves the external customer portal.
+         4. db (PostgreSQL):
+         * Image: Will use the official postgres:latest image.
+         * Responsibilities: Persists all application data. Data will be stored in a Docker volume to ensure persistence across container restarts.
+Note: A reverse proxy (like NGINX) would also be recommended to manage traffic to the frontend and portal on ports 80/443, but is outside this initial scope.
+
+
+9.2 Configuration Management: Environment Variables
+
+
+All installation-specific configuration will be managed via environment variables, adhering to the "Twelve-Factor App" methodology. This avoids hard-coding secrets.
+         * Go Backend: The Go application must read all configuration from environment variables (e.g., DATABASE_URL, JWT_SECRET).
+         * .env File: The customer will configure their installation by editing a single .env file in the same directory as the docker-compose.yml file. This file will supply the variables to the containers.
+         * Secrets: Sensitive values like the DATABASE_PASSWORD and JWT_SECRET will be managed in this .env file. The customer must be instructed to secure this file.
+
+
+9.3 Database Migrations: golang-migrate
+
+
+To manage database schema changes and updates for on-premise installations, a formal migration system is required.
+         * Tool: We will use golang-migrate, a standard tool for this purpose.
+         * Migration Files: Migrations will be written as plain SQL files (e.g., 001_create_users.up.sql, 001_create_users.down.sql) and bundled with the backend application.
+         * Execution Strategy: The Go backend application will be responsible for running its own migrations on startup. This is a robust pattern for on-premise applications as it ensures the database is always in sync with the code.
+         * A startup flag (e.g., go-app -migrate) will be added to the Go application.
+         * The docker-compose.yml file can be configured to run this migration command before starting the main application server, ensuring the database is ready.
+
+
+Part 10: Module Specification: GDPR Record of Processing Activities (ROPA)
+
+
+
+
+10.1 Purpose
+
+
+To fulfill the legal requirement under GDPR Article 30 to maintain a "Record of Processing Activities" (ROPA). This module functions as a separate, dedicated register within the system.
+
+
+10.2 Database Model (PostgreSQL)
+
+
+A new table, gdpr_ropa, must be created.
+
+
+SQL
+
+
+
+
+-- Table for GDPR Article 30 Record of Processing Activities (ROPA)
+CREATE TABLE gdpr_ropa (
+   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+   
+   -- What is the purpose? (e.g., "SaaS Customer Administration")
+   activity_name TEXT NOT NULL, 
+   
+   -- Which department owns the process?
+   department TEXT,
+   
+   -- Who is the Data Controller? (e.g., "Our Company Ltd...")
+   data_controller_details TEXT NOT NULL,
+   
+   -- What types of data are processed? (e.g., 'Name', 'Email', 'IP Address')
+   data_categories TEXT NOT NULL,
+   
+   -- Who are the data subjects? (e.g., 'Customers', 'Employees')
+   data_subject_categories TEXT NOT NULL,
+   
+   -- Who is the data shared with? (e.g., 'AWS', 'Stripe', 'Our Auditor')
+   recipients TEXT,
+   
+   -- Is data transferred outside the EU?
+   third_country_transfers TEXT, -- e.g., "Yes, USA, based on SCCs"
+   
+   -- How long is the data stored?
+   retention_period TEXT, -- e.g., "5 years after end of customer relationship"
+   
+   -- How is the data secured? (Reference to GRC controls)
+   security_measures TEXT, -- e.g., "Encryption, Access Control (see CIS 4.1)"
+   
+   -- Status
+   status TEXT NOT NULL DEFAULT 'draft', -- 'draft', 'active', 'archived'
+   
+   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Set the automatic 'updated_at' trigger
+CREATE TRIGGER set_timestamp
+BEFORE UPDATE ON gdpr_ropa
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();
+
+
+
+10.3 API Specification (Go Backend)
+
+
+A new set of admin-only CRUD endpoints must be created:
+Method
+	Path
+	Description
+	Role
+	POST
+	/api/v1/gdpr/ropa
+	Creates a new processing activity in the record.
+	admin
+	GET
+	/api/v1/gdpr/ropa
+	Fetches the entire list of active processing activities. This is the record to be shown to the Supervisory Authority.
+	admin
+	PUT
+	/api/v1/gdpr/ropa/{id}
+	Updates an existing processing activity.
+	admin
+	DELETE
+	/api/v1/gdpr/ropa/{id}
+	Soft-delete: Sets an activity's status to 'archived'. Must not be physically deleted.
+	admin
+	
+
+Part 11: Module Specification: GRC Module Expansion (Data Population)
+
+
+
+
+11.1 Purpose
+
+
+To expand the existing GRC module (Part 3) to also include the control libraries for NIS 2, eIDAS, and SOC 2, allowing these standards to be part of the central compliance mapping.
+
+
+11.2 Database Model (PostgreSQL)
+
+
+No change. The existing control_library table is already designed to handle this by using the standard column. New rows will simply be added.
+
+
+11.3 Data Population Requirement (Development Task)
+
+
+Data files (JSON or CSV) must be created that contain all control requirements for:
+         * NIS 2: (The 10 minimum requirements for risk management measures).
+         * eIDAS: (The relevant security and technical requirements for PKI/trust services).
+         * SOC 2: (Trust Services Criteria: Security, Availability, Confidentiality, Processing Integrity, Privacy).
+Example Data (JSON):
+
+
+JSON
+
+
+
+
+
+
+
+
+11.4 Backend (Go) Startup Logic Requirement
+
+
+The main.go or store.go file must be updated. The function that currently loads the CIS Controls into control_library at startup must be expanded to also read and load the new data files for NIS 2, eIDAS, and SOC 2. This ensures the GRC module is populated from the start with all necessary standards.
+________________
+
+
+Appendix A: Complete On-Premise PostgreSQL DDL Script
+
+
+This is the complete, executable DDL script to create the entire (single-tenant) database structure.
+
+
+SQL
+
+
+
+
+-- ### 0. PREPARATION ###
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Function to update 'updated_at' timestamps
+CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+ NEW.updated_at = NOW();
+ RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ### 1. GRC & USER TABLES ###
+
+CREATE TABLE users (
+   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+   email TEXT NOT NULL UNIQUE,
+   name TEXT NOT NULL,
+   role TEXT NOT NULL DEFAULT 'user', -- 'user', 'admin'
+   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE TRIGGER set_timestamp BEFORE UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE trigger_set_timestamp();
+
+CREATE TABLE control_library (
+   id TEXT PRIMARY KEY, -- e.g., 'CIS-4.1'
+   standard TEXT NOT NULL, -- e.g., 'CIS v8 IG1'
+   family TEXT NOT NULL, -- e.g., 'Access Control Management'
+   name TEXT NOT NULL, -- e.g., 'Password Management'
+   description TEXT NOT NULL
+);
+
+CREATE TABLE activated_controls (
+   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+   control_library_id TEXT NOT NULL REFERENCES control_library(id),
+   owner_id UUID REFERENCES users(id) ON DELETE SET NULL,
+   status TEXT NOT NULL DEFAULT 'active', -- 'active', 'inactive'
+   review_interval_days INTEGER NOT NULL DEFAULT 90,
+   last_reviewed_at TIMESTAMPTZ,
+   next_review_due_date DATE,
+   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE TRIGGER set_timestamp BEFORE UPDATE ON activated_controls FOR EACH ROW EXECUTE PROCEDURE trigger_set_timestamp();
+
+CREATE TABLE control_evidence_log (
+   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+   activated_control_id UUID NOT NULL REFERENCES activated_controls(id) ON DELETE CASCADE,
+   performed_by_id UUID NOT NULL REFERENCES users(id),
+   performed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+   compliance_status TEXT NOT NULL, -- 'compliant', 'non-compliant'
+   notes TEXT,
+   evidence_link TEXT 
+);
+
+-- ### 2. DOCUMENT & ASSET TABLES ###
+
+CREATE TABLE documents (
+   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+   title TEXT NOT NULL,
+   category TEXT NOT NULL, -- e.g., 'Policy', 'Procedure'
+   owner_id UUID REFERENCES users(id) ON DELETE SET NULL,
+   published_version_id UUID, -- Deferrable FK defined below
+   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE TRIGGER set_timestamp BEFORE UPDATE ON documents FOR EACH ROW EXECUTE PROCEDURE trigger_set_timestamp();
+
+CREATE TABLE document_versions (
+   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+   document_id UUID NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+   version_number INTEGER NOT NULL,
+   body_content TEXT NOT NULL, 
+   change_description TEXT,
+   status TEXT NOT NULL DEFAULT 'draft', -- 'draft', 'published', 'archived'
+   created_by_user_id UUID NOT NULL REFERENCES users(id),
+   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Add the circular foreign key for published version
+ALTER TABLE documents
+ADD CONSTRAINT fk_published_version
+FOREIGN KEY (published_version_id)
+REFERENCES document_versions(id)
+ON DELETE SET NULL
+DEFERRABLE INITIALLY DEFERRED;
+
+CREATE TABLE document_read_acknowledgements (
+   document_version_id UUID NOT NULL REFERENCES document_versions(id) ON DELETE CASCADE,
+   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+   acknowledged_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+   PRIMARY KEY (document_version_id, user_id)
+);
+
+CREATE TABLE assets (
+   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+   name TEXT NOT NULL,
+   asset_type TEXT NOT NULL, -- 'Server', 'Software'
+   owner_id UUID REFERENCES users(id) ON DELETE SET NULL,
+   status TEXT NOT NULL DEFAULT 'active', -- 'active', 'decommissioned'
+   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE TRIGGER set_timestamp BEFORE UPDATE ON assets FOR EACH ROW EXECUTE PROCEDURE trigger_set_timestamp();
+
+-- ### 3. MAPPING & ITSM TABLES ###
+
+CREATE TABLE document_control_mapping (
+   document_id UUID NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+   activated_control_id UUID NOT NULL REFERENCES activated_controls(id) ON DELETE CASCADE,
+   PRIMARY KEY (document_id, activated_control_id)
+);
+
+CREATE TABLE asset_control_mapping (
+   asset_id UUID NOT NULL REFERENCES assets(id) ON DELETE CASCADE,
+   activated_control_id UUID NOT NULL REFERENCES activated_controls(id) ON DELETE CASCADE,
+   PRIMARY KEY (asset_id, activated_control_id)
+);
+
+CREATE TABLE tickets (
+   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+   sequential_id SERIAL UNIQUE, -- Human-readable ID (T-1001)
+   ticket_type TEXT NOT NULL, -- 'internal' or 'external'
+   title TEXT NOT NULL,
+   description TEXT,
+   category TEXT,
+   status TEXT NOT NULL DEFAULT 'new', -- 'new', 'in_progress', 'resolved', 'invalidated'
+   created_by_user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+   assigned_to_user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+   external_customer_ref TEXT,
+   activated_control_id UUID REFERENCES activated_controls(id) ON DELETE SET NULL,
+   document_id UUID REFERENCES documents(id) ON DELETE SET NULL,
+   asset_id UUID REFERENCES assets(id) ON DELETE SET NULL,
+   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+   resolved_at TIMESTAMPTZ
+);
+CREATE TRIGGER set_timestamp BEFORE UPDATE ON tickets FOR EACH ROW EXECUTE PROCEDURE trigger_set_timestamp();
+
+CREATE TABLE ticket_comments (
+   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+   ticket_id UUID NOT NULL REFERENCES tickets(id) ON DELETE CASCADE,
+   body TEXT NOT NULL,
+   is_internal_note BOOLEAN NOT NULL DEFAULT false, -- CRITICAL: Hides from customer
+   comment_by_user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+   external_customer_ref TEXT,
+   created_at TIMESTAMTz NOT NULL DEFAULT NOW()
+);
+
+-- ### 4. SYSTEM TABLES ###
+
+CREATE TABLE audit_log (
+   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+   performed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+   user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+   action_type TEXT NOT NULL, 
+   target_entity_type TEXT, 
+   target_entity_id TEXT,   
+   changes JSONB, 
+   ip_address INET
+);
+
+CREATE TABLE notifications (
+   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+   message TEXT NOT NULL,
+   link_url TEXT, -- e.g., '/controls/activated/uuid-...'
+   is_read BOOLEAN NOT NULL DEFAULT false,
+   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- ### 5. NEW EU COMPLIANCE TABLES (GDPR) ###
+
+CREATE TABLE gdpr_ropa (
+   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+   activity_name TEXT NOT NULL, 
+   department TEXT,
+   data_controller_details TEXT NOT NULL,
+   data_categories TEXT NOT NULL,
+   data_subject_categories TEXT NOT NULL,
+   recipients TEXT,
+   third_country_transfers TEXT,
+   retention_period TEXT,
+   security_measures TEXT,
+   status TEXT NOT NULL DEFAULT 'draft', -- 'draft', 'active', 'archived'
+   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TRIGGER set_timestamp
+BEFORE UPDATE ON gdpr_ropa
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();
+
+________________
+
+
+Appendix B: Go Backend Reference Implementation (On-Premise)
+
+
+This is the reference Go code, removed of all multi-tenancy logic. It is simpler and directly reflects the on-premise model.
+
+
+File: models.go
+
+
+
+
+Go
+
+
+
+
+package main
+
+import (
+        "database/sql"
+        "time"
+)
+
+// ControlLibraryItem represents a row in 'control_library'
+type ControlLibraryItem struct {
+        ID          string `json:"id" db:"id"`
+        Standard    string `json:"standard" db:"standard"`
+        Family      string `json:"family" db:"family"`
+        Name        string `json:"name" db:"name"`
+        Description string `json:"description" db:"description"`
+}
+
+// ActivatedControl represents a row in 'activated_controls'
+type ActivatedControl struct {
+        ID                 string     `json:"id" db:"id"`
+        ControlLibraryID   string     `json:"control_library_id" db:"control_library_id"`
+        OwnerID            string     `json:"owner_id" db:"owner_id"`
+        Status             string     `json:"status" db:"status"`
+        ReviewIntervalDays int        `json:"review_interval_days" db:"review_interval_days"`
+        LastReviewedAt     *time.Time `json:"last_reviewed_at,omitempty" db:"last_reviewed_at"`
+        NextReviewDueDate  time.Time  `json:"next_review_due_date" db:"next_review_due_date"`
+        CreatedAt          time.Time  `json:"created_at" db:"created_at"`
+        UpdatedAt          time.Time  `json:"updated_at" db:"updated_at"`
+}
+
+// ActivateControlRequest is the JSON for activating a new control
+type ActivateControlRequest struct {
+        ControlLibraryID   string `json:"control_library_id"`
+        OwnerID            string `json:"owner_id"`
+        ReviewIntervalDays int    `json:"review_interval_days"`
+}
+
+// ActiveControlListItem is the JOINed view for the list API
+type ActiveControlListItem struct {
+        ID                string         `json:"id" db:"id"`
+        ControlName       string         `json:"control_name" db:"control_name"`
+        ControlID         string         `json:"control_id" db:"control_id"`
+        OwnerName         sql.NullString `json:"owner_name,omitempty" db:"owner_name"`
+        Status            string         `json:"status" db:"status"`
+        NextReviewDueDate time.Time      `json:"next_review_due_date" db:"next_review_due_date"`
+        LastReviewedAt    *time.Time     `json:"last_reviewed_at,omitempty" db:"last_reviewed_at"`
+}
+
+// ControlEvidenceLog represents a row in 'control_evidence_log'
+type ControlEvidenceLog struct {
+        ID                 string    `json:"id" db:"id"`
+        ActivatedControlID string    `json:"activated_control_id" db:"activated_control_id"`
+        PerformedByID      string    `json:"performed_by_id" db:"performed_by_id"`
+        PerformedAt        time.Time `json:"performed_at" db:"performed_at"`
+        ComplianceStatus   string    `json:"compliance_status" db:"compliance_status"`
+        Notes              string    `json:"notes,omitempty" db:"notes"`
+        EvidenceLink       string    `json:"evidence_link,omitempty" db:"evidence_link"`
+}
+
+// SubmitEvidenceRequest is the JSON for submitting evidence
+type SubmitEvidenceRequest struct {
+        ComplianceStatus string `json:"compliance_status"`
+        Notes            string `json:"notes"`
+        EvidenceLink     string `json:"evidence_link,omitempty"`
+}
+
+// Ticket represents a row in 'tickets'
+type Ticket struct {
+        ID                  string         `json:"id" db:"id"`
+        SequentialID        int32          `json:"sequential_id" db:"sequential_id"`
+        TicketType          string         `json:"ticket_type" db:"ticket_type"`
+        Title               string         `json:"title" db:"title"`
+        Description         sql.NullString `json:"description,omitempty" db:"description"`
+        Category            sql.NullString `json:"category,omitempty" db:"category"`
+        Status              string         `json:"status" db:"status"`
+        CreatedByUserID     sql.NullString `json:"created_by_user_id,omitempty" db:"created_by_user_id"`
+        AssignedToUserID    sql.NullString `json:"assigned_to_user_id,omitempty" db:"assigned_to_user_id"`
+        ExternalCustomerRef sql.NullString `json:"external_customer_ref,omitempty" db:"external_customer_ref"`
+        ActivatedControlID  sql.NullString `json:"activated_control_id,omitempty" db:"activated_control_id"`
+        DocumentID          sql.NullString `json:"document_id,omitempty" db:"document_id"`
+   AssetID             sql.NullString `json:"asset_id,omitempty" db:"asset_id"`
+        CreatedAt           time.Time      `json:"created_at" db:"created_at"`
+        UpdatedAt           time.Time      `json:"updated_at" db:"updated_at"`
+        ResolvedAt          sql.NullTime   `json:"resolved_at,omitempty" db:"resolved_at"`
+}
+
+// CreateInternalTicketRequest is the JSON for a new internal ticket
+type CreateInternalTicketRequest struct {
+        Title              string  `json:"title"`
+        Description        *string `json:"description"`
+        Category           *string `json:"category"`
+        ActivatedControlID *string `json:"activated_control_id"`
+        DocumentID         *string `json:"document_id"`
+   AssetID            *string `json:"asset_id"`
+}
+
+
+
+File: store.go
+
+
+
+
+Go
+
+
+
+
+package main
+
+import (
+        "context"
+        "database/sql"
+        "fmt"
+        "log"
+
+        "github.com/jackc/pgx/v5/pgxpool"
+)
+
+// Store holds the database connection pool
+type Store struct {
+        db *pgxpool.Pool
+}
+
+// NewStore creates a new Store
+func NewStore(db *pgxpool.Pool) *Store {
+        return &Store{db: db}
+}
+
+// GetControlLibrary fetches all controls from the master library
+func (s *Store) GetControlLibrary(ctx context.Context) (ControlLibraryItem, error) {
+        query := `
+       SELECT id, standard, family, name, description
+       FROM control_library ORDER BY id;
+   `
+        rows, err := s.db.Query(ctx, query)
+        if err!= nil {
+                log.Printf("Error querying control_library: %v", err)
+                return nil, err
+        }
+        defer rows.Close()
+
+        var controlsControlLibraryItem
+        for rows.Next() {
+                var c ControlLibraryItem
+                if err := rows.Scan(&c.ID, &c.Standard, &c.Family, &c.Name, &c.Description); err!= nil {
+                        log.Printf("Error scanning control_library row: %v", err)
+                        return nil, err
+                }
+                controls = append(controls, c)
+        }
+        if err := rows.Err(); err!= nil {
+                return nil, err
+        }
+        if controls == nil {
+                controls = make(ControlLibraryItem, 0)
+        }
+        return controls, nil
+}
+
+// ActivateControl inserts a new active control into the database
+func (s *Store) ActivateControl(ctx context.Context, req ActivateControlRequest) (*ActivatedControl, error) {
+        query := `
+                INSERT INTO activated_controls
+                (control_library_id, owner_id, status, review_interval_days, next_review_due_date)
+                VALUES
+                ($1, $2, 'active', $3, NOW() + ($3 * '1 day'::interval))
+                RETURNING id, control_library_id, owner_id, status, review_interval_days, 
+                 last_reviewed_at, next_review_due_date, created_at, updated_at;
+   `
+        var newControl ActivatedControl
+        err := s.db.QueryRow(ctx, query,
+                req.ControlLibraryID,
+                req.OwnerID,
+                req.ReviewIntervalDays,
+        ).Scan(
+                &newControl.ID,
+                &newControl.ControlLibraryID,
+                &newControl.OwnerID,
+                &newControl.Status,
+                &newControl.ReviewIntervalDays,
+                &newControl.LastReviewedAt,
+                &newControl.NextReviewDueDate,
+                &newControl.CreatedAt,
+                &newControl.UpdatedAt,
+        )
+        if err!= nil {
+                log.Printf("Error INSERT into activated_controls: %v", err)
+                return nil, err
+        }
+        return &newControl, nil
+}
+
+// GetActiveControlsList fetches a JOINed list of all active controls
+func (s *Store) GetActiveControlsList(ctx context.Context) (ActiveControlListItem, error) {
+        query := `
+                SELECT
+                        ac.id, cl.name AS control_name, ac.control_library_id AS control_id,
+                        u.name AS owner_name, ac.status, ac.next_review_due_date, ac.last_reviewed_at
+                FROM
+                        activated_controls ac
+                LEFT JOIN
+                        control_library cl ON ac.control_library_id = cl.id
+                LEFT JOIN
+                        users u ON ac.owner_id = u.id
+                WHERE
+                        ac.status = 'active'
+                ORDER BY
+                        ac.next_review_due_date ASC;
+   `
+        rows, err := s.db.Query(ctx, query)
+        if err!= nil {
+                log.Printf("Error querying activated_controls (JOIN): %v", err)
+                return nil, err
+        }
+        defer rows.Close()
+
+        var controlsActiveControlListItem
+        for rows.Next() {
+                var c ActiveControlListItem
+                if err := rows.Scan(
+                        &c.ID, &c.ControlName, &c.ControlID, &c.OwnerName,
+                        &c.Status, &c.NextReviewDueDate, &c.LastReviewedAt,
+                ); err!= nil {
+                        log.Printf("Error scanning JOINed activated_controls row: %v", err)
+                        return nil, err
+                }
+                controls = append(controls, c)
+        }
+        if err := rows.Err(); err!= nil {
+                return nil, err
+        }
+        if controls == nil {
+                controls = make(ActiveControlListItem, 0)
+        }
+        return controls, nil
+}
+
+// SubmitControlEvidence runs a transaction to log evidence and update the control
+func (s *Store) SubmitControlEvidence(ctx context.Context, activatedControlID string, userID string, req SubmitEvidenceRequest) (*ControlEvidenceLog, error) {
+        tx, err := s.db.Begin(ctx)
+        if err!= nil {
+                return nil, err
+        }
+        defer tx.Rollback(ctx) 
+
+        var reviewIntervalDays int
+        intervalQuery := "SELECT review_interval_days FROM activated_controls WHERE id = $1"
+        err = tx.QueryRow(ctx, intervalQuery, activatedControlID).Scan(&reviewIntervalDays)
+        if err!= nil {
+                return nil, fmt.Errorf("control with ID %s not found: %w", activatedControlID, err)
+        }
+
+        logQuery := `
+                INSERT INTO control_evidence_log
+                (activated_control_id, performed_by_id, compliance_status, notes, evidence_link)
+                VALUES ($1, $2, $3, $4, $5)
+                RETURNING id, activated_control_id, performed_by_id, performed_at, 
+                 compliance_status, notes, evidence_link;
+   `
+        var newLogEntry ControlEvidenceLog
+        err = tx.QueryRow(ctx, logQuery,
+                activatedControlID, userID, req.ComplianceStatus, req.Notes, req.EvidenceLink,
+        ).Scan(
+                &newLogEntry.ID, &newLogEntry.ActivatedControlID, &newLogEntry.PerformedByID,
+                &newLogEntry.PerformedAt, &newLogEntry.ComplianceStatus, &newLogEntry.Notes, &newLogEntry.EvidenceLink,
+        )
+        if err!= nil {
+                log.Printf("Error INSERT into control_evidence_log: %v", err)
+                return nil, err
+        }
+
+        updateQuery := `
+                UPDATE activated_controls
+                SET last_reviewed_at = NOW(), next_review_due_date = NOW() + ($1 * '1 day'::interval)
+                WHERE id = $2;
+   `
+        _, err = tx.Exec(ctx, updateQuery, reviewIntervalDays, activatedControlID)
+        if err!= nil {
+                log.Printf("Error UPDATE activated_controls: %v", err)
+                return nil, err
+        }
+
+        if err := tx.Commit(ctx); err!= nil {
+                return nil, err
+        }
+        return &newLogEntry, nil
+}
+
+// CreateInternalTicket creates a new internal ticket
+func (s *Store) CreateInternalTicket(ctx context.Context, userID string, req CreateInternalTicketRequest) (*Ticket, error) {
+        query := `
+                INSERT INTO tickets
+                (ticket_type, created_by_user_id, status, title, description, category, activated_control_id, document_id, asset_id)
+                VALUES
+                ('internal', $1, 'new', $2, $3, $4, $5, $6, $7)
+                RETURNING
+                        id, sequential_id, ticket_type, title, description, category, status,
+                        created_by_user_id, assigned_to_user_id, external_customer_ref,
+                        activated_control_id, document_id, asset_id,
+                        created_at, updated_at, resolved_at;
+   `
+        var newTicket Ticket
+        err := s.db.QueryRow(ctx, query,
+                userID,
+                req.Title, req.Description, req.Category,
+                req.ActivatedControlID, req.DocumentID, req.AssetID,
+        ).Scan(
+                &newTicket.ID, &newTicket.SequentialID, &newTicket.TicketType, &newTicket.Title,
+                &newTicket.Description, &newTicket.Category, &newTicket.Status,
+                &newTicket.CreatedByUserID, &newTicket.AssignedToUserID, &newTicket.ExternalCustomerRef,
+                &newTicket.ActivatedControlID, &newTicket.DocumentID, &newTicket.AssetID,
+                &newTicket.CreatedAt, &newTicket.UpdatedAt, &newTicket.ResolvedAt,
+        )
+        if err!= nil {
+                log.Printf("Error INSERT into tickets: %v", err)
+                return nil, err
+        }
+        return &newTicket, nil
+}
+
+
+
+File: handlers.go
+
+
+
+
+Go
+
+
+
+
+package main
+
+import (
+        "encoding/json"
+        "log"
+        "net/http"
+        "strings"
+)
+
+// (Define context keys for auth)
+type contextKey string
+const (
+        UserIDKey contextKey = "userID"
+        RoleKey   contextKey = "role"
+)
+
+// ApiServer holds the store
+type ApiServer struct {
+        store *Store
+}
+func NewApiServer(store *Store) *ApiServer { return &ApiServer{store: store} }
+
+// HandleGetControlLibrary handles GET /api/v1/controls/library
+func (s *ApiServer) HandleGetControlLibrary(w http.ResponseWriter, r *http.Request) {
+        if r.Method!= http.MethodGet {
+                http.Error(w, "Invalid method", http.StatusMethodNotAllowed)
+                return
+        }
+        // (Auth middleware would have run)
+        
+        controls, err := s.store.GetControlLibrary(r.Context())
+        if err!= nil {
+                http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+                return
+        }
+        
+        w.Header().Set("Content-Type", "application/json")
+        json.NewEncoder(w).Encode(controls)
+}
+
+// HandleActivatedControls routes GET and POST for /api/v1/controls/activated
+func (s *ApiServer) HandleActivatedControls(w http.ResponseWriter, r *http.Request) {
+        switch r.Method {
+        case http.MethodGet:
+                s.handleGetActiveControlsList(w, r)
+        case http.MethodPost:
+                s.handleActivateControl(w, r)
+        default:
+                w.Header().Set("Allow", "GET, POST")
+                http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+        }
+}
+
+// handleGetActiveControlsList handles GET
+func (s *ApiServer) handleGetActiveControlsList(w http.ResponseWriter, r *http.Request) {
+        controls, err := s.store.GetActiveControlsList(r.Context())
+        if err!= nil {
+                http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+                return
+        }
+        w.Header().Set("Content-Type", "application/json")
+        json.NewEncoder(w).Encode(controls)
+}
+
+// handleActivateControl handles POST
+func (s *ApiServer) handleActivateControl(w http.ResponseWriter, r *http.Request) {
+        // (Auth: Check role from context - should be 'admin')
+        // role := r.Context().Value(RoleKey).(string)
+        // if role!= "admin" { http.Error(w, "Forbidden", http.StatusForbidden); return }
+        
+        var req ActivateControlRequest
+        if err := json.NewDecoder(r.Body).Decode(&req); err!= nil {
+                http.Error(w, "Invalid request body", http.StatusBadRequest)
+                return
+        }
+        if req.ControlLibraryID == "" |
+
+| req.OwnerID == "" |
+| req.ReviewIntervalDays <= 0 {
+                http.Error(w, "Missing or invalid fields", http.StatusBadRequest)
+                return
+        }
+
+        newControl, err := s.store.ActivateControl(r.Context(), req)
+        if err!= nil {
+                http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+                return
+        }
+   // (TODO: Call audit log)
+        w.Header().Set("Content-Type", "application/json")
+        w.WriteHeader(http.StatusCreated)
+        json.NewEncoder(w).Encode(newControl)
+}
+
+// HandleSpecificActivatedControl routes /.../{id}/...
+func (s *ApiServer) HandleSpecificActivatedControl(w http.ResponseWriter, r *http.Request) {
+        path := strings.TrimPrefix(r.URL.Path, "/api/v1/controls/activated/")
+        parts := strings.Split(path, "/")
+
+        if len(parts) == 0 |
+
+| parts == "" {
+                http.Error(w, "Missing control ID", http.StatusBadRequest)
+                return
+        }
+        controlID := parts
+
+        if len(parts) == 2 && parts[1] == "evidence" {
+                if r.Method == http.MethodPost {
+                        s.handleSubmitControlEvidence(w, r, controlID)
+                        return
+                }
+        }
+        http.Error(w, "Not Found", http.StatusNotFound)
+}
+
+// handleSubmitControlEvidence handles POST /.../{id}/evidence
+func (s *ApiServer) handleSubmitControlEvidence(w http.ResponseWriter, r *http.Request, activatedControlID string) {
+        // (Auth: Get user ID from context)
+        // userID := r.Context().Value(UserIDKey).(string)
+        // (Auth: Check if user is owner or admin)
+        const mockUserID = "00000000-0000-0000-0000-000000000001" // Placeholder
+
+        var req SubmitEvidenceRequest
+        if err := json.NewDecoder(r.Body).Decode(&req); err!= nil {
+                http.Error(w, "Invalid request body", http.StatusBadRequest)
+                return
+        }
+        if req.ComplianceStatus == "" |
+
+| req.Notes == "" {
+                http.Error(w, "Missing fields (compliance_status, notes)", http.StatusBadRequest)
+                return
+        }
+
+        newLogEntry, err := s.store.SubmitControlEvidence(r.Context(), activatedControlID, mockUserID, req)
+        if err!= nil {
+                if err.Error() == "control not found" {
+                        http.Error(w, err.Error(), http.StatusNotFound)
+                        return
+                }
+                http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+                return
+        }
+   // (TODO: Call audit log)
+        w.Header().Set("Content-Type", "application/json")
+        w.WriteHeader(http.StatusCreated)
+        json.NewEncoder(w).Encode(newLogEntry)
+}
+
+// HandleCreateInternalTicket handles POST /api/v1/tickets/internal
+func (s *ApiServer) HandleCreateInternalTicket(w http.ResponseWriter, r *http.Request) {
+        if r.Method!= http.MethodPost {
+                http.Error(w, "Invalid method", http.StatusMethodNotAllowed)
+                return
+        }
+        
+        // (Auth: Get user ID from context)
+        // userID := r.Context().Value(UserIDKey).(string)
+        const mockUserID = "00000000-0000-0000-0000-000000000001" // Placeholder
+
+        var req CreateInternalTicketRequest
+        if err := json.NewDecoder(r.Body).Decode(&req); err!= nil {
+                http.Error(w, "Invalid request body", http.StatusBadRequest)
+                return
+        }
+        if req.Title == "" {
+                http.Error(w, "Field 'title' is required", http.StatusBadRequest)
+                return
+        }
+
+        newTicket, err := s.store.CreateInternalTicket(r.Context(), mockUserID, req)
+        if err!= nil {
+                http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+                return
+        }
+   // (TODO: Call audit log)
+        w.Header().Set("Content-Type", "application/json")
+        w.WriteHeader(http.StatusCreated)
+        json.NewEncoder(w).Encode(newTicket)
+}
