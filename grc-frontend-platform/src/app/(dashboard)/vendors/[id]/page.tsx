@@ -57,6 +57,11 @@ export default function VendorDetailPage() {
   const [assessments, setAssessments] = useState<Assessment[]>([]);
   const [controls, setControls] = useState<Control[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [editForm, setEditForm] = useState({
+    contact_name: "",
+    contact_email: "",
+  });
   const [form, setForm] = useState({
     overall_risk_score: 0,
     data_security_score: 0,
@@ -110,6 +115,31 @@ export default function VendorDetailPage() {
     } catch {}
   };
 
+  const updateVendor = async () => {
+    try {
+      const res = await fetch(`http://localhost:8080/api/v1/vendors/${params.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(editForm),
+      });
+      if (res.ok) {
+        setEditMode(false);
+        fetchData();
+      }
+    } catch {}
+  };
+
+  const startEdit = () => {
+    setEditForm({
+      contact_name: vendor?.contact_name || "",
+      contact_email: vendor?.contact_email || "",
+    });
+    setEditMode(true);
+  };
+
   if (!vendor) return <div>Loading...</div>;
 
   return (
@@ -122,13 +152,48 @@ export default function VendorDetailPage() {
       <div className="grid md:grid-cols-2 gap-4">
         <Card>
           <CardHeader>
-            <CardTitle>Vendor Information</CardTitle>
+            <div className="flex justify-between items-center">
+              <CardTitle>Vendor Information</CardTitle>
+              {!editMode && (
+                <Button size="sm" variant="outline" onClick={startEdit}>
+                  Edit Contact
+                </Button>
+              )}
+            </div>
           </CardHeader>
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-3">
             <div><strong>Status:</strong> {vendor.status}</div>
             <div><strong>Risk Tier:</strong> {vendor.risk_tier}</div>
-            <div><strong>Contact:</strong> {vendor.contact_name || "N/A"}</div>
-            <div><strong>Email:</strong> {vendor.contact_email || "N/A"}</div>
+            {editMode ? (
+              <>
+                <div>
+                  <Label>Contact Name</Label>
+                  <Input 
+                    value={editForm.contact_name} 
+                    onChange={(e) => setEditForm({ ...editForm, contact_name: e.target.value })}
+                    placeholder="Contact name"
+                  />
+                </div>
+                <div>
+                  <Label>Contact Email</Label>
+                  <Input 
+                    type="email"
+                    value={editForm.contact_email} 
+                    onChange={(e) => setEditForm({ ...editForm, contact_email: e.target.value })}
+                    placeholder="contact@email.com"
+                  />
+                </div>
+                <div className="flex gap-2 pt-2">
+                  <Button size="sm" onClick={updateVendor}>Save</Button>
+                  <Button size="sm" variant="outline" onClick={() => setEditMode(false)}>Cancel</Button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div><strong>Contact:</strong> {vendor.contact_name || "N/A"}</div>
+                <div><strong>Email:</strong> {vendor.contact_email || "N/A"}</div>
+              </>
+            )}
             {vendor.description && <div><strong>Description:</strong> {vendor.description}</div>}
           </CardContent>
         </Card>
