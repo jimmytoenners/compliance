@@ -2906,3 +2906,241 @@ func (s *Store) DeleteVendorControlMapping(ctx context.Context, vendorID, contro
 	log.Printf("Unmapped control %s from vendor %s", controlID, vendorID)
 	return nil
 }
+
+// ============================================================================
+// Standards Management
+// ============================================================================
+
+// ControlStandard represents a compliance standard metadata
+type ControlStandard struct {
+	ID             string     `json:"id" db:"id"`
+	Code           string     `json:"code" db:"code"`
+	Name           string     `json:"name" db:"name"`
+	Version        string     `json:"version" db:"version"`
+	Organization   string     `json:"organization" db:"organization"`
+	PublishedDate  *time.Time `json:"published_date,omitempty" db:"published_date"`
+	Description    string     `json:"description" db:"description"`
+	WebsiteURL     string     `json:"website_url,omitempty" db:"website_url"`
+	TotalControls  int        `json:"total_controls" db:"total_controls"`
+	CreatedAt      time.Time  `json:"created_at" db:"created_at"`
+	UpdatedAt      time.Time  `json:"updated_at" db:"updated_at"`
+}
+
+// ControlArticle represents detailed article/spec text for a control
+type ControlArticle struct {
+	ID                 string `json:"id" db:"id"`
+	ControlLibraryID   string `json:"control_library_id" db:"control_library_id"`
+	StandardID         string `json:"standard_id" db:"standard_id"`
+	ArticleNumber      string `json:"article_number" db:"article_number"`
+	SectionName        string `json:"section_name" db:"section_name"`
+	FullText           string `json:"full_text" db:"full_text"`
+	Guidance           string `json:"guidance,omitempty" db:"guidance"`
+	ExternalReferences string `json:"external_references,omitempty" db:"external_references"`
+	CreatedAt          time.Time `json:"created_at" db:"created_at"`
+	UpdatedAt          time.Time `json:"updated_at" db:"updated_at"`
+}
+
+// StandardImportData represents the JSON structure for importing standards
+type StandardImportData struct {
+	Standard struct {
+		Code           string `json:"code"`
+		Name           string `json:"name"`
+		Version        string `json:"version"`
+		Organization   string `json:"organization"`
+		PublishedDate  string `json:"published_date"`
+		Description    string `json:"description"`
+		WebsiteURL     string `json:"website_url"`
+		TotalControls  int    `json:"total_controls"`
+	} `json:"standard"`
+	Controls []struct {
+		ControlID   string `json:"control_id"`
+		Name        string `json:"name"`
+		Family      string `json:"family"`
+		Description string `json:"description"`
+		Article     struct {
+			ArticleNumber      string `json:"article_number"`
+			SectionName        string `json:"section_name"`
+			FullText           string `json:"full_text"`
+			Guidance           string `json:"guidance"`
+			ExternalReferences string `json:"external_references"`
+		} `json:"article"`
+	} `json:"controls"`
+}
+
+func (s *Store) GetStandards(ctx context.Context) ([]ControlStandard, error) {
+	query := `SELECT id, code, name, version, organization, published_date, description, website_url, total_controls, created_at, updated_at 
+			  FROM control_standards 
+			  ORDER BY code ASC`
+
+	rows, err := s.db.Query(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var standards []ControlStandard
+	for rows.Next() {
+		var std ControlStandard
+		err := rows.Scan(&std.ID, &std.Code, &std.Name, &std.Version, &std.Organization, 
+			&std.PublishedDate, &std.Description, &std.WebsiteURL, &std.TotalControls, 
+			&std.CreatedAt, &std.UpdatedAt)
+		if err != nil {
+			return nil, err
+		}
+		standards = append(standards, std)
+	}
+
+	if standards == nil {
+		standards = make([]ControlStandard, 0)
+	}
+
+	return standards, nil
+}
+
+func (s *Store) GetStandardByID(ctx context.Context, id string) (*ControlStandard, error) {
+	query := `SELECT id, code, name, version, organization, published_date, description, website_url, total_controls, created_at, updated_at 
+			  FROM control_standards 
+			  WHERE id = $1`
+
+	var std ControlStandard
+	err := s.db.QueryRow(ctx, query, id).Scan(&std.ID, &std.Code, &std.Name, &std.Version, 
+		&std.Organization, &std.PublishedDate, &std.Description, &std.WebsiteURL, &std.TotalControls, 
+		&std.CreatedAt, &std.UpdatedAt)
+	if err != nil {
+		return nil, err
+	}
+
+	return &std, nil
+}
+
+func (s *Store) ImportStandard(ctx context.Context, data StandardImportData) error {
+	// Parse published date
+	var publishedDate *time.Time
+	if data.Standard.PublishedDate != "" {
+		t, err := time.Parse("2006-01-02", data.Standard.PublishedDate)
+		if err == nil {
+			publishedDate = &t
+		}
+	}
+
+	// Insert standard metadata
+	standardID := ""
+	standardQuery := `INSERT INTO control_standards (code, name, version, organization, published_date, description, website_url, total_controls)
+					 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+					 ON CONFLICT (code) DO UPDATE SET 
+						name = EXCLUDED.name,
+						version = EXCLUDED.version,
+						organization = EXCLUDED.organization,
+						published_date = EXCLUDED.published_date,
+						description = EXCLUDED.description,
+						website_url = EXCLUDED.website_url,
+						total_controls = EXCLUDED.total_controls,
+						updated_at = NOW()
+					 RETURNING id`
+
+	err := s.db.QueryRow(ctx, standardQuery, data.Standard.Code, data.Standard.Name, 
+		data.Standard.Version, data.Standard.Organization, publishedDate, 
+		data.Standard.Description, data.Standard.WebsiteURL, data.Standard.TotalControls).Scan(&standardID)
+	if err != nil {
+		log.Printf("Failed to insert standard: %v", err)
+		return err
+	}
+
+	log.Printf("Imported standard: %s (ID: %s)", data.Standard.Code, standardID)
+
+	// Insert controls
+	controlQuery := `INSERT INTO control_library (id, standard, family, name, description, standard_id)
+					 VALUES ($1, $2, $3, $4, $5, $6)
+					 ON CONFLICT (id) DO UPDATE SET
+						standard = EXCLUDED.standard,
+						family = EXCLUDED.family,
+						name = EXCLUDED.name,
+						description = EXCLUDED.description,
+						standard_id = EXCLUDED.standard_id`
+
+	articleQuery := `INSERT INTO control_articles (control_library_id, standard_id, article_number, section_name, full_text, guidance, external_references)
+					 VALUES ($1, $2, $3, $4, $5, $6, $7)
+					 ON CONFLICT (control_library_id) DO UPDATE SET
+						standardID = EXCLUDED.standard_id,
+						article_number = EXCLUDED.article_number,
+						section_name = EXCLUDED.section_name,
+						full_text = EXCLUDED.full_text,
+						guidance = EXCLUDED.guidance,
+						external_references = EXCLUDED.external_references,
+						updated_at = NOW()`
+
+	importedCount := 0
+	for _, control := range data.Controls {
+		// Insert control
+		_, err := s.db.Exec(ctx, controlQuery, control.ControlID, data.Standard.Code, 
+			control.Family, control.Name, control.Description, standardID)
+		if err != nil {
+			log.Printf("Failed to insert control %s: %v", control.ControlID, err)
+			continue
+		}
+
+		// Insert article if provided
+		if control.Article.FullText != "" {
+			_, err = s.db.Exec(ctx, articleQuery, control.ControlID, standardID,
+				control.Article.ArticleNumber, control.Article.SectionName, 
+				control.Article.FullText, control.Article.Guidance, 
+				control.Article.ExternalReferences)
+			if err != nil {
+				log.Printf("Failed to insert article for control %s: %v", control.ControlID, err)
+			}
+		}
+
+		importedCount++
+	}
+
+	log.Printf("Imported %d controls for standard %s", importedCount, data.Standard.Code)
+	return nil
+}
+
+func (s *Store) GetArticleByControlID(ctx context.Context, controlID string) (*ControlArticle, error) {
+	query := `SELECT id, control_library_id, standard_id, article_number, section_name, full_text, guidance, external_references, created_at, updated_at
+			  FROM control_articles
+			  WHERE control_library_id = $1`
+
+	var article ControlArticle
+	err := s.db.QueryRow(ctx, query, controlID).Scan(&article.ID, &article.ControlLibraryID, 
+		&article.StandardID, &article.ArticleNumber, &article.SectionName, &article.FullText, 
+		&article.Guidance, &article.ExternalReferences, &article.CreatedAt, &article.UpdatedAt)
+	if err == sql.ErrNoRows {
+		return nil, nil // No article found, not an error
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return &article, nil
+}
+
+func (s *Store) GetControlsByStandardID(ctx context.Context, standardID string) ([]ControlLibraryItem, error) {
+	query := `SELECT id, standard, family, name, description
+			  FROM control_library
+			  WHERE standard_id = $1
+			  ORDER BY id ASC`
+
+	rows, err := s.db.Query(ctx, query, standardID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var controls []ControlLibraryItem
+	for rows.Next() {
+		var ctrl ControlLibraryItem
+		err := rows.Scan(&ctrl.ID, &ctrl.Standard, &ctrl.Family, &ctrl.Name, &ctrl.Description)
+		if err != nil {
+			return nil, err
+		}
+		controls = append(controls, ctrl)
+	}
+
+	if controls == nil {
+		controls = make([]ControlLibraryItem, 0)
+	}
+
+	return controls, nil
+}

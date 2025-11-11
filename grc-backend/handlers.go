@@ -2465,3 +2465,96 @@ func (s *ApiServer) HandleDeleteVendorControlMapping(w http.ResponseWriter, r *h
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"status": "deleted"})
 }
+
+// ============================================================================
+// Standards Management Handlers
+// ============================================================================
+
+func (s *ApiServer) HandleGetStandards(w http.ResponseWriter, r *http.Request) {
+	standards, err := s.store.GetStandards(r.Context())
+	if err != nil {
+		log.Printf("Failed to fetch standards: %v", err)
+		http.Error(w, "Failed to fetch standards", http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(standards)
+}
+
+func (s *ApiServer) HandleGetStandardByID(w http.ResponseWriter, r *http.Request) {
+	standardID := mux.Vars(r)["id"]
+	standard, err := s.store.GetStandardByID(r.Context(), standardID)
+	if err != nil {
+		log.Printf("Failed to fetch standard: %v", err)
+		http.Error(w, "Standard not found", http.StatusNotFound)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(standard)
+}
+
+func (s *ApiServer) HandleGetControlsByStandard(w http.ResponseWriter, r *http.Request) {
+	standardID := mux.Vars(r)["id"]
+	controls, err := s.store.GetControlsByStandardID(r.Context(), standardID)
+	if err != nil {
+		log.Printf("Failed to fetch controls for standard: %v", err)
+		http.Error(w, "Failed to fetch controls", http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(controls)
+}
+
+func (s *ApiServer) HandleGetArticleByControlID(w http.ResponseWriter, r *http.Request) {
+	controlID := mux.Vars(r)["id"]
+	article, err := s.store.GetArticleByControlID(r.Context(), controlID)
+	if err != nil {
+		log.Printf("Failed to fetch article: %v", err)
+		http.Error(w, "Failed to fetch article", http.StatusInternalServerError)
+		return
+	}
+	if article == nil {
+		http.Error(w, "Article not found", http.StatusNotFound)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(article)
+}
+
+func (s *ApiServer) HandleImportStandard(w http.ResponseWriter, r *http.Request) {
+	var importData StandardImportData
+	if err := json.NewDecoder(r.Body).Decode(&importData); err != nil {
+		log.Printf("Invalid request body: %v", err)
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	// Validation
+	if importData.Standard.Code == "" || importData.Standard.Name == "" {
+		http.Error(w, "Standard code and name are required", http.StatusBadRequest)
+		return
+	}
+
+	if err := s.store.ImportStandard(r.Context(), importData); err != nil {
+		log.Printf("Failed to import standard: %v", err)
+		http.Error(w, "Failed to import standard", http.StatusInternalServerError)
+		return
+	}
+
+	// Log audit
+	userID := r.Context().Value(UserIDKey).(string)
+	entityType := "standard"
+	changes := map[string]interface{}{
+		"code":           importData.Standard.Code,
+		"name":           importData.Standard.Name,
+		"controls_count": len(importData.Controls),
+	}
+	s.store.LogAudit(r.Context(), &userID, "STANDARD_IMPORTED", &entityType, nil, changes, nil)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"status":          "success",
+		"standard":        importData.Standard.Code,
+		"controls_imported": len(importData.Controls),
+	})
+}

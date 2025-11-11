@@ -187,6 +187,15 @@ func main() {
 	admin.HandleFunc("/mappings/vendor-to-control", apiServer.HandleCreateVendorControlMapping).Methods("POST", "OPTIONS")
 	admin.HandleFunc("/mappings/vendor-to-control", apiServer.HandleDeleteVendorControlMapping).Methods("DELETE", "OPTIONS")
 
+	// Standards Management routes (all authenticated users can view)
+	protected.HandleFunc("/standards", apiServer.HandleGetStandards).Methods("GET", "OPTIONS")
+	protected.HandleFunc("/standards/{id}", apiServer.HandleGetStandardByID).Methods("GET", "OPTIONS")
+	protected.HandleFunc("/standards/{id}/controls", apiServer.HandleGetControlsByStandard).Methods("GET", "OPTIONS")
+	protected.HandleFunc("/controls/{id}/article", apiServer.HandleGetArticleByControlID).Methods("GET", "OPTIONS")
+
+	// Admin-only Standards routes
+	admin.HandleFunc("/standards/import", apiServer.HandleImportStandard).Methods("POST", "OPTIONS")
+
 	// Start server
 	port := os.Getenv("API_PORT")
 	if port == "" {
