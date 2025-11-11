@@ -1145,6 +1145,1318 @@
         "guidance": "Cloud and SaaS provider logs are essential for comprehensive visibility. API access may be required to collect logs. Integrate provider logs into central log management. Understand provider retention policies and export logs as needed.",
         "external_references": "NIST CSF: DE.AE-3"
       }
+    },
+    {
+      "control_id": "CIS-9.1",
+      "name": "Ensure Use of Only Fully Supported Browsers and Email Clients",
+      "family": "Email and Web Browser Protections",
+      "description": "Ensure only fully supported browsers and email clients are allowed",
+      "implementation_group": "IG1",
+      "asset_type": "Applications",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "9.1",
+        "section_name": "Ensure Use of Only Fully Supported Browsers and Email Clients",
+        "full_text": "Ensure only fully supported browsers and email clients are allowed to execute in the enterprise, only using the latest version of browsers and email clients provided through the vendor.",
+        "guidance": "Browsers and email clients are common attack vectors. Unsupported versions contain known vulnerabilities. Automated tools can enforce supported versions. Consider enterprise browser management solutions for centralized control and updates.",
+        "external_references": "NIST CSF: PR.IP-1"
+      }
+    },
+    {
+      "control_id": "CIS-9.2",
+      "name": "Use DNS Filtering Services",
+      "family": "Email and Web Browser Protections",
+      "description": "Use DNS filtering services to block access to known malicious domains",
+      "implementation_group": "IG1",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "9.2",
+        "section_name": "Use DNS Filtering Services",
+        "full_text": "Use DNS filtering services on all enterprise assets to block access to known malicious domains.",
+        "guidance": "DNS filtering prevents connections to malicious sites before they occur. Services provide regularly updated threat intelligence. Can block phishing, malware, and C2 traffic. Works across all applications using DNS. Consider redundant DNS filtering for reliability.",
+        "external_references": "NIST CSF: DE.CM-7"
+      }
+    },
+    {
+      "control_id": "CIS-9.3",
+      "name": "Maintain and Enforce Network-Based URL Filters",
+      "family": "Email and Web Browser Protections",
+      "description": "Enforce URL filtering to limit website access",
+      "implementation_group": "IG2",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "9.3",
+        "section_name": "Maintain and Enforce Network-Based URL Filters",
+        "full_text": "Enforce and update network-based URL filters to limit an enterprise asset from connecting to potentially malicious or unapproved websites. Example implementations include category-based filtering, reputation-based filtering, or through the use of block lists. Enforce filters for all enterprise assets.",
+        "guidance": "URL filtering extends beyond DNS to block access by category or reputation. Web proxies and secure web gateways provide this capability. Policies should balance security with productivity. Regular review and updating of filter policies is essential.",
+        "external_references": "NIST CSF: PR.AC-5"
+      }
+    },
+    {
+      "control_id": "CIS-9.4",
+      "name": "Restrict Unnecessary or Unauthorized Browser and Email Client Extensions",
+      "family": "Email and Web Browser Protections",
+      "description": "Restrict browser and email client extensions",
+      "implementation_group": "IG2",
+      "asset_type": "Applications",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "9.4",
+        "section_name": "Restrict Unnecessary or Unauthorized Browser and Email Client Extensions",
+        "full_text": "Restrict, either through uninstalling or disabling, any unauthorized or unnecessary browser or email client plugins, extensions, and add-on applications.",
+        "guidance": "Extensions can access sensitive data and introduce vulnerabilities. Maintain allowlist of approved extensions. Enterprise browser management can enforce extension policies. Review extensions for excessive permissions. Consider browser isolation for high-risk browsing.",
+        "external_references": "NIST CSF: PR.PT-3"
+      }
+    },
+    {
+      "control_id": "CIS-9.5",
+      "name": "Implement DMARC",
+      "family": "Email and Web Browser Protections",
+      "description": "Implement DMARC policy to protect against email spoofing",
+      "implementation_group": "IG1",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "9.5",
+        "section_name": "Implement DMARC",
+        "full_text": "To lower the chance of spoofed or modified emails from valid domains, implement DMARC policy and verification, starting with implementing the Sender Policy Framework (SPF) and the DomainKeys Identified Mail (DKIM) standards.",
+        "guidance": "DMARC protects against email spoofing and phishing. Start with monitoring mode (p=none), then progress to quarantine or reject policies. SPF and DKIM must be properly configured first. Monitor DMARC reports to identify legitimate vs. malicious email sources.",
+        "external_references": "NIST SP 800-177"
+      }
+    },
+    {
+      "control_id": "CIS-9.6",
+      "name": "Block Unnecessary File Types",
+      "family": "Email and Web Browser Protections",
+      "description": "Block unnecessary file types from email",
+      "implementation_group": "IG2",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "9.6",
+        "section_name": "Block Unnecessary File Types",
+        "full_text": "Block unnecessary file types attempting to enter the enterprise's email gateway.",
+        "guidance": "Many file types are rarely legitimate business email attachments but commonly used for malware (e.g., .exe, .scr, .vbs). Email gateways can block or quarantine these. Document exceptions with justification. Consider blocking by MIME type, not just extension.",
+        "external_references": "NIST CSF: DE.CM-4"
+      }
+    },
+    {
+      "control_id": "CIS-9.7",
+      "name": "Deploy and Maintain Email Server Anti-Malware Protections",
+      "family": "Email and Web Browser Protections",
+      "description": "Deploy anti-malware on email servers",
+      "implementation_group": "IG1",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "9.7",
+        "section_name": "Deploy and Maintain Email Server Anti-Malware Protections",
+        "full_text": "Deploy and maintain email server anti-malware protections, such as attachment scanning and/or sandboxing.",
+        "guidance": "Email is a primary malware delivery mechanism. Multi-layer scanning (gateway, server, endpoint) provides defense in depth. Sandboxing detonates suspicious attachments in isolated environments. Keep signatures and detection engines updated.",
+        "external_references": "NIST CSF: DE.CM-4"
+      }
+    },
+    {
+      "control_id": "CIS-10.1",
+      "name": "Deploy and Maintain Anti-Malware Software",
+      "family": "Malware Defenses",
+      "description": "Deploy anti-malware software on all enterprise assets",
+      "implementation_group": "IG1",
+      "asset_type": "Devices",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "10.1",
+        "section_name": "Deploy and Maintain Anti-Malware Software",
+        "full_text": "Deploy and maintain anti-malware software on all enterprise assets.",
+        "guidance": "Anti-malware is fundamental security control. Should be deployed on endpoints, servers, and network devices where supported. Centralized management ensures consistent deployment and configuration. Next-generation solutions use behavior-based detection beyond signatures.",
+        "external_references": "NIST CSF: DE.CM-4, ISO 27001: A.12.2.1"
+      }
+    },
+    {
+      "control_id": "CIS-10.2",
+      "name": "Configure Automatic Anti-Malware Signature Updates",
+      "family": "Malware Defenses",
+      "description": "Configure automatic signature updates for anti-malware",
+      "implementation_group": "IG1",
+      "asset_type": "Devices",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "10.2",
+        "section_name": "Configure Automatic Anti-Malware Signature Updates",
+        "full_text": "Configure automatic updates for anti-malware signature files on all enterprise assets.",
+        "guidance": "Outdated signatures cannot detect new threats. Automatic updates ensure timely protection. Configure updates to occur multiple times daily. Monitor update success. For air-gapped systems, establish manual update procedures. Consider cloud-delivered protection for real-time updates.",
+        "external_references": "NIST CSF: DE.CM-4"
+      }
+    },
+    {
+      "control_id": "CIS-10.3",
+      "name": "Disable Autorun and Autoplay for Removable Media",
+      "family": "Malware Defenses",
+      "description": "Disable autorun/autoplay for removable media",
+      "implementation_group": "IG1",
+      "asset_type": "Devices",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "10.3",
+        "section_name": "Disable Autorun and Autoplay for Removable Media",
+        "full_text": "Disable autorun and autoplay auto-execute functionality for removable media.",
+        "guidance": "Autorun/autoplay can automatically execute malware from USB drives and other removable media. Disabling prevents automatic malware execution. Configure through Group Policy or endpoint management. Consider blocking removable media entirely for high-security environments.",
+        "external_references": "NIST CSF: PR.PT-2"
+      }
+    },
+    {
+      "control_id": "CIS-10.4",
+      "name": "Configure Automatic Anti-Malware Scanning",
+      "family": "Malware Defenses",
+      "description": "Configure automatic anti-malware scanning",
+      "implementation_group": "IG1",
+      "asset_type": "Devices",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "10.4",
+        "section_name": "Configure Automatic Anti-Malware Scanning",
+        "full_text": "Configure anti-malware software to automatically scan removable media.",
+        "guidance": "Real-time scanning detects malware upon access. Schedule regular full system scans. Balance scan frequency with performance impact. Configure scanning of email attachments, downloads, and file shares. Ensure scans include compressed and archived files.",
+        "external_references": "NIST CSF: DE.CM-4"
+      }
+    },
+    {
+      "control_id": "CIS-10.5",
+      "name": "Enable Anti-Exploitation Features",
+      "family": "Malware Defenses",
+      "description": "Enable anti-exploitation features on enterprise assets",
+      "implementation_group": "IG1",
+      "asset_type": "Devices",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "10.5",
+        "section_name": "Enable Anti-Exploitation Features",
+        "full_text": "Enable anti-exploitation features on enterprise assets and software, where possible, such as Microsoft® Data Execution Prevention (DEP), Windows® Defender Exploit Guard (WDEG), or Apple® System Integrity Protection (SIP) and Gatekeeper™.",
+        "guidance": "Anti-exploitation features prevent exploit techniques (DEP, ASLR, control flow guard). Modern operating systems include these protections. Ensure they're enabled and not disabled for compatibility. Third-party solutions provide additional protection. Test application compatibility.",
+        "external_references": "NIST CSF: PR.IP-1"
+      }
+    },
+    {
+      "control_id": "CIS-10.6",
+      "name": "Centrally Manage Anti-Malware Software",
+      "family": "Malware Defenses",
+      "description": "Centrally manage anti-malware software",
+      "implementation_group": "IG2",
+      "asset_type": "Devices",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "10.6",
+        "section_name": "Centrally Manage Anti-Malware Software",
+        "full_text": "Use a centrally managed anti-malware software to continuously monitor and defend each of the enterprise's workstations and servers.",
+        "guidance": "Central management ensures consistent policies, monitoring, and reporting. Prevents users from disabling protection. Provides visibility into malware detections across the enterprise. Enables rapid response to new threats. Supports compliance reporting.",
+        "external_references": "NIST CSF: DE.CM-4"
+      }
+    },
+    {
+      "control_id": "CIS-10.7",
+      "name": "Use Behavior-Based Anti-Malware Software",
+      "family": "Malware Defenses",
+      "description": "Use behavior-based anti-malware",
+      "implementation_group": "IG2",
+      "asset_type": "Devices",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "10.7",
+        "section_name": "Use Behavior-Based Anti-Malware Software",
+        "full_text": "Use behavior-based anti-malware software.",
+        "guidance": "Signature-based detection cannot catch zero-day malware. Behavior-based detection identifies malicious activities regardless of signature. Machine learning and AI enhance detection. EDR solutions provide advanced behavior monitoring. Balance detection sensitivity with false positives.",
+        "external_references": "NIST CSF: DE.CM-4"
+      }
+    },
+    {
+      "control_id": "CIS-11.1",
+      "name": "Establish and Maintain a Data Recovery Process",
+      "family": "Data Recovery",
+      "description": "Establish data recovery processes",
+      "implementation_group": "IG1",
+      "asset_type": "Data",
+      "security_function": "Recover",
+      "article": {
+        "article_number": "11.1",
+        "section_name": "Establish and Maintain a Data Recovery Process",
+        "full_text": "Establish and maintain a data recovery process. In the process, address the scope of data recovery activities, recovery prioritization, and the security of backup data. Review and update documentation annually, or when significant enterprise changes occur that could impact this Safeguard.",
+        "guidance": "Data recovery is critical for business continuity and ransomware recovery. Document RTO and RPO for each system. Define backup scope including systems, applications, and data. Address backup security (encryption, access controls). Test recovery procedures regularly.",
+        "external_references": "NIST CSF: PR.IP-4, ISO 27001: A.12.3.1"
+      }
+    },
+    {
+      "control_id": "CIS-11.2",
+      "name": "Perform Automated Backups",
+      "family": "Data Recovery",
+      "description": "Perform automated backups of critical data",
+      "implementation_group": "IG1",
+      "asset_type": "Data",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "11.2",
+        "section_name": "Perform Automated Backups",
+        "full_text": "Perform automated backups of in-scope enterprise assets. Run backups weekly, or more frequently, based on the sensitivity of the data.",
+        "guidance": "Manual backups are unreliable. Automation ensures consistent backup execution. Frequency should match data change rate and RPO. Consider continuous data protection for critical systems. Implement 3-2-1 backup strategy (3 copies, 2 media types, 1 offsite).",
+        "external_references": "NIST CSF: PR.IP-4"
+      }
+    },
+    {
+      "control_id": "CIS-11.3",
+      "name": "Protect Recovery Data",
+      "family": "Data Recovery",
+      "description": "Protect backup and recovery data",
+      "implementation_group": "IG1",
+      "asset_type": "Data",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "11.3",
+        "section_name": "Protect Recovery Data",
+        "full_text": "Protect recovery data with equivalent controls to the original data. Reference encryption or data separation, based on requirements.",
+        "guidance": "Backups contain sensitive data requiring protection. Encrypt backups at rest and in transit. Apply access controls limiting backup access. Store backups separately from production to prevent concurrent compromise. Consider immutable backups to prevent ransomware encryption.",
+        "external_references": "NIST CSF: PR.DS-1, ISO 27001: A.12.3.1"
+      }
+    },
+    {
+      "control_id": "CIS-11.4",
+      "name": "Establish and Maintain an Isolated Instance of Recovery Data",
+      "family": "Data Recovery",
+      "description": "Maintain isolated backup copies",
+      "implementation_group": "IG1",
+      "asset_type": "Data",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "11.4",
+        "section_name": "Establish and Maintain an Isolated Instance of Recovery Data",
+        "full_text": "Establish and maintain an isolated instance of recovery data. Example implementations include version controlling backup destinations through offline, cloud, or off-site systems or services.",
+        "guidance": "Isolated backups protect against ransomware and malicious insiders. Air-gapped, offline, or cloud backups prevent simultaneous compromise. Implement network segmentation for backup infrastructure. Consider write-once-read-many (WORM) storage. Geographic separation protects against local disasters.",
+        "external_references": "NIST CSF: PR.IP-4"
+      }
+    },
+    {
+      "control_id": "CIS-11.5",
+      "name": "Test Data Recovery",
+      "family": "Data Recovery",
+      "description": "Test data recovery procedures",
+      "implementation_group": "IG1",
+      "asset_type": "Data",
+      "security_function": "Recover",
+      "article": {
+        "article_number": "11.5",
+        "section_name": "Test Data Recovery",
+        "full_text": "Test backup recovery quarterly, or more frequently, for a sampling of in-scope enterprise assets.",
+        "guidance": "Untested backups may fail when needed. Regular testing validates backup integrity and recovery procedures. Test full and partial recovery scenarios. Document recovery times to verify RTO/RPO. Include testing in disaster recovery exercises. Rotate tested systems to provide comprehensive coverage.",
+        "external_references": "NIST CSF: RC.RP-1, ISO 27001: A.17.1.3"
+      }
+    },
+    {
+      "control_id": "CIS-12.1",
+      "name": "Ensure Network Infrastructure is Up-to-Date",
+      "family": "Network Infrastructure Management",
+      "description": "Keep network infrastructure current and supported",
+      "implementation_group": "IG1",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "12.1",
+        "section_name": "Ensure Network Infrastructure is Up-to-Date",
+        "full_text": "Ensure network infrastructure is kept up-to-date. Example implementations include running the latest stable release of software and/or using currently supported network-as-a-service (NaaS) offerings. Review software versions monthly, or more frequently.",
+        "guidance": "Network devices are critical infrastructure requiring current software. Outdated firmware contains vulnerabilities. Maintain inventory of network devices with software versions. Plan upgrades before end-of-support. Test updates in non-production before deploying. Subscribe to vendor security advisories.",
+        "external_references": "NIST CSF: PR.IP-1, ISO 27001: A.12.6.1"
+      }
+    },
+    {
+      "control_id": "CIS-12.2",
+      "name": "Establish and Maintain a Secure Network Architecture",
+      "family": "Network Infrastructure Management",
+      "description": "Design and maintain secure network architecture",
+      "implementation_group": "IG1",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "12.2",
+        "section_name": "Establish and Maintain a Secure Network Architecture",
+        "full_text": "Establish and maintain a secure network architecture. A secure network architecture must address segmentation, least privilege, and availability, at a minimum.",
+        "guidance": "Network architecture should implement defense in depth. Segment networks by security zone (DMZ, internal, management). Apply least privilege to network flows. Use VLANs, firewalls, and micro-segmentation. Document architecture with network diagrams. Review architecture when adding new services or systems.",
+        "external_references": "NIST CSF: PR.AC-5, ISO 27001: A.13.1.3"
+      }
+    },
+    {
+      "control_id": "CIS-12.3",
+      "name": "Securely Manage Network Infrastructure",
+      "family": "Network Infrastructure Management",
+      "description": "Implement secure management of network devices",
+      "implementation_group": "IG2",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "12.3",
+        "section_name": "Securely Manage Network Infrastructure",
+        "full_text": "Securely manage network infrastructure. Example implementations include version-controlled-infrastructure-as-code, and the use of secure network protocols, such as SSH and HTTPS. Do not use insecure management protocols, such as Telnet (Teletype Network) and HTTP, unless operationally essential.",
+        "guidance": "Insecure protocols transmit credentials in clear text. Use SSH, HTTPS, SNMPv3 for device management. Separate management network from production. Restrict management access by source IP. Use jump hosts for administrative access. Implement multi-factor authentication for network device access.",
+        "external_references": "NIST CSF: PR.AC-4, ISO 27001: A.9.4.1"
+      }
+    },
+    {
+      "control_id": "CIS-12.4",
+      "name": "Establish and Maintain Architecture Diagram(s)",
+      "family": "Network Infrastructure Management",
+      "description": "Document network architecture",
+      "implementation_group": "IG2",
+      "asset_type": "Network",
+      "security_function": "Identify",
+      "article": {
+        "article_number": "12.4",
+        "section_name": "Establish and Maintain Architecture Diagram(s)",
+        "full_text": "Establish and maintain architecture diagram(s) and/or other network system documentation. Review and update documentation annually, or when significant enterprise changes occur that could impact this Safeguard.",
+        "guidance": "Network diagrams are essential for understanding security posture, troubleshooting, and planning. Document physical and logical topology, security zones, trust boundaries, and data flows. Include IP addressing, device inventory, and security controls. Use automated tools to maintain accuracy.",
+        "external_references": "NIST CSF: ID.AM-4, ISO 27001: A.13.1.1"
+      }
+    },
+    {
+      "control_id": "CIS-12.5",
+      "name": "Centralize Network Authentication, Authorization, and Auditing",
+      "family": "Network Infrastructure Management",
+      "description": "Centralize AAA for network devices",
+      "implementation_group": "IG2",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "12.5",
+        "section_name": "Centralize Network Authentication, Authorization, and Auditing",
+        "full_text": "Centralize network authentication, authorization, and auditing (AAA) for all network devices.",
+        "guidance": "Centralized AAA (RADIUS, TACACS+) simplifies credential management and provides consistent auditing. Eliminates shared local accounts on devices. Supports role-based access control. Provides audit trail of administrative actions. Implement redundant AAA servers for availability.",
+        "external_references": "NIST CSF: PR.AC-1, ISO 27001: A.9.2.1"
+      }
+    },
+    {
+      "control_id": "CIS-12.6",
+      "name": "Use of Secure Network Management and Communication Protocols",
+      "family": "Network Infrastructure Management",
+      "description": "Use secure protocols for network management",
+      "implementation_group": "IG2",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "12.6",
+        "section_name": "Use of Secure Network Management and Communication Protocols",
+        "full_text": "Use secure network management and communication protocols (e.g., 802.1X, Wi-Fi Protected Access 2 (WPA2) Enterprise or WPA3).",
+        "guidance": "Weak wireless security allows unauthorized access. WPA3 provides strongest protection; WPA2-Enterprise is minimum. Disable WEP and WPA-Personal. Use 802.1X for wired and wireless authentication. Implement certificate-based authentication where possible. Regularly rotate pre-shared keys if used.",
+        "external_references": "NIST SP 800-97, NIST SP 800-153"
+      }
+    },
+    {
+      "control_id": "CIS-12.7",
+      "name": "Ensure Remote Devices Utilize a VPN",
+      "family": "Network Infrastructure Management",
+      "description": "Require VPN for remote access",
+      "implementation_group": "IG2",
+      "asset_type": "Devices",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "12.7",
+        "section_name": "Ensure Remote Devices Utilize a VPN",
+        "full_text": "Require users to authenticate to enterprise-managed VPN and authentication services prior to accessing enterprise resources on end-user devices.",
+        "guidance": "VPN protects data in transit and extends network security to remote users. Implement strong VPN protocols (IPsec, SSL/TLS). Require multi-factor authentication for VPN access. Consider split-tunneling risks. Modern alternatives include zero trust network access (ZTNA).",
+        "external_references": "NIST SP 800-77, NIST SP 800-113"
+      }
+    },
+    {
+      "control_id": "CIS-12.8",
+      "name": "Establish and Maintain Dedicated Computing Resources",
+      "family": "Network Infrastructure Management",
+      "description": "Use dedicated resources for high-risk activities",
+      "implementation_group": "IG3",
+      "asset_type": "Devices",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "12.8",
+        "section_name": "Establish and Maintain Dedicated Computing Resources",
+        "full_text": "Establish and maintain dedicated computing resources, either physically or logically separated, for all administrative tasks or tasks requiring administrative access. The dedicated computing resources need to be segmented from the enterprise's primary network through either physical or logical means.",
+        "guidance": "Dedicated administrative workstations reduce compromise risk. Privileged Access Workstations (PAWs) separate high-privilege activities. Jump hosts provide controlled access. Browser isolation protects against web-based attacks. Implement strict access controls and monitoring for admin systems.",
+        "external_references": "NIST SP 800-53 AC-6(2)"
+      }
+    },
+    {
+      "control_id": "CIS-13.1",
+      "name": "Centralize Security Event Alerting",
+      "family": "Network Monitoring and Defense",
+      "description": "Centralize security event alerting and analysis",
+      "implementation_group": "IG2",
+      "asset_type": "Network",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "13.1",
+        "section_name": "Centralize Security Event Alerting",
+        "full_text": "Centralize security event alerting across enterprise assets for log correlation and analysis. Best practice implementation requires the use of a SIEM, which includes vendor-defined event correlation alerts. A log analytics platform configured with security-relevant correlation alerts also satisfies this Safeguard.",
+        "guidance": "SIEM enables detection of complex attack patterns across multiple systems. Aggregate logs from network devices, servers, applications, and endpoints. Develop correlation rules for known attack patterns. Integrate threat intelligence. Configure alerts for suspicious activities. Tune to reduce false positives.",
+        "external_references": "NIST CSF: DE.AE-3, ISO 27001: A.12.4.1"
+      }
+    },
+    {
+      "control_id": "CIS-13.2",
+      "name": "Deploy a Host-Based Intrusion Detection Solution",
+      "family": "Network Monitoring and Defense",
+      "description": "Deploy HIDS on enterprise assets",
+      "implementation_group": "IG2",
+      "asset_type": "Devices",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "13.2",
+        "section_name": "Deploy a Host-Based Intrusion Detection Solution",
+        "full_text": "Deploy a host-based intrusion detection solution on enterprise assets, where appropriate and/or supported.",
+        "guidance": "HIDS monitors system calls, file integrity, and log files for suspicious activity. Complements network-based detection. EDR solutions provide advanced HIDS capabilities. Configure alerts for configuration changes, privilege escalation, and unauthorized access attempts. Integrate with SIEM.",
+        "external_references": "NIST CSF: DE.CM-1"
+      }
+    },
+    {
+      "control_id": "CIS-13.3",
+      "name": "Deploy a Network Intrusion Detection Solution",
+      "family": "Network Monitoring and Defense",
+      "description": "Deploy NIDS for network monitoring",
+      "implementation_group": "IG2",
+      "asset_type": "Network",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "13.3",
+        "section_name": "Deploy a Network Intrusion Detection Solution",
+        "full_text": "Deploy a network intrusion detection solution on enterprise assets, where appropriate. Example implementations include the use of a Network Intrusion Detection System (NIDS) or equivalent cloud service provider (CSP) service.",
+        "guidance": "NIDS analyzes network traffic for attack signatures and anomalies. Deploy sensors at key network locations (perimeter, between security zones). Keep signatures updated. Tune to environment to reduce false positives. Consider network traffic analysis (NTA) for advanced threat detection.",
+        "external_references": "NIST CSF: DE.CM-1"
+      }
+    },
+    {
+      "control_id": "CIS-13.4",
+      "name": "Perform Traffic Filtering Between Network Segments",
+      "family": "Network Monitoring and Defense",
+      "description": "Filter traffic between network segments",
+      "implementation_group": "IG2",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "13.4",
+        "section_name": "Perform Traffic Filtering Between Network Segments",
+        "full_text": "Perform traffic filtering between network segments, where appropriate.",
+        "guidance": "Network segmentation limits lateral movement during breaches. Firewalls between segments enforce access policies. Define allowed traffic between zones using least privilege. Monitor inter-segment traffic for anomalies. Micro-segmentation provides granular control. Document firewall rules and review regularly.",
+        "external_references": "NIST CSF: PR.AC-5, ISO 27001: A.13.1.3"
+      }
+    },
+    {
+      "control_id": "CIS-13.5",
+      "name": "Manage Access Control for Remote Assets",
+      "family": "Network Monitoring and Defense",
+      "description": "Control remote asset access to internal resources",
+      "implementation_group": "IG2",
+      "asset_type": "Devices",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "13.5",
+        "section_name": "Manage Access Control for Remote Assets",
+        "full_text": "Manage access control for assets remotely connecting to enterprise resources. Determine amount of access to enterprise resources based on: up-to-date anti-malware software installed, configuration compliance with the enterprise's secure configuration process, and ensuring the operating system and applications are up-to-date.",
+        "guidance": "Network Access Control (NAC) verifies device health before granting access. Check for current patches, anti-malware, and configuration compliance. Quarantine non-compliant devices. Provide remediation guidance. Consider zero trust approach requiring continuous verification.",
+        "external_references": "NIST CSF: PR.AC-5"
+      }
+    },
+    {
+      "control_id": "CIS-13.6",
+      "name": "Collect Network Traffic Flow Logs",
+      "family": "Network Monitoring and Defense",
+      "description": "Collect and analyze network flow data",
+      "implementation_group": "IG2",
+      "asset_type": "Network",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "13.6",
+        "section_name": "Collect Network Traffic Flow Logs",
+        "full_text": "Collect network traffic flow logs and/or network traffic to review and alert upon from network devices.",
+        "guidance": "Network flow logs (NetFlow, sFlow, IPFIX) provide visibility into network communications. Useful for detecting C2 traffic, data exfiltration, and lateral movement. Lightweight compared to full packet capture. Analyze flows for volume anomalies, unusual destinations, and off-hours activity.",
+        "external_references": "NIST CSF: DE.AE-3"
+      }
+    },
+    {
+      "control_id": "CIS-13.7",
+      "name": "Deploy a Host-Based Intrusion Prevention Solution",
+      "family": "Network Monitoring and Defense",
+      "description": "Deploy HIPS on enterprise assets",
+      "implementation_group": "IG3",
+      "asset_type": "Devices",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "13.7",
+        "section_name": "Deploy a Host-Based Intrusion Prevention Solution",
+        "full_text": "Deploy a host-based intrusion prevention solution on enterprise assets, where appropriate and/or supported. Example implementations include use of an Endpoint Detection and Response (EDR) client or host-based IPS agent.",
+        "guidance": "HIPS prevents attacks by blocking malicious activities. EDR solutions provide prevention, detection, and response capabilities. Can prevent exploits, credential theft, and malicious scripts. Requires careful tuning to avoid disrupting legitimate activities. Integrate with threat intelligence.",
+        "external_references": "NIST CSF: DE.CM-1"
+      }
+    },
+    {
+      "control_id": "CIS-13.8",
+      "name": "Deploy a Network Intrusion Prevention Solution",
+      "family": "Network Monitoring and Defense",
+      "description": "Deploy NIPS for inline traffic inspection",
+      "implementation_group": "IG3",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "13.8",
+        "section_name": "Deploy a Network Intrusion Prevention Solution",
+        "full_text": "Deploy a network intrusion prevention solution, where appropriate. Example implementations include the use of a Network Intrusion Prevention System (NIPS) or equivalent CSP service.",
+        "guidance": "NIPS blocks attacks in real-time by sitting inline in network path. Can prevent exploits, malware downloads, and C2 communications. Performance impact requires consideration. Keep signatures updated. Tune to balance protection with false positive blocking. Deploy at critical network boundaries.",
+        "external_references": "NIST CSF: DE.CM-1"
+      }
+    },
+    {
+      "control_id": "CIS-13.9",
+      "name": "Deploy Port-Level Access Control",
+      "family": "Network Monitoring and Defense",
+      "description": "Implement port-level access control",
+      "implementation_group": "IG3",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "13.9",
+        "section_name": "Deploy Port-Level Access Control",
+        "full_text": "Deploy port-level access control. Port-level access control utilizes 802.1x, or similar network access control protocols, such as certificates, and may incorporate user and/or device authentication.",
+        "guidance": "802.1X authenticates devices before granting network access. Prevents unauthorized devices from connecting to network ports. Works with RADIUS/certificate authorities. Can be combined with dynamic VLAN assignment. Consider for both wired and wireless networks. Guest network should be isolated.",
+        "external_references": "NIST SP 800-120"
+      }
+    },
+    {
+      "control_id": "CIS-13.10",
+      "name": "Perform Application Layer Filtering",
+      "family": "Network Monitoring and Defense",
+      "description": "Filter traffic using application awareness",
+      "implementation_group": "IG3",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "13.10",
+        "section_name": "Perform Application Layer Filtering",
+        "full_text": "Perform application layer filtering. Example implementations include a filtering proxy, application layer firewall, or gateway.",
+        "guidance": "Application-layer filtering inspects traffic beyond port/protocol. Next-generation firewalls provide this capability. Can identify applications regardless of port. Enforce application usage policies. Detect and block tunneling and evasion techniques. Provides granular control over application features.",
+        "external_references": "NIST CSF: PR.PT-4"
+      }
+    },
+    {
+      "control_id": "CIS-13.11",
+      "name": "Tune Security Event Alerting Thresholds",
+      "family": "Network Monitoring and Defense",
+      "description": "Tune alerting to reduce false positives",
+      "implementation_group": "IG3",
+      "asset_type": "Network",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "13.11",
+        "section_name": "Tune Security Event Alerting Thresholds",
+        "full_text": "Tune security event alerting thresholds monthly, or more frequently.",
+        "guidance": "Excessive false positives cause alert fatigue and missed real threats. Regular tuning improves signal-to-noise ratio. Track alert accuracy metrics. Adjust correlation rules and thresholds. Suppress known benign activities. Document tuning decisions. Balance sensitivity with false positive rate.",
+        "external_references": "NIST CSF: DE.AE-5"
+      }
+    },
+    {
+      "control_id": "CIS-14.1",
+      "name": "Establish and Maintain a Security Awareness Program",
+      "family": "Security Awareness and Skills Training",
+      "description": "Implement security awareness training program",
+      "implementation_group": "IG1",
+      "asset_type": "N/A",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "14.1",
+        "section_name": "Establish and Maintain a Security Awareness Program",
+        "full_text": "Establish and maintain a security awareness program. The purpose of a security awareness program is to educate the enterprise's workforce on how to interact with enterprise assets and data in a secure manner. Conduct training at hire and, at a minimum, annually. Review and update content annually, or when significant enterprise changes occur that could impact this Safeguard.",
+        "guidance": "Users are often the weakest link in security. Regular training reduces human-related risks. Cover phishing, password security, physical security, and reporting procedures. Track training completion. Use varied delivery methods (videos, newsletters, posters). Make training relevant to job roles.",
+        "external_references": "NIST SP 800-50, ISO 27001: A.7.2.2"
+      }
+    },
+    {
+      "control_id": "CIS-14.2",
+      "name": "Train Workforce Members to Recognize Social Engineering Attacks",
+      "family": "Security Awareness and Skills Training",
+      "description": "Train users to recognize social engineering",
+      "implementation_group": "IG1",
+      "asset_type": "N/A",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "14.2",
+        "section_name": "Train Workforce Members to Recognize Social Engineering Attacks",
+        "full_text": "Train workforce members to recognize social engineering attacks, such as phishing, pre-texting, and tailgating.",
+        "guidance": "Social engineering bypasses technical controls. Training should include email phishing, phone vishing, SMS smishing, and physical pretexting. Use simulated phishing campaigns to test and train. Provide clear reporting mechanisms. Reward reporting of suspicious activities. Update training with current attack trends.",
+        "external_references": "NIST SP 800-50"
+      }
+    },
+    {
+      "control_id": "CIS-14.3",
+      "name": "Train Workforce Members on Authentication Best Practices",
+      "family": "Security Awareness and Skills Training",
+      "description": "Train users on authentication security",
+      "implementation_group": "IG1",
+      "asset_type": "N/A",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "14.3",
+        "section_name": "Train Workforce Members on Authentication Best Practices",
+        "full_text": "Train workforce members on authentication best practices. Example topics include MFA, password composition, and credential management.",
+        "guidance": "Weak authentication practices lead to account compromise. Train on password strength, unique passwords per site, password manager use, MFA benefits, and protecting credentials. Explain common credential theft techniques. Demonstrate secure authentication methods. Emphasize never sharing passwords.",
+        "external_references": "NIST SP 800-63B"
+      }
+    },
+    {
+      "control_id": "CIS-14.4",
+      "name": "Train Workforce on Data Handling Best Practices",
+      "family": "Security Awareness and Skills Training",
+      "description": "Train users on secure data handling",
+      "implementation_group": "IG1",
+      "asset_type": "N/A",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "14.4",
+        "section_name": "Train Workforce on Data Handling Best Practices",
+        "full_text": "Train workforce members on how to identify and properly store, transfer, archive, and destroy sensitive data. This also includes training workforce members on clear screen and desk best practices, such as locking their screen when they step away from their enterprise asset, erasing physical and virtual whiteboards at the end of meetings, and storing data and assets securely.",
+        "guidance": "Improper data handling causes breaches. Train on data classification, encryption requirements, secure transmission methods, and proper disposal. Cover physical security (clean desk, screen locking, document shredding). Address cloud storage and file sharing risks. Emphasize data minimization principles.",
+        "external_references": "ISO 27001: A.7.2.2"
+      }
+    },
+    {
+      "control_id": "CIS-14.5",
+      "name": "Train Workforce Members on Causes of Unintentional Data Exposure",
+      "family": "Security Awareness and Skills Training",
+      "description": "Train on unintentional data exposure risks",
+      "implementation_group": "IG2",
+      "asset_type": "N/A",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "14.5",
+        "section_name": "Train Workforce Members on Causes of Unintentional Data Exposure",
+        "full_text": "Train workforce members to be aware of causes for unintentional data exposure. Example topics include mis-delivery of sensitive data, losing a portable end-user device, or publishing data to unintended audiences.",
+        "guidance": "Accidental exposure is common breach cause. Train on risks of: misdirected emails, public cloud storage, lost devices, oversharing on collaboration platforms, and misconfigured permissions. Emphasize verifying recipients before sending. Promote use of DLP tools. Encourage reporting of potential exposures.",
+        "external_references": "ISO 27001: A.7.2.2"
+      }
+    },
+    {
+      "control_id": "CIS-14.6",
+      "name": "Train Workforce Members on Recognizing and Reporting Security Incidents",
+      "family": "Security Awareness and Skills Training",
+      "description": "Train users on incident recognition and reporting",
+      "implementation_group": "IG2",
+      "asset_type": "N/A",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "14.6",
+        "section_name": "Train Workforce Members on Recognizing and Reporting Security Incidents",
+        "full_text": "Train workforce members to be able to recognize a potential incident and be able to report such an incident.",
+        "guidance": "Early detection enables rapid response. Train users to recognize signs of compromise (unusual system behavior, unexpected emails, suspicious network activity). Provide clear, simple reporting mechanisms. Ensure non-punitive reporting culture. Acknowledge and reward reporting. Follow up on reports promptly.",
+        "external_references": "NIST SP 800-61"
+      }
+    },
+    {
+      "control_id": "CIS-14.7",
+      "name": "Train Workforce on How to Identify and Report if Their Enterprise Assets are Missing Security Updates",
+      "family": "Security Awareness and Skills Training",
+      "description": "Train users to identify missing security updates",
+      "implementation_group": "IG2",
+      "asset_type": "N/A",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "14.7",
+        "section_name": "Train Workforce on Identifying Missing Security Updates",
+        "full_text": "Train workforce on how to identify out-of-date software on their enterprise assets, and how to report such findings.",
+        "guidance": "Users can help identify unpatched systems. Train on checking software versions, recognizing update notifications, and understanding update importance. Provide reporting channel for outdated software. While automated patching is preferred, user awareness provides additional layer. Explain risks of ignoring updates.",
+        "external_references": "NIST CSF: PR.IP-12"
+      }
+    },
+    {
+      "control_id": "CIS-14.8",
+      "name": "Train Workforce on the Dangers of Connecting to and Transmitting Enterprise Data Over Insecure Networks",
+      "family": "Security Awareness and Skills Training",
+      "description": "Train on insecure network risks",
+      "implementation_group": "IG2",
+      "asset_type": "N/A",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "14.8",
+        "section_name": "Train on Insecure Network Dangers",
+        "full_text": "Train workforce members on the dangers of connecting to, and transmitting enterprise data over, insecure networks for enterprise activities. If the enterprise has remote workers, training must include guidance to ensure that all users securely configure their home network infrastructure.",
+        "guidance": "Public WiFi and untrusted networks pose eavesdropping risks. Train on VPN use before accessing enterprise resources. Explain risks of public WiFi for sensitive activities. Provide guidance on securing home networks (changing default passwords, enabling encryption, updating router firmware). Recommend avoiding public networks for high-sensitivity work.",
+        "external_references": "NIST SP 800-46"
+      }
+    },
+    {
+      "control_id": "CIS-14.9",
+      "name": "Conduct Role-Specific Security Awareness and Skills Training",
+      "family": "Security Awareness and Skills Training",
+      "description": "Provide role-specific security training",
+      "implementation_group": "IG3",
+      "asset_type": "N/A",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "14.9",
+        "section_name": "Conduct Role-Specific Security Training",
+        "full_text": "Conduct role-specific security awareness and skills training. Example implementations include secure system administration, secure software development, and security product usage.",
+        "guidance": "Different roles require specific security knowledge. Developers need secure coding training. Administrators need secure configuration and privilege management training. Security staff need technical skills training. Tailor content to job responsibilities. Provide hands-on training where appropriate. Consider certifications for critical roles.",
+        "external_references": "NIST SP 800-16, ISO 27001: A.7.2.2"
+      }
+    },
+    {
+      "control_id": "CIS-15.1",
+      "name": "Establish and Maintain an Inventory of Service Providers",
+      "family": "Service Provider Management",
+      "description": "Maintain inventory of service providers",
+      "implementation_group": "IG1",
+      "asset_type": "N/A",
+      "security_function": "Identify",
+      "article": {
+        "article_number": "15.1",
+        "section_name": "Establish and Maintain Service Provider Inventory",
+        "full_text": "Establish and maintain an inventory of service providers. The inventory is to list all known service providers, include classification(s), and designate an enterprise contact for each service provider. Review and update the inventory annually, or when significant enterprise changes occur that could impact this Safeguard.",
+        "guidance": "Third-party risks require visibility into service providers. Inventory should include cloud providers, SaaS vendors, managed services, outsourced functions. Document data access, criticality, and contract details. Classify by risk level. Review regularly as provider relationships change. Track subcontractors/fourth parties.",
+        "external_references": "NIST CSF: ID.SC-1, ISO 27001: A.15.1.1"
+      }
+    },
+    {
+      "control_id": "CIS-15.2",
+      "name": "Establish and Maintain a Service Provider Management Policy",
+      "family": "Service Provider Management",
+      "description": "Create service provider management policy",
+      "implementation_group": "IG1",
+      "asset_type": "N/A",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "15.2",
+        "section_name": "Establish Service Provider Management Policy",
+        "full_text": "Establish and maintain a service provider management policy. Ensure the policy addresses the classification, inventory, assessment, monitoring, and decommissioning of service providers. Review and update the policy annually, or when significant enterprise changes occur that could impact this Safeguard.",
+        "guidance": "Formalized policy ensures consistent vendor risk management. Policy should cover vendor selection criteria, due diligence requirements, contract security provisions, ongoing monitoring, and off-boarding. Define roles and responsibilities. Address data protection, audit rights, and incident notification requirements. Align with procurement processes.",
+        "external_references": "ISO 27001: A.15.1.1"
+      }
+    },
+    {
+      "control_id": "CIS-15.3",
+      "name": "Classify Service Providers",
+      "family": "Service Provider Management",
+      "description": "Classify service providers by risk",
+      "implementation_group": "IG1",
+      "asset_type": "N/A",
+      "security_function": "Identify",
+      "article": {
+        "article_number": "15.3",
+        "section_name": "Classify Service Providers",
+        "full_text": "Classify service providers. Classification consideration may include one or more characteristics, such as data sensitivity, and provider type. Update and review classifications annually, or when significant enterprise changes occur that could impact this Safeguard.",
+        "guidance": "Risk-based classification enables proportionate controls. Consider: data accessed, system criticality, regulatory requirements, and financial impact. High-risk providers require enhanced due diligence and monitoring. Classification drives assessment frequency and control requirements. Document classification criteria.",
+        "external_references": "NIST CSF: ID.SC-2"
+      }
+    },
+    {
+      "control_id": "CIS-15.4",
+      "name": "Ensure Service Provider Contracts Include Security Requirements",
+      "family": "Service Provider Management",
+      "description": "Include security requirements in contracts",
+      "implementation_group": "IG1",
+      "asset_type": "N/A",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "15.4",
+        "section_name": "Include Security Requirements in Service Provider Contracts",
+        "full_text": "Ensure service provider contracts include security requirements. Example requirements may include minimum security program requirements, security incident and/or data breach notification and response, data encryption requirements, and data disposal commitments. These security requirements must be consistent with the enterprise's service provider management policy. Review service provider contracts annually to ensure contracts are not missing security requirements.",
+        "guidance": "Contracts establish security expectations and remedies. Include: security standards compliance, audit/assessment rights, incident notification timelines, data handling requirements, subcontractor restrictions, insurance requirements, right to terminate for security cause. Review contracts before signing. Engage legal and security teams.",
+        "external_references": "ISO 27001: A.15.1.2"
+      }
+    },
+    {
+      "control_id": "CIS-15.5",
+      "name": "Assess Service Providers",
+      "family": "Service Provider Management",
+      "description": "Assess service provider security controls",
+      "implementation_group": "IG2",
+      "asset_type": "N/A",
+      "security_function": "Identify",
+      "article": {
+        "article_number": "15.5",
+        "section_name": "Assess Service Providers",
+        "full_text": "Assess service providers consistent with the enterprise's service provider management policy. Assessment scope may vary based on classification(s), and may include review of security program documentation, security capabilities, and security requirements. Assess service providers upon selection and on an annual basis, at a minimum.",
+        "guidance": "Due diligence validates provider security posture. Methods include security questionnaires, SOC reports, certifications (ISO 27001, SOC 2), onsite assessments. Assessment depth should match risk classification. Evaluate controls relevant to data/services provided. Document findings and track remediation. Consider shared assessments to reduce redundancy.",
+        "external_references": "NIST CSF: ID.SC-3, ISO 27001: A.15.2.1"
+      }
+    },
+    {
+      "control_id": "CIS-15.6",
+      "name": "Monitor Service Providers",
+      "family": "Service Provider Management",
+      "description": "Monitor ongoing service provider security",
+      "implementation_group": "IG2",
+      "asset_type": "N/A",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "15.6",
+        "section_name": "Monitor Service Providers",
+        "full_text": "Monitor service providers consistent with the enterprise's service provider management policy. Monitoring may include periodic reassessment of service provider compliance, monitoring service provider release notes, and dark web monitoring.",
+        "guidance": "Continuous monitoring detects provider security degradation. Track security incidents, breaches, and vulnerabilities affecting providers. Monitor for changes in certifications/attestations. Subscribe to provider security bulletins. Use threat intelligence for provider compromise monitoring. Conduct periodic reassessments. Review SLA compliance including security metrics.",
+        "external_references": "NIST CSF: ID.SC-4"
+      }
+    },
+    {
+      "control_id": "CIS-15.7",
+      "name": "Securely Decommission Service Providers",
+      "family": "Service Provider Management",
+      "description": "Securely off-board service providers",
+      "implementation_group": "IG2",
+      "asset_type": "N/A",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "15.7",
+        "section_name": "Securely Decommission Service Providers",
+        "full_text": "Securely decommission service providers. Example considerations include user and service account deactivation, termination of data flows, and secure disposal of enterprise data within service provider systems.",
+        "guidance": "Proper off-boarding prevents unauthorized data access. Checklist should include: revoke provider access, retrieve or destroy enterprise data, terminate network connections, recover physical assets, conduct final audit, document completion. Verify data deletion per contract. Address data in backups. Remove provider from security exceptions.",
+        "external_references": "ISO 27001: A.15.1.3"
+      }
+    },
+    {
+      "control_id": "CIS-16.1",
+      "name": "Establish and Maintain a Secure Application Development Process",
+      "family": "Application Software Security",
+      "description": "Implement secure development lifecycle",
+      "implementation_group": "IG1",
+      "asset_type": "Applications",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "16.1",
+        "section_name": "Establish Secure Application Development Process",
+        "full_text": "Establish and maintain a secure application development process. In the process, address such items as: secure application design standards, secure coding practices, developer training, vulnerability management, security testing, and security requirements definition.",
+        "guidance": "Security must be integrated throughout SDLC. Adopt secure development framework (OWASP, Microsoft SDL, BSIMM). Define security requirements early. Conduct threat modeling. Implement secure coding standards. Use static and dynamic analysis. Perform security testing before release. Include security gates in CI/CD pipeline.",
+        "external_references": "NIST SP 800-218, ISO 27034, OWASP SAMM"
+      }
+    },
+    {
+      "control_id": "CIS-16.2",
+      "name": "Establish and Maintain a Process to Accept and Address Software Vulnerabilities",
+      "family": "Application Software Security",
+      "description": "Implement vulnerability disclosure process",
+      "implementation_group": "IG1",
+      "asset_type": "Applications",
+      "security_function": "Respond",
+      "article": {
+        "article_number": "16.2",
+        "section_name": "Process to Accept and Address Software Vulnerabilities",
+        "full_text": "Establish and maintain a process to accept and address reports of software vulnerabilities, including providing a means for external entities to report. The process is to include such items as: a vulnerability disclosure policy, a reporting mechanism (e.g., a bug bounty program, a vulnerability submission form, or a monitored email address), and a mechanism for acknowledging receipt of reported vulnerabilities. Review and update documentation annually, or when significant enterprise changes occur that could impact this Safeguard.",
+        "guidance": "External researchers find valuable vulnerabilities. Vulnerability disclosure policy sets expectations for reporters. Provide clear reporting mechanism (security@, bug bounty program). Acknowledge reports promptly. Provide timelines for remediation. Recognize helpful reporters. Consider bug bounty programs. Coordinate disclosure timing. Follow responsible disclosure practices.",
+        "external_references": "ISO 29147 (Vulnerability Disclosure)"
+      }
+    },
+    {
+      "control_id": "CIS-16.3",
+      "name": "Perform Root Cause Analysis on Security Vulnerabilities",
+      "family": "Application Software Security",
+      "description": "Analyze vulnerability root causes",
+      "implementation_group": "IG2",
+      "asset_type": "Applications",
+      "security_function": "Respond",
+      "article": {
+        "article_number": "16.3",
+        "section_name": "Perform Root Cause Analysis on Security Vulnerabilities",
+        "full_text": "Perform root cause analysis on security vulnerabilities. When reviewing vulnerabilities, root cause analysis is the task of evaluating underlying issues that create vulnerabilities in code, and allows development teams to move beyond just fixing individual vulnerabilities as they arise.",
+        "guidance": "Root cause analysis prevents vulnerability recurrence. Look beyond individual bugs to systemic issues. Common root causes: inadequate input validation, insecure defaults, missing access controls, cryptographic weaknesses. Use findings to improve secure coding training, standards, and tools. Track vulnerability patterns. Share lessons learned with development teams.",
+        "external_references": "OWASP SAMM"
+      }
+    },
+    {
+      "control_id": "CIS-16.4",
+      "name": "Establish and Manage an Inventory of Third-Party Software Components",
+      "family": "Application Software Security",
+      "description": "Inventory third-party software components",
+      "implementation_group": "IG2",
+      "asset_type": "Applications",
+      "security_function": "Identify",
+      "article": {
+        "article_number": "16.4",
+        "section_name": "Inventory Third-Party Software Components",
+        "full_text": "Establish and manage an updated inventory of third-party components used in development, often referred to as a \"bill of materials,\" as well as components slated for future use. This inventory is to include any risks that each third-party component could pose. Review and update this inventory monthly, or more frequently.",
+        "guidance": "Third-party components introduce supply chain risks. Maintain software bill of materials (SBOM) listing all dependencies. Track component versions, licenses, and known vulnerabilities. Use software composition analysis (SCA) tools. Monitor for newly disclosed vulnerabilities in components. Have process to update or replace vulnerable components. Consider component risk in selection.",
+        "external_references": "NIST SP 800-218, NTIA SBOM"
+      }
+    },
+    {
+      "control_id": "CIS-16.5",
+      "name": "Use Up-to-Date and Trusted Third-Party Software Components",
+      "family": "Application Software Security",
+      "description": "Use current and trusted third-party components",
+      "implementation_group": "IG2",
+      "asset_type": "Applications",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "16.5",
+        "section_name": "Use Up-to-Date and Trusted Third-Party Components",
+        "full_text": "Use up-to-date and trusted third-party software components. When possible, choose established and proven frameworks and libraries that provide adequate security. Acquire these components from trusted sources or evaluate the software for vulnerabilities before use.",
+        "guidance": "Outdated components contain known vulnerabilities. Keep dependencies current with security patches. Use reputable sources for components (official repositories, verified publishers). Evaluate component security before adoption. Prefer well-maintained projects with active communities. Consider component popularity and maturity. Scan components for vulnerabilities before use.",
+        "external_references": "OWASP Top 10 A06:2021 (Vulnerable and Outdated Components)"
+      }
+    },
+    {
+      "control_id": "CIS-16.6",
+      "name": "Establish and Maintain a Severity Rating System and Process for Application Vulnerabilities",
+      "family": "Application Software Security",
+      "description": "Rate application vulnerability severity",
+      "implementation_group": "IG2",
+      "asset_type": "Applications",
+      "security_function": "Respond",
+      "article": {
+        "article_number": "16.6",
+        "section_name": "Severity Rating System for Application Vulnerabilities",
+        "full_text": "Establish and maintain a severity rating system and process for application vulnerabilities that facilitates prioritizing the order in which discovered vulnerabilities are fixed. This process includes setting a minimum level of security acceptability for releasing code or applications. Severity ratings bring a systematic way of triaging vulnerabilities that improves risk management and helps ensure the most critical vulnerabilities are addressed swiftly.",
+        "guidance": "Severity ratings prioritize remediation efforts. Use standardized scoring (CVSS, OWASP Risk Rating). Consider exploitability, impact, and affected systems. Define SLAs for remediation by severity. Establish quality gates for releases (no criticals, limited highs). Risk acceptance should require executive approval. Track remediation metrics. Automate severity assignment where possible.",
+        "external_references": "CVSS, OWASP Risk Rating Methodology"
+      }
+    },
+    {
+      "control_id": "CIS-16.7",
+      "name": "Use Standard Hardening Configuration Templates for Application Infrastructure",
+      "family": "Application Software Security",
+      "description": "Harden application infrastructure",
+      "implementation_group": "IG2",
+      "asset_type": "Applications",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "16.7",
+        "section_name": "Standard Hardening Configuration for Application Infrastructure",
+        "full_text": "Use standard, industry-recommended hardening configuration templates for application infrastructure components. This includes underlying servers, databases, and web servers, and applies to cloud containers, Platform as a Service (PaaS) components, or system images used by Infrastructure as a Service (IaaS) components. Do not allow in-house developed software to weaken configuration hardening.",
+        "guidance": "Hardened infrastructure reduces attack surface. Use CIS Benchmarks, DISA STIGs, or vendor hardening guides. Apply principle of least functionality—disable unnecessary services and features. Harden web servers, application servers, and databases. Implement security headers. Configure TLS properly. Use infrastructure as code for consistent deployment. Scan for configuration issues.",
+        "external_references": "CIS Benchmarks, NIST SP 800-123"
+      }
+    },
+    {
+      "control_id": "CIS-16.8",
+      "name": "Separate Production and Non-Production Systems",
+      "family": "Application Software Security",
+      "description": "Segregate production and non-production environments",
+      "implementation_group": "IG1",
+      "asset_type": "Applications",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "16.8",
+        "section_name": "Separate Production and Non-Production Systems",
+        "full_text": "Maintain separate environments for production and non-production systems. Designers and developers should not have unmonitored access to production systems.",
+        "guidance": "Production/non-production separation prevents accidental production changes and protects production data. Use separate networks, accounts, and credentials. Restrict developer access to production. Sanitize production data before use in non-production. Implement change control between environments. Monitor production access. Use production-like non-production environments for realistic testing.",
+        "external_references": "NIST SP 800-53 SC-7"
+      }
+    },
+    {
+      "control_id": "CIS-16.9",
+      "name": "Train Developers in Application Security Concepts and Secure Coding",
+      "family": "Application Software Security",
+      "description": "Provide secure coding training to developers",
+      "implementation_group": "IG2",
+      "asset_type": "N/A",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "16.9",
+        "section_name": "Train Developers in Application Security",
+        "full_text": "Ensure that all software development personnel receive training in writing secure code for their specific development environment and responsibilities. Training can include general security principles and application security standard practices. Conduct training at least annually and update it regularly with new security techniques and best practices.",
+        "guidance": "Developer knowledge is critical for secure applications. Training should cover OWASP Top 10, secure coding for specific languages/frameworks, common vulnerability types, and secure design principles. Use hands-on labs and code examples. Provide reference materials and secure coding checklists. Consider security champions program. Make training relevant to technologies used.",
+        "external_references": "OWASP Top 10, SAFECode training guides"
+      }
+    },
+    {
+      "control_id": "CIS-16.10",
+      "name": "Apply Secure Design Principles in Application Architectures",
+      "family": "Application Software Security",
+      "description": "Use secure design principles",
+      "implementation_group": "IG2",
+      "asset_type": "Applications",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "16.10",
+        "section_name": "Apply Secure Design Principles",
+        "full_text": "Apply secure design principles in application architectures. Secure design principles include the concept of least privilege and enforcing mediation to validate every operation that the user makes, promoting the concept of \"never trust user input.\" Examples include ensuring that explicit error checking is performed and documented for all input, including for size, data type, and acceptable ranges or formats. Secure design also means minimizing the application infrastructure attack surface, such as turning off unprotected ports and services, removing unnecessary programs and files, and renaming or removing default accounts.",
+        "guidance": "Secure design prevents entire vulnerability classes. Apply principles: least privilege, defense in depth, fail securely, separation of duties, economy of mechanism, complete mediation, open design, least common mechanism. Never trust user input—validate all input. Use threat modeling during design. Design for security from the start rather than adding it later. Document security design decisions.",
+        "external_references": "OWASP ASVS, Saltzer and Schroeder Security Principles"
+      }
+    },
+    {
+      "control_id": "CIS-16.11",
+      "name": "Leverage Vetted Modules or Services for Application Security Components",
+      "family": "Application Software Security",
+      "description": "Use proven security libraries",
+      "implementation_group": "IG2",
+      "asset_type": "Applications",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "16.11",
+        "section_name": "Leverage Vetted Security Modules",
+        "full_text": "Leverage vetted modules or services for application security components, such as identity management, encryption, and auditing and logging. Using platform features in critical security functions will reduce developers' workload and minimize the likelihood of design or implementation errors. Modern operating systems provide effective mechanisms for identification, authentication, and authorization and make those mechanisms available to applications. Use only standardized, currently accepted, and extensively reviewed encryption algorithms. Operating systems also provide mechanisms to create and maintain secure audit logs.",
+        "guidance": "Don't roll your own crypto or authentication. Use established, vetted libraries for security functions. Leverage platform security features (OS authentication, cryptographic APIs). Use OAuth/OIDC for authorization, bcrypt/Argon2 for password hashing, TLS for encryption. Proven libraries have been extensively tested and reviewed. Custom security code often contains flaws.",
+        "external_references": "OWASP Cryptographic Storage Cheat Sheet"
+      }
+    },
+    {
+      "control_id": "CIS-16.12",
+      "name": "Implement Code-Level Security Checks",
+      "family": "Application Software Security",
+      "description": "Perform security checks during development",
+      "implementation_group": "IG2",
+      "asset_type": "Applications",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "16.12",
+        "section_name": "Implement Code-Level Security Checks",
+        "full_text": "Apply static and dynamic analysis tools to verify that secure coding practices are being followed and to identify potential software security weaknesses. Security weaknesses found during the code review are to be tracked and addressed in a timely manner. Static and dynamic analysis tools must be updated regularly for accurate detection of coding weaknesses.",
+        "guidance": "Automated code analysis finds vulnerabilities early. Static analysis (SAST) scans source code without execution. Dynamic analysis (DAST) tests running applications. Interactive analysis (IAST) combines both approaches. Integrate into CI/CD pipeline. Set quality gates based on findings. Tune tools to reduce false positives. Combine with manual code review. Track and remediate findings.",
+        "external_references": "OWASP Code Review Guide, NIST SP 800-218"
+      }
+    },
+    {
+      "control_id": "CIS-16.13",
+      "name": "Conduct Application Penetration Testing",
+      "family": "Application Software Security",
+      "description": "Test applications for security vulnerabilities",
+      "implementation_group": "IG3",
+      "asset_type": "Applications",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "16.13",
+        "section_name": "Conduct Application Penetration Testing",
+        "full_text": "Conduct penetration testing on web-based and other application software prior to release, using techniques that exploit common vulnerabilities, including but not limited to authorization and authentication, and input validation. Applications that consume third-party components or APIs should be tested for vulnerabilities within the integrated application.",
+        "guidance": "Penetration testing validates security in realistic attack scenarios. Test before initial release and after significant changes. Include OWASP Top 10 vulnerabilities. Test authentication, authorization, input validation, session management. Test APIs and integrations. Use both automated scanning and manual testing. Remediate findings before release. Consider bug bounty programs for ongoing testing.",
+        "external_references": "OWASP Testing Guide, PTES"
+      }
+    },
+    {
+      "control_id": "CIS-16.14",
+      "name": "Conduct Threat Modeling",
+      "family": "Application Software Security",
+      "description": "Perform threat modeling for applications",
+      "implementation_group": "IG3",
+      "asset_type": "Applications",
+      "security_function": "Identify",
+      "article": {
+        "article_number": "16.14",
+        "section_name": "Conduct Threat Modeling",
+        "full_text": "Conduct threat modeling for high-value, high-risk, or mission-critical applications. This helps identify and address potential security design flaws within an application early in the development lifecycle. Conduct threat modeling every three years at a minimum, or when a significant change is made to an application or application hosting infrastructure. When modeling, consider technologies, applications, services, and threat actors that may or may not be currently supported or known. Threat modeling can inform security requirements for technologies, applications, and services that may also have implications on how to securely configure such technologies, applications, and services.",
+        "guidance": "Threat modeling identifies security risks during design. Use structured approach (STRIDE, PASTA, Attack Trees). Document assets, entry points, trust boundaries, and data flows. Identify threats for each component. Prioritize threats by risk. Define mitigations. Update models as architecture changes. Engage developers, architects, and security team. Document findings and track mitigation implementation.",
+        "external_references": "OWASP Threat Modeling, Microsoft Threat Modeling Tool"
+      }
+    },
+    {
+      "control_id": "CIS-17.1",
+      "name": "Perform a Skills Gap Analysis",
+      "family": "Incident Response Management",
+      "description": "Assess incident response capability gaps",
+      "implementation_group": "IG1",
+      "asset_type": "N/A",
+      "security_function": "Identify",
+      "article": {
+        "article_number": "17.1",
+        "section_name": "Perform Skills Gap Analysis",
+        "full_text": "Perform a skills gap analysis to understand the roles and skills required to support security operations, and use gap analysis to determine training requirements.",
+        "guidance": "Understanding capability gaps enables targeted improvement. Assess current incident response capabilities against required skills. Identify gaps in people, process, and technology. Consider incident types likely to affect organization. Plan training, hiring, or outsourcing to address gaps. Review annually as threats and technology evolve. Document findings and improvement plans.",
+        "external_references": "NIST SP 800-61"
+      }
+    },
+    {
+      "control_id": "CIS-17.2",
+      "name": "Assign Job Titles and Duties for Incident Response",
+      "family": "Incident Response Management",
+      "description": "Define incident response roles and responsibilities",
+      "implementation_group": "IG1",
+      "asset_type": "N/A",
+      "security_function": "Respond",
+      "article": {
+        "article_number": "17.2",
+        "section_name": "Assign Incident Response Roles",
+        "full_text": "Assign job titles and duties for incident response, and ensure a role includes an owner, with authority and responsibility to manage incidents.",
+        "guidance": "Clear roles prevent confusion during incidents. Define: incident manager, technical leads, communications, legal, HR roles. Document responsibilities and authority. Establish escalation paths. Designate primary and backup for each role. Ensure 24/7 coverage for critical roles. Provide role-specific training. Document contact information. Include executives in appropriate roles.",
+        "external_references": "NIST SP 800-61, ISO 27035"
+      }
+    },
+    {
+      "control_id": "CIS-17.3",
+      "name": "Establish and Maintain Contact Information for Reporting Security Incidents",
+      "family": "Incident Response Management",
+      "description": "Maintain incident reporting contact information",
+      "implementation_group": "IG1",
+      "asset_type": "N/A",
+      "security_function": "Respond",
+      "article": {
+        "article_number": "17.3",
+        "section_name": "Contact Information for Reporting Incidents",
+        "full_text": "Establish and maintain contact information for reporting security incidents. Verify contacts annually to ensure that information is up-to-date. Contact information should include a means of accessing the incident response team at any time of day.",
+        "guidance": "Accessible reporting enables rapid response. Provide multiple reporting channels (email, phone, portal, chat). Make contact information easy to find. Ensure 24/7 availability for critical systems. Include contacts for external parties (law enforcement, regulators, vendors). Test contact methods regularly. Update emergency contact lists. Communicate reporting procedures to workforce.",
+        "external_references": "NIST SP 800-61"
+      }
+    },
+    {
+      "control_id": "CIS-17.4",
+      "name": "Establish and Maintain an Incident Response Process",
+      "family": "Incident Response Management",
+      "description": "Document incident response procedures",
+      "implementation_group": "IG1",
+      "asset_type": "N/A",
+      "security_function": "Respond",
+      "article": {
+        "article_number": "17.4",
+        "section_name": "Establish Incident Response Process",
+        "full_text": "Establish and maintain an incident response process that addresses roles and responsibilities, compliance requirements, and a communication plan. Review annually, or when significant enterprise changes occur that could impact this Safeguard.",
+        "guidance": "Documented process ensures consistent, effective response. Address: detection, analysis, containment, eradication, recovery, post-incident activity. Define severity classification and escalation. Include communication templates and procedures. Address evidence handling and chain of custody. Document legal and regulatory notification requirements. Integrate with business continuity. Test process through exercises.",
+        "external_references": "NIST SP 800-61, ISO 27035"
+      }
+    },
+    {
+      "control_id": "CIS-17.5",
+      "name": "Assign Key Roles and Responsibilities",
+      "family": "Incident Response Management",
+      "description": "Designate incident response team members",
+      "implementation_group": "IG1",
+      "asset_type": "N/A",
+      "security_function": "Respond",
+      "article": {
+        "article_number": "17.5",
+        "section_name": "Assign Key Incident Response Roles",
+        "full_text": "Assign key roles and responsibilities for incident response, including staff from IT, legal, HR, and other business functions. Review and update roles annually, or when significant enterprise changes occur that could impact this Safeguard.",
+        "guidance": "Cross-functional team addresses all incident aspects. Include: technical analysis (IT/security), legal (counsel), communications (PR), human resources (insider threats), business units (impact assessment), management (decision authority). Define when to engage each role. Document contact information. Conduct team building activities. Ensure understanding of responsibilities.",
+        "external_references": "NIST SP 800-61"
+      }
+    },
+    {
+      "control_id": "CIS-17.6",
+      "name": "Define Mechanisms for Communicating During Incident Response",
+      "family": "Incident Response Management",
+      "description": "Establish incident communication methods",
+      "implementation_group": "IG2",
+      "asset_type": "N/A",
+      "security_function": "Respond",
+      "article": {
+        "article_number": "17.6",
+        "section_name": "Incident Communication Mechanisms",
+        "full_text": "Determine which primary and secondary communication mechanisms would be used to communicate during an incident. Mechanisms can include phone calls, emails, or letters. Keep in mind that certain mechanisms, such as emails, can be affected during a security incident.",
+        "guidance": "Reliable communication is critical during incidents. Primary and backup channels needed (phone, secure messaging, out-of-band email). Consider that enterprise systems may be compromised or unavailable. Establish communication protocols (conference bridges, war rooms). Prepare communication templates. Define information sharing limitations. Test communication channels. Include external communication methods (customers, media, regulators).",
+        "external_references": "NIST SP 800-61"
+      }
+    },
+    {
+      "control_id": "CIS-17.7",
+      "name": "Conduct Routine Incident Response Exercises",
+      "family": "Incident Response Management",
+      "description": "Practice incident response procedures",
+      "implementation_group": "IG2",
+      "asset_type": "N/A",
+      "security_function": "Respond",
+      "article": {
+        "article_number": "17.7",
+        "section_name": "Conduct Incident Response Exercises",
+        "full_text": "Plan and conduct routine incident response exercises, including tabletop exercises, technical exercises, and red team/blue team exercises. Exercises should involve relevant stakeholders, including IT, HR, legal, and communications.",
+        "guidance": "Exercises test and improve incident response capabilities. Conduct tabletop exercises to walk through scenarios. Technical exercises test specific tools/procedures. Red team/blue team exercises simulate real attacks. Vary scenarios (malware, data breach, DDoS, insider threat). Include realistic complications. Document lessons learned. Update procedures based on findings. Conduct at least annually.",
+        "external_references": "NIST SP 800-61, CISA tabletop exercise packages"
+      }
+    },
+    {
+      "control_id": "CIS-17.8",
+      "name": "Conduct Post-Incident Reviews",
+      "family": "Incident Response Management",
+      "description": "Review and learn from incidents",
+      "implementation_group": "IG2",
+      "asset_type": "N/A",
+      "security_function": "Recover",
+      "article": {
+        "article_number": "17.8",
+        "section_name": "Conduct Post-Incident Reviews",
+        "full_text": "Conduct post-incident reviews. Post-incident reviews help ensure that lessons learned are communicated to the right people to improve the enterprise's response to future incidents.",
+        "guidance": "Learning from incidents prevents recurrence. Conduct review shortly after incident closure while details are fresh. Include all response team members. Document: timeline, root cause, what went well, what needs improvement, action items. Focus on process improvement, not blame. Share lessons learned appropriately. Track action item completion. Update procedures and training based on findings.",
+        "external_references": "NIST SP 800-61, ISO 27035"
+      }
+    },
+    {
+      "control_id": "CIS-17.9",
+      "name": "Establish and Maintain Security Incident Thresholds",
+      "family": "Incident Response Management",
+      "description": "Define incident severity thresholds",
+      "implementation_group": "IG3",
+      "asset_type": "N/A",
+      "security_function": "Respond",
+      "article": {
+        "article_number": "17.9",
+        "section_name": "Establish Security Incident Thresholds",
+        "full_text": "Establish and maintain security incident thresholds, including, at a minimum, differentiating between an incident and an event. Examples can include: abnormal activity, security vulnerability, security weakness, data breach, privacy incident, etc. Review annually, or when significant enterprise changes occur that could impact this Safeguard.",
+        "guidance": "Clear thresholds enable appropriate response. Define incident severity levels (low, medium, high, critical) with specific criteria. Distinguish events from incidents requiring formal response. Consider factors: data sensitivity, system criticality, number of affected users, regulatory implications. Define escalation triggers. Document notification requirements by severity. Use consistent classification. Review and adjust thresholds based on experience.",
+        "external_references": "NIST SP 800-61"
+      }
+    },
+    {
+      "control_id": "CIS-18.1",
+      "name": "Establish and Maintain a Penetration Testing Program",
+      "family": "Penetration Testing",
+      "description": "Create formalized penetration testing program",
+      "implementation_group": "IG2",
+      "asset_type": "N/A",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "18.1",
+        "section_name": "Establish Penetration Testing Program",
+        "full_text": "Establish and maintain a penetration testing program appropriate to the size, complexity, and maturity of the enterprise. Penetration testing program characteristics include: scope, such as network, web application, API, hosted services, and physical premise controls; frequency; limitations, such as acceptable hours, and excluded attack types; threat model; drive-by compromise prevention; and remediation workflow.",
+        "guidance": "Penetration testing validates security controls under adversarial conditions. Define scope (external, internal, applications, physical, social). Determine frequency based on risk (annually minimum for IG2, more frequent for high-risk systems). Use qualified testers (internal team or external firm). Follow rules of engagement. Establish reporting and remediation processes. Track findings to closure. Consider continuous testing approaches.",
+        "external_references": "PTES, OWASP Testing Guide, NIST SP 800-115"
+      }
+    },
+    {
+      "control_id": "CIS-18.2",
+      "name": "Perform Periodic External Penetration Tests",
+      "family": "Penetration Testing",
+      "description": "Conduct external penetration tests",
+      "implementation_group": "IG2",
+      "asset_type": "Network",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "18.2",
+        "section_name": "Perform External Penetration Tests",
+        "full_text": "Perform periodic external penetration tests based on program requirements, no less than annually. External penetration testing must include enterprise and environmental reconnaissance to detect exploitable information. Penetration testing requires specialized skills and experience and must be conducted through a qualified party. The testing may be clear box or opaque box.",
+        "guidance": "External testing simulates attacker perspective. Test internet-facing systems (websites, VPN, email, DNS). Include reconnaissance phase. Test for OWASP Top 10 and common vulnerabilities. Attempt to gain unauthorized access. Document all findings. Provide detailed report with remediation guidance. Retest after remediation. Consider both authenticated and unauthenticated testing. Use qualified, experienced testers.",
+        "external_references": "PTES, PCI DSS Requirement 11.3"
+      }
+    },
+    {
+      "control_id": "CIS-18.3",
+      "name": "Remediate Penetration Test Findings",
+      "family": "Penetration Testing",
+      "description": "Fix vulnerabilities discovered during penetration tests",
+      "implementation_group": "IG2",
+      "asset_type": "N/A",
+      "security_function": "Respond",
+      "article": {
+        "article_number": "18.3",
+        "section_name": "Remediate Penetration Test Findings",
+        "full_text": "Remediate penetration test findings based on the enterprise's policy for remediation scope and prioritization.",
+        "guidance": "Testing is only valuable if findings are addressed. Prioritize remediation by severity and exploitability. Set remediation timelines (critical: 30 days, high: 60 days, etc.). Track findings to closure. Verify remediation effectiveness through retesting. Document risk acceptance for findings that cannot be immediately remediated. Report remediation status to management. Use findings to improve security program.",
+        "external_references": "NIST SP 800-115"
+      }
+    },
+    {
+      "control_id": "CIS-18.4",
+      "name": "Validate Security Measures",
+      "family": "Penetration Testing",
+      "description": "Validate that security controls function as intended",
+      "implementation_group": "IG3",
+      "asset_type": "N/A",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "18.4",
+        "section_name": "Validate Security Measures",
+        "full_text": "Validate security measures after each penetration test. If deemed necessary, modify the enterprise's security plan, incident response plan, and penetration testing program.",
+        "guidance": "Validation ensures controls work as designed. Review test findings against security architecture and controls. Identify control gaps or failures. Assess whether controls detected/prevented test activities. Update security measures based on findings. Modify security policies and standards. Enhance detection capabilities. Improve incident response based on lessons learned. Update threat model with observed attack techniques.",
+        "external_references": "NIST SP 800-115"
+      }
+    },
+    {
+      "control_id": "CIS-18.5",
+      "name": "Perform Periodic Internal Penetration Tests",
+      "family": "Penetration Testing",
+      "description": "Conduct internal penetration tests",
+      "implementation_group": "IG3",
+      "asset_type": "Network",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "18.5",
+        "section_name": "Perform Internal Penetration Tests",
+        "full_text": "Perform periodic internal penetration tests based on program requirements, no less than annually. The testing may be clear box or opaque box.",
+        "guidance": "Internal testing simulates insider threat or post-compromise scenario. Test from inside network perimeter. Attempt lateral movement and privilege escalation. Test segmentation effectiveness. Target high-value systems. Assess detective controls. Document paths to critical assets. Internal tests should simulate both malicious insider and compromised account scenarios. Use qualified testers. Remediate findings.",
+        "external_references": "PTES, NIST SP 800-115"
+      }
     }
   ]
 }
