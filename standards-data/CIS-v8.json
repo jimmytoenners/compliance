@@ -309,7 +309,7 @@
       "article": {
         "article_number": "3.7",
         "section_name": "Establish and Maintain a Data Classification Scheme",
-        "full_text": "Establish and maintain an overall data classification scheme for the enterprise. Enterprises may use labels, such as "Sensitive," "Confidential," and "Public," and classify their data according to those labels. Review and update the classification scheme annually, or when significant enterprise changes occur that could impact this Safeguard.",
+        "full_text": "Establish and maintain an overall data classification scheme for the enterprise. Enterprises may use labels, such as \"Sensitive,\" \"Confidential,\" and \"Public,\" and classify their data according to those labels. Review and update the classification scheme annually, or when significant enterprise changes occur that could impact this Safeguard.",
         "guidance": "Data classification provides a framework for applying appropriate security controls based on sensitivity. The scheme should be simple enough to use consistently but granular enough to differentiate protection needs. Train users on proper classification.",
         "external_references": "NIST CSF: ID.AM-5, ISO 27001: A.8.2.1"
       }
