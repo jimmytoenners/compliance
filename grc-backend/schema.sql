@@ -22,13 +22,46 @@ CREATE TABLE users (
 );
 CREATE TRIGGER set_timestamp BEFORE UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE trigger_set_timestamp();
 
+-- Standards metadata table
+CREATE TABLE control_standards (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  code TEXT NOT NULL UNIQUE, -- e.g., 'CIS-v8', 'ISO-27001-2022'
+  name TEXT NOT NULL, -- e.g., 'CIS Controls Version 8'
+  version TEXT NOT NULL, -- e.g., '8.0', '2022'
+  organization TEXT NOT NULL, -- e.g., 'Center for Internet Security', 'ISO/IEC'
+  published_date DATE,
+  description TEXT,
+  website_url TEXT,
+  total_controls INTEGER,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE TRIGGER set_timestamp BEFORE UPDATE ON control_standards FOR EACH ROW EXECUTE PROCEDURE trigger_set_timestamp();
+
 CREATE TABLE control_library (
   id TEXT PRIMARY KEY, -- e.g., 'CIS-4.1'
   standard TEXT NOT NULL, -- e.g., 'CIS v8 IG1'
+  standard_id UUID REFERENCES control_standards(id) ON DELETE SET NULL, -- NEW: Link to standard metadata
   family TEXT NOT NULL, -- e.g., 'Access Control Management'
   name TEXT NOT NULL, -- e.g., 'Password Management'
   description TEXT NOT NULL
 );
+
+-- Full article/specification text for controls
+CREATE TABLE control_articles (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  control_library_id TEXT NOT NULL REFERENCES control_library(id) ON DELETE CASCADE,
+  standard_id UUID REFERENCES control_standards(id) ON DELETE CASCADE,
+  article_number TEXT, -- e.g., '5.1', 'A.5.1'
+  section_name TEXT, -- e.g., 'Policies for information security'
+  full_text TEXT NOT NULL, -- Complete specification text
+  guidance TEXT, -- Implementation guidance
+  external_references TEXT, -- External references, standards, etc.
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE(control_library_id, standard_id)
+);
+CREATE TRIGGER set_timestamp BEFORE UPDATE ON control_articles FOR EACH ROW EXECUTE PROCEDURE trigger_set_timestamp();
 
 CREATE TABLE activated_controls (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

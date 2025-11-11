@@ -1,0 +1,1223 @@
+{
+  "standard": {
+    "code": "ISO-27001-2022",
+    "name": "ISO/IEC 27001:2022",
+    "version": "2022",
+    "organization": "International Organization for Standardization (ISO) / International Electrotechnical Commission (IEC)",
+    "published_date": "2022-10-25",
+    "description": "Information security, cybersecurity and privacy protection — Information security management systems — Requirements",
+    "website_url": "https://www.iso.org/standard/27001",
+    "total_controls": 93
+  },
+  "controls": [
+    {
+      "control_id": "ISO-27001-5.1",
+      "name": "Policies for information security",
+      "family": "Organizational Controls",
+      "description": "Define, approve, publish, communicate and review information security policies",
+      "article": {
+        "article_number": "5.1",
+        "section_name": "Policies for information security",
+        "full_text": "A set of policies for information security shall be defined, approved by management, published, communicated to and acknowledged by relevant personnel and relevant interested parties, and reviewed at planned intervals and if significant changes occur.",
+        "guidance": "Information security policy provides management direction and support for information security in accordance with business requirements and relevant laws and regulations. Management should establish information security policies and demonstrate support and commitment to information security through clear direction, demonstrated commitment, explicit assignment and acknowledgment of information security responsibilities.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.1"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.2",
+      "name": "Information security roles and responsibilities",
+      "family": "Organizational Controls",
+      "description": "Define and allocate information security responsibilities",
+      "article": {
+        "article_number": "5.2",
+        "section_name": "Information security roles and responsibilities",
+        "full_text": "Information security roles and responsibilities shall be defined and allocated according to the organization needs. Responsibilities for the protection of individual assets and for carrying out specific information security processes shall be defined. Responsibilities for information security risk management activities and in particular for acceptance of residual risks shall be defined. These responsibilities shall be supplemented, where necessary, with detailed guidance for specific sites and information processing facilities. Local responsibilities for the protection of assets and for carrying out specific security processes shall be defined.",
+        "guidance": "The allocation of responsibilities for information security should be done at an organizational level. The responsibilities of individual assets and of information security processes should be defined. Particular attention should be given to the need for information security risk management activities and acceptance of residual risks.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.2"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.3",
+      "name": "Segregation of duties",
+      "family": "Organizational Controls",
+      "description": "Segregate conflicting duties and areas of responsibility",
+      "article": {
+        "article_number": "5.3",
+        "section_name": "Segregation of duties",
+        "full_text": "Conflicting duties and conflicting areas of responsibility shall be segregated.",
+        "guidance": "Segregation of duties is a method for reducing the risk of accidental or deliberate misuse of an organization's assets. The aim is to ensure that no single person can access, modify or use assets without authorization or detection. The initiation of an event should be separated from its authorization. The possibility of collusion should be considered in designing the controls.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.3"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.4",
+      "name": "Management responsibilities",
+      "family": "Organizational Controls",
+      "description": "Require management to apply information security according to established policies",
+      "article": {
+        "article_number": "5.4",
+        "section_name": "Management responsibilities",
+        "full_text": "Management shall require all personnel to apply information security in accordance with the established policies, topic-specific policies, rules and procedures of the organization.",
+        "guidance": "Management should ensure that security roles and responsibilities are assigned, communicated and accepted. Management should also ensure that adequate resources are allocated to information security activities. Management should review and approve information security policies, assign security roles and authorize exceptions to information security policies.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.4"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.5",
+      "name": "Contact with authorities",
+      "family": "Organizational Controls",
+      "description": "Maintain contact with relevant authorities",
+      "article": {
+        "article_number": "5.5",
+        "section_name": "Contact with authorities",
+        "full_text": "The organization shall establish and maintain contact with relevant authorities.",
+        "guidance": "The organization should maintain contact with authorities such as: law enforcement authorities; fire authorities; utility providers; internet service providers; telecommunications operators; supervisory authorities; emergency services; authorities responsible for maintaining or accessing public infrastructure; health authorities.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.5"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.6",
+      "name": "Contact with special interest groups",
+      "family": "Organizational Controls",
+      "description": "Maintain contact with special interest groups and security forums",
+      "article": {
+        "article_number": "5.6",
+        "section_name": "Contact with special interest groups",
+        "full_text": "The organization shall establish and maintain contact with special interest groups or other specialist security forums and professional associations.",
+        "guidance": "Membership of special interest groups or forums can help the organization: stay up-to-date on current security threats; keep up-to-date with best practice and maintain awareness of developments in information security management; receive early warning alerts about new threats; gain access to specialist information security advice; share information and coordinate security issues with other organizations.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.6"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.7",
+      "name": "Threat intelligence",
+      "family": "Organizational Controls",
+      "description": "Collect and analyze threat intelligence information",
+      "article": {
+        "article_number": "5.7",
+        "section_name": "Threat intelligence",
+        "full_text": "Information relating to information security threats shall be collected and analyzed to produce threat intelligence.",
+        "guidance": "Organizations should collect information about threats from sources such as: security forums; information sharing networks; threat intelligence providers; specialist security organizations; government agencies; websites and mailing lists; social media; publicly available vulnerability databases; security research publications.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.7"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.8",
+      "name": "Information security in project management",
+      "family": "Organizational Controls",
+      "description": "Integrate information security in project management",
+      "article": {
+        "article_number": "5.8",
+        "section_name": "Information security in project management",
+        "full_text": "Information security shall be integrated in project management.",
+        "guidance": "Project management methodology should ensure that information security is addressed within projects. Information security should be included in all phases: project initiation; project planning; project execution; project monitoring and control; project closure. Security requirements should be identified and agreed upon during the project initiation phase.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.8"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.9",
+      "name": "Inventory of information and other associated assets",
+      "family": "Organizational Controls",
+      "description": "Develop and maintain an inventory of information and assets",
+      "article": {
+        "article_number": "5.9",
+        "section_name": "Inventory of information and other associated assets",
+        "full_text": "An inventory of information and other associated assets, including owners, shall be developed and maintained.",
+        "guidance": "The organization should identify and record all information assets. The inventory should include: information; hardware; software; services; people; locations; intangible assets. Each asset should have an identified owner who has responsibility for the asset. Assets should be classified according to their importance.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.9"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.10",
+      "name": "Acceptable use of information and other associated assets",
+      "family": "Organizational Controls",
+      "description": "Define and implement acceptable use rules",
+      "article": {
+        "article_number": "5.10",
+        "section_name": "Acceptable use of information and other associated assets",
+        "full_text": "Rules for the acceptable use and procedures for handling information and other associated assets shall be identified, documented and implemented.",
+        "guidance": "Acceptable use policy should address: authorized use of information assets; restrictions on use; responsibility for maintaining confidentiality; copyright and intellectual property; use of organizational devices for personal purposes; monitoring and privacy considerations.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.10"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.11",
+      "name": "Return of assets",
+      "family": "Organizational Controls",
+      "description": "Ensure employees return all organizational assets upon termination",
+      "article": {
+        "article_number": "5.11",
+        "section_name": "Return of assets",
+        "full_text": "Personnel and external parties shall return all of the organizational assets in their possession upon termination of their employment, contract or agreement.",
+        "guidance": "The return of assets process should: be documented in employment terms and conditions; include all types of assets (physical and electronic); include access credentials; be verified as part of termination procedures; include data deletion from personal devices.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.11"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.12",
+      "name": "Classification of information",
+      "family": "Organizational Controls",
+      "description": "Classify information according to legal requirements and business value",
+      "article": {
+        "article_number": "5.12",
+        "section_name": "Classification of information",
+        "full_text": "Information shall be classified according to the information security needs of the organization based on confidentiality, integrity, availability and relevant interested party requirements.",
+        "guidance": "A classification scheme should be developed considering: legal and contractual requirements; business value; criticality; sensitivity. Common classification levels include: Public; Internal; Confidential; Restricted. Each classification level should have defined handling requirements.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.12"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.13",
+      "name": "Labelling of information",
+      "family": "Organizational Controls",
+      "description": "Develop and implement labelling procedures",
+      "article": {
+        "article_number": "5.13",
+        "section_name": "Labelling of information",
+        "full_text": "An appropriate set of procedures for information labelling shall be developed and implemented in accordance with the information classification scheme adopted by the organization.",
+        "guidance": "Labelling procedures should address: output from systems; physical media; email messages; file shares; databases. Labels should be: clearly visible; standardized; easy to understand; automated where possible.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.13"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.14",
+      "name": "Information transfer",
+      "family": "Organizational Controls",
+      "description": "Maintain information security during information transfer",
+      "article": {
+        "article_number": "5.14",
+        "section_name": "Information transfer",
+        "full_text": "Information transfer rules, procedures, or agreements shall be in place for all types of transfer facilities within the organization and between the organization and other parties.",
+        "guidance": "Information transfer procedures should address: electronic messaging; file transfers; physical transport; verbal communication. Security measures should include: encryption; access controls; audit trails; secure transmission protocols; integrity checking.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.14"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.15",
+      "name": "Access control",
+      "family": "Organizational Controls",
+      "description": "Establish and implement access control rules",
+      "article": {
+        "article_number": "5.15",
+        "section_name": "Access control",
+        "full_text": "Rules to control physical and logical access to information and other associated assets shall be established and implemented based on business and information security requirements.",
+        "guidance": "Access control policy should address: user access management; user responsibilities; system and application access control; secure log-on procedures; password management; use of privileged access rights; access rights review.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.15"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.16",
+      "name": "Identity management",
+      "family": "Organizational Controls",
+      "description": "Manage full lifecycle of identities",
+      "article": {
+        "article_number": "5.16",
+        "section_name": "Identity management",
+        "full_text": "The full life cycle of identities shall be managed.",
+        "guidance": "Identity management should cover: identity registration; identity verification; identity provisioning; identity maintenance; identity de-provisioning; identity review. Unique user IDs should be used for accountability.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.16"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.17",
+      "name": "Authentication information",
+      "family": "Organizational Controls",
+      "description": "Securely allocate and manage authentication information",
+      "article": {
+        "article_number": "5.17",
+        "section_name": "Authentication information",
+        "full_text": "Allocation and management of authentication information shall be controlled by a management process, including advising personnel on appropriate handling of authentication information.",
+        "guidance": "Authentication management should include: secure distribution; temporary authentication for new users; password complexity requirements; regular password changes; protection during storage and transmission; multi-factor authentication where appropriate.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.17"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.18",
+      "name": "Access rights",
+      "family": "Organizational Controls",
+      "description": "Provision, review, modify and remove access rights",
+      "article": {
+        "article_number": "5.18",
+        "section_name": "Access rights",
+        "full_text": "Access rights to information and other associated assets shall be provisioned, reviewed, modified and removed in accordance with the organization's topic-specific policy on and rules for access control.",
+        "guidance": "Access rights management should include: formal access request; access approval by asset owner; implementation of access; regular access review; removal of access when no longer required; privilege escalation procedures.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.18"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.19",
+      "name": "Information security in supplier relationships",
+      "family": "Organizational Controls",
+      "description": "Define and agree information security requirements with suppliers",
+      "article": {
+        "article_number": "5.19",
+        "section_name": "Information security in supplier relationships",
+        "full_text": "Processes and procedures shall be defined and agreed with each supplier to maintain an appropriate level of information security and service delivery in line with supplier agreements.",
+        "guidance": "Supplier security should address: security requirements in supplier selection; security clauses in agreements; supply chain security; service delivery management; monitoring and review; incident management.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.19"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.20",
+      "name": "Addressing information security within supplier agreements",
+      "family": "Organizational Controls",
+      "description": "Include relevant security requirements in supplier agreements",
+      "article": {
+        "article_number": "5.20",
+        "section_name": "Addressing information security within supplier agreements",
+        "full_text": "Relevant information security requirements shall be established and agreed with each supplier based on the type of supplier relationship.",
+        "guidance": "Supplier agreements should include: description of information to be provided; classification of information; legal and regulatory requirements; right to audit; incident management procedures; termination clauses; subcontracting arrangements.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.20"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.21",
+      "name": "Managing information security in the ICT supply chain",
+      "family": "Organizational Controls",
+      "description": "Define and implement security processes for ICT supply chain",
+      "article": {
+        "article_number": "5.21",
+        "section_name": "Managing information security in the ICT supply chain",
+        "full_text": "Processes and procedures shall be defined and implemented to manage the information security risks associated with the ICT products and services supply chain.",
+        "guidance": "ICT supply chain security should address: supplier security assessment; product security verification; secure acquisition; software provenance; supply chain monitoring; resilience planning.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.21"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.22",
+      "name": "Monitoring, review and change management of supplier services",
+      "family": "Organizational Controls",
+      "description": "Monitor, review and manage changes in supplier services",
+      "article": {
+        "article_number": "5.22",
+        "section_name": "Monitoring, review and change management of supplier services",
+        "full_text": "The organization shall regularly monitor, review, evaluate and manage change in supplier information security practices and service delivery.",
+        "guidance": "Supplier monitoring should include: performance reviews; security audits; compliance verification; change management; incident review; continuous improvement.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.22"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.23",
+      "name": "Information security for use of cloud services",
+      "family": "Organizational Controls",
+      "description": "Secure acquisition, use and management of cloud services",
+      "article": {
+        "article_number": "5.23",
+        "section_name": "Information security for use of cloud services",
+        "full_text": "Processes for acquisition, use, management and exit from cloud services shall be established in accordance with the organization's information security requirements.",
+        "guidance": "Cloud security should address: cloud service provider assessment; data location and sovereignty; data protection and encryption; access control; service level agreements; exit strategy; vendor lock-in avoidance.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.23"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.24",
+      "name": "Information security incident management planning and preparation",
+      "family": "Organizational Controls",
+      "description": "Plan and prepare for managing information security incidents",
+      "article": {
+        "article_number": "5.24",
+        "section_name": "Information security incident management planning and preparation",
+        "full_text": "The organization shall plan and prepare for managing information security incidents by defining, establishing and communicating information security incident management processes, roles and responsibilities.",
+        "guidance": "Incident management planning should include: incident response procedures; escalation procedures; roles and responsibilities; communication plans; evidence collection; forensics capabilities; training and awareness.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.24"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.25",
+      "name": "Assessment and decision on information security events",
+      "family": "Organizational Controls",
+      "description": "Assess and classify information security events",
+      "article": {
+        "article_number": "5.25",
+        "section_name": "Assessment and decision on information security events",
+        "full_text": "The organization shall assess information security events and decide if they are to be categorized as information security incidents.",
+        "guidance": "Event assessment should include: event detection; event logging; event analysis; severity classification; incident declaration; escalation criteria.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.25"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.26",
+      "name": "Response to information security incidents",
+      "family": "Organizational Controls",
+      "description": "Respond to information security incidents according to documented procedures",
+      "article": {
+        "article_number": "5.26",
+        "section_name": "Response to information security incidents",
+        "full_text": "Information security incidents shall be responded to in accordance with the documented procedures.",
+        "guidance": "Incident response should include: containment; eradication; recovery; evidence preservation; communication; documentation; lessons learned.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.26"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.27",
+      "name": "Learning from information security incidents",
+      "family": "Organizational Controls",
+      "description": "Use knowledge from security incidents to strengthen security",
+      "article": {
+        "article_number": "5.27",
+        "section_name": "Learning from information security incidents",
+        "full_text": "Knowledge gained from information security incidents shall be used to strengthen and improve the information security controls.",
+        "guidance": "Learning processes should include: post-incident review; root cause analysis; control effectiveness evaluation; improvement recommendations; knowledge sharing; metrics and trends.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.27"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.28",
+      "name": "Collection of evidence",
+      "family": "Organizational Controls",
+      "description": "Establish procedures for evidence collection and preservation",
+      "article": {
+        "article_number": "5.28",
+        "section_name": "Collection of evidence",
+        "full_text": "The organization shall establish and implement procedures for the identification, collection, acquisition and preservation of evidence.",
+        "guidance": "Evidence handling should address: chain of custody; forensic procedures; legal admissibility; evidence storage; evidence disposal; expert involvement.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.28"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.29",
+      "name": "Information security during disruption",
+      "family": "Organizational Controls",
+      "description": "Maintain information security during disruption",
+      "article": {
+        "article_number": "5.29",
+        "section_name": "Information security during disruption",
+        "full_text": "The organization shall plan how to maintain information security at an appropriate level during disruption.",
+        "guidance": "Disruption planning should include: business continuity integration; alternative procedures; reduced security controls documentation; recovery priorities; testing and exercises.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.29"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.30",
+      "name": "ICT readiness for business continuity",
+      "family": "Organizational Controls",
+      "description": "Ensure ICT readiness to support business continuity",
+      "article": {
+        "article_number": "5.30",
+        "section_name": "ICT readiness for business continuity",
+        "full_text": "ICT readiness shall be planned, implemented, maintained and tested based on business continuity objectives and ICT continuity requirements.",
+        "guidance": "ICT continuity should address: backup procedures; redundancy; alternative sites; recovery time objectives; recovery point objectives; testing and maintenance.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.30"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.31",
+      "name": "Legal, statutory, regulatory and contractual requirements",
+      "family": "Organizational Controls",
+      "description": "Identify and meet legal and contractual security requirements",
+      "article": {
+        "article_number": "5.31",
+        "section_name": "Legal, statutory, regulatory and contractual requirements",
+        "full_text": "Legal, statutory, regulatory and contractual requirements relevant to information security and the organization's approach to meet these requirements shall be identified, documented and kept up to date.",
+        "guidance": "Compliance requirements should be: identified for each information system; documented; reviewed regularly; assigned ownership; integrated into processes.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.31"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.32",
+      "name": "Intellectual property rights",
+      "family": "Organizational Controls",
+      "description": "Implement procedures to protect intellectual property rights",
+      "article": {
+        "article_number": "5.32",
+        "section_name": "Intellectual property rights",
+        "full_text": "The organization shall implement appropriate procedures to protect intellectual property rights.",
+        "guidance": "IPR protection should include: software licensing compliance; copyright protection; trademark protection; patent protection; trade secret protection; usage policies.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.32"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.33",
+      "name": "Protection of records",
+      "family": "Organizational Controls",
+      "description": "Protect records from loss, destruction and falsification",
+      "article": {
+        "article_number": "5.33",
+        "section_name": "Protection of records",
+        "full_text": "Records shall be protected from loss, destruction, falsification, unauthorized access and unauthorized release.",
+        "guidance": "Record protection should address: retention requirements; storage security; access controls; backup procedures; destruction procedures; audit trails.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.33"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.34",
+      "name": "Privacy and protection of PII",
+      "family": "Organizational Controls",
+      "description": "Ensure privacy and protection of personally identifiable information",
+      "article": {
+        "article_number": "5.34",
+        "section_name": "Privacy and protection of PII",
+        "full_text": "The organization shall identify and meet requirements regarding the preservation of privacy and protection of PII according to applicable laws and regulations and contractual requirements.",
+        "guidance": "Privacy protection should include: data minimization; purpose limitation; consent management; data subject rights; privacy by design; data protection impact assessments; international data transfers.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.34, ISO/IEC 27701"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.35",
+      "name": "Independent review of information security",
+      "family": "Organizational Controls",
+      "description": "Conduct independent reviews of information security",
+      "article": {
+        "article_number": "5.35",
+        "section_name": "Independent review of information security",
+        "full_text": "The organization's approach to managing information security and its implementation including people, processes and technologies shall be reviewed independently at planned intervals, or when significant changes occur.",
+        "guidance": "Independent reviews should: be performed by competent assessors; cover all aspects of ISMS; identify non-conformities; provide improvement recommendations; be documented; result in action plans.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.35"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.36",
+      "name": "Compliance with policies, rules and standards for information security",
+      "family": "Organizational Controls",
+      "description": "Verify compliance with security policies and standards",
+      "article": {
+        "article_number": "5.36",
+        "section_name": "Compliance with policies, rules and standards for information security",
+        "full_text": "Compliance with the organization's information security policy, topic-specific policies, rules and standards shall be regularly reviewed.",
+        "guidance": "Compliance verification should include: regular audits; automated compliance checking; management reviews; self-assessments; remediation tracking.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.36"
+      }
+    },
+    {
+      "control_id": "ISO-27001-5.37",
+      "name": "Documented operating procedures",
+      "family": "Organizational Controls",
+      "description": "Document and maintain operating procedures for information processing facilities",
+      "article": {
+        "article_number": "5.37",
+        "section_name": "Documented operating procedures",
+        "full_text": "Operating procedures for information processing facilities shall be documented and made available to personnel who need them.",
+        "guidance": "Operating procedures should cover: system startup and shutdown; backup procedures; scheduling requirements; error handling; system monitoring; media handling; incident management.",
+        "external_references": "ISO/IEC 27002:2022 Section 5.37"
+      }
+    },
+    {
+      "control_id": "ISO-27001-6.1",
+      "name": "Screening",
+      "family": "People Controls",
+      "description": "Conduct background verification checks on all candidates for employment",
+      "article": {
+        "article_number": "6.1",
+        "section_name": "Screening",
+        "full_text": "Background verification checks on all candidates for employment shall be carried out prior to joining the organization and on an ongoing basis taking into consideration applicable laws, regulations and ethics and be proportional to the business requirements, the classification of the information to be accessed and the perceived risks.",
+        "guidance": "Background screening should include: identity verification; employment history; education verification; criminal records check; credit check (where appropriate); reference checks. The level of screening should be commensurate with the role sensitivity.",
+        "external_references": "ISO/IEC 27002:2022 Section 6.1"
+      }
+    },
+    {
+      "control_id": "ISO-27001-6.2",
+      "name": "Terms and conditions of employment",
+      "family": "People Controls",
+      "description": "Include security responsibilities in employment contracts",
+      "article": {
+        "article_number": "6.2",
+        "section_name": "Terms and conditions of employment",
+        "full_text": "The employment contractual agreements shall state the personnel's and the organization's responsibilities for information security.",
+        "guidance": "Employment contracts should address: confidentiality agreements; acceptable use policies; responsibilities for asset protection; intellectual property rights; disciplinary process; termination procedures; post-employment obligations.",
+        "external_references": "ISO/IEC 27002:2022 Section 6.2"
+      }
+    },
+    {
+      "control_id": "ISO-27001-6.3",
+      "name": "Information security awareness, education and training",
+      "family": "People Controls",
+      "description": "Provide security awareness, education and training to all employees",
+      "article": {
+        "article_number": "6.3",
+        "section_name": "Information security awareness, education and training",
+        "full_text": "Personnel of the organization and relevant interested parties shall receive appropriate information security awareness, education and training and regular updates of the organization's information security policy, topic-specific policies and procedures, as relevant for their job function.",
+        "guidance": "Security training should include: induction training; role-specific training; regular refresher training; specialized technical training; awareness campaigns; phishing simulations; metrics and effectiveness measurement.",
+        "external_references": "ISO/IEC 27002:2022 Section 6.3"
+      }
+    },
+    {
+      "control_id": "ISO-27001-6.4",
+      "name": "Disciplinary process",
+      "family": "People Controls",
+      "description": "Establish formal disciplinary process for security violations",
+      "article": {
+        "article_number": "6.4",
+        "section_name": "Disciplinary process",
+        "full_text": "A formal disciplinary process shall be in place to take action against personnel and other relevant interested parties who have committed an information security policy violation.",
+        "guidance": "Disciplinary process should: be fair and consistent; be clearly documented; be communicated to all personnel; consider severity of violation; include progressive discipline; comply with employment laws; be enforced consistently.",
+        "external_references": "ISO/IEC 27002:2022 Section 6.4"
+      }
+    },
+    {
+      "control_id": "ISO-27001-6.5",
+      "name": "Responsibilities after termination or change of employment",
+      "family": "People Controls",
+      "description": "Define security responsibilities after employment changes",
+      "article": {
+        "article_number": "6.5",
+        "section_name": "Responsibilities after termination or change of employment",
+        "full_text": "Information security responsibilities and duties that remain valid after termination or change of employment shall be defined, enforced and communicated to relevant personnel and other interested parties.",
+        "guidance": "Post-employment responsibilities should include: ongoing confidentiality obligations; return of assets; knowledge transfer; exit interviews; access revocation; continuing restrictions.",
+        "external_references": "ISO/IEC 27002:2022 Section 6.5"
+      }
+    },
+    {
+      "control_id": "ISO-27001-6.6",
+      "name": "Confidentiality or non-disclosure agreements",
+      "family": "People Controls",
+      "description": "Require confidentiality agreements from employees and contractors",
+      "article": {
+        "article_number": "6.6",
+        "section_name": "Confidentiality or non-disclosure agreements",
+        "full_text": "Confidentiality or non-disclosure agreements reflecting the organization's needs for the protection of information shall be identified, documented, regularly reviewed and signed by personnel and relevant interested parties.",
+        "guidance": "NDAs should: cover all forms of information; specify duration of obligation; define permitted disclosures; include legal remedies; be reviewed regularly; be updated when requirements change.",
+        "external_references": "ISO/IEC 27002:2022 Section 6.6"
+      }
+    },
+    {
+      "control_id": "ISO-27001-6.7",
+      "name": "Remote working",
+      "family": "People Controls",
+      "description": "Implement security measures for remote working",
+      "article": {
+        "article_number": "6.7",
+        "section_name": "Remote working",
+        "full_text": "Security measures shall be implemented when personnel are working remotely to protect information accessed, processed or stored outside the organization's premises.",
+        "guidance": "Remote working security should include: secure access methods; endpoint security; physical security at remote location; acceptable use policy; equipment provisions; data protection; network security.",
+        "external_references": "ISO/IEC 27002:2022 Section 6.7"
+      }
+    },
+    {
+      "control_id": "ISO-27001-6.8",
+      "name": "Information security event reporting",
+      "family": "People Controls",
+      "description": "Provide mechanism for reporting security events",
+      "article": {
+        "article_number": "6.8",
+        "section_name": "Information security event reporting",
+        "full_text": "The organization shall provide a mechanism for personnel to report observed or suspected information security events through appropriate channels in a timely manner.",
+        "guidance": "Event reporting should include: multiple reporting channels; clear procedures; confidential reporting options; no-blame culture; feedback mechanism; tracking system; escalation procedures.",
+        "external_references": "ISO/IEC 27002:2022 Section 6.8"
+      }
+    },
+    {
+      "control_id": "ISO-27001-7.1",
+      "name": "Physical security perimeters",
+      "family": "Physical Controls",
+      "description": "Define and protect physical security perimeters",
+      "article": {
+        "article_number": "7.1",
+        "section_name": "Physical security perimeters",
+        "full_text": "Security perimeters shall be defined and used to protect areas that contain information and other associated assets.",
+        "guidance": "Physical perimeters should: be clearly defined; provide appropriate protection; consider natural and man-made threats; include multiple layers; be monitored; have controlled entry points.",
+        "external_references": "ISO/IEC 27002:2022 Section 7.1"
+      }
+    },
+    {
+      "control_id": "ISO-27001-7.2",
+      "name": "Physical entry",
+      "family": "Physical Controls",
+      "description": "Control physical entry to secure areas",
+      "article": {
+        "article_number": "7.2",
+        "section_name": "Physical entry",
+        "full_text": "Secure areas shall be protected by appropriate entry controls and access points.",
+        "guidance": "Entry controls should include: access cards; biometrics; security guards; visitor logs; escort requirements; access reviews; tailgating prevention.",
+        "external_references": "ISO/IEC 27002:2022 Section 7.2"
+      }
+    },
+    {
+      "control_id": "ISO-27001-7.3",
+      "name": "Securing offices, rooms and facilities",
+      "family": "Physical Controls",
+      "description": "Design and implement physical security for offices and facilities",
+      "article": {
+        "article_number": "7.3",
+        "section_name": "Securing offices, rooms and facilities",
+        "full_text": "Physical security for offices, rooms and facilities shall be designed and implemented.",
+        "guidance": "Facility security should address: location selection; construction standards; environmental controls; fire suppression; power supply; cabling security; maintenance access.",
+        "external_references": "ISO/IEC 27002:2022 Section 7.3"
+      }
+    },
+    {
+      "control_id": "ISO-27001-7.4",
+      "name": "Physical security monitoring",
+      "family": "Physical Controls",
+      "description": "Monitor premises continuously for unauthorized physical access",
+      "article": {
+        "article_number": "7.4",
+        "section_name": "Physical security monitoring",
+        "full_text": "Premises shall be continuously monitored for unauthorized physical access.",
+        "guidance": "Physical monitoring should include: CCTV systems; intrusion detection; security patrols; alarm systems; access logs; incident response; recording retention.",
+        "external_references": "ISO/IEC 27002:2022 Section 7.4"
+      }
+    },
+    {
+      "control_id": "ISO-27001-7.5",
+      "name": "Protecting against physical and environmental threats",
+      "family": "Physical Controls",
+      "description": "Design and implement protection against physical and environmental threats",
+      "article": {
+        "article_number": "7.5",
+        "section_name": "Protecting against physical and environmental threats",
+        "full_text": "Protection against physical and environmental threats, such as natural disasters and other intentional or unintentional physical threats to infrastructure shall be designed and implemented.",
+        "guidance": "Environmental protection should address: fire detection and suppression; flood protection; earthquake protection; temperature and humidity control; power backup; lightning protection.",
+        "external_references": "ISO/IEC 27002:2022 Section 7.5"
+      }
+    },
+    {
+      "control_id": "ISO-27001-7.6",
+      "name": "Working in secure areas",
+      "family": "Physical Controls",
+      "description": "Design and implement security measures for working in secure areas",
+      "article": {
+        "article_number": "7.6",
+        "section_name": "Working in secure areas",
+        "full_text": "Security measures for working in secure areas shall be designed and implemented.",
+        "guidance": "Secure area procedures should include: clear desk policy; visitor supervision; photography restrictions; sensitive information handling; screen privacy; equipment removal procedures.",
+        "external_references": "ISO/IEC 27002:2022 Section 7.6"
+      }
+    },
+    {
+      "control_id": "ISO-27001-7.7",
+      "name": "Clear desk and clear screen",
+      "family": "Physical Controls",
+      "description": "Enforce clear desk and clear screen policies",
+      "article": {
+        "article_number": "7.7",
+        "section_name": "Clear desk and clear screen",
+        "full_text": "Clear desk rules for papers and removable storage media and clear screen rules for information processing facilities shall be defined and appropriately enforced.",
+        "guidance": "Clear desk/screen policy should address: locking screens when unattended; securing papers in storage; disposing of waste securely; locking removable media; visitor considerations; enforcement and monitoring.",
+        "external_references": "ISO/IEC 27002:2022 Section 7.7"
+      }
+    },
+    {
+      "control_id": "ISO-27001-7.8",
+      "name": "Equipment siting and protection",
+      "family": "Physical Controls",
+      "description": "Locate and protect equipment appropriately",
+      "article": {
+        "article_number": "7.8",
+        "section_name": "Equipment siting and protection",
+        "full_text": "Equipment shall be sited securely and protected.",
+        "guidance": "Equipment protection should consider: environmental conditions; physical access; power supply; electromagnetic interference; visibility from outside; cable protection.",
+        "external_references": "ISO/IEC 27002:2022 Section 7.8"
+      }
+    },
+    {
+      "control_id": "ISO-27001-7.9",
+      "name": "Security of assets off-premises",
+      "family": "Physical Controls",
+      "description": "Protect assets outside organizational premises",
+      "article": {
+        "article_number": "7.9",
+        "section_name": "Security of assets off-premises",
+        "full_text": "Off-site assets shall be protected.",
+        "guidance": "Off-site asset protection should include: authorization requirements; transportation security; remote working controls; encryption; tracking; insurance; physical security at off-site locations.",
+        "external_references": "ISO/IEC 27002:2022 Section 7.9"
+      }
+    },
+    {
+      "control_id": "ISO-27001-7.10",
+      "name": "Storage media",
+      "family": "Physical Controls",
+      "description": "Manage storage media according to classification",
+      "article": {
+        "article_number": "7.10",
+        "section_name": "Storage media",
+        "full_text": "Storage media shall be managed through their life cycle of acquisition, use, transportation and disposal in accordance with the organization's classification scheme and handling requirements.",
+        "guidance": "Media management should cover: media registration; secure storage; authorized access; transportation procedures; sanitization before reuse; secure disposal; audit trails.",
+        "external_references": "ISO/IEC 27002:2022 Section 7.10"
+      }
+    },
+    {
+      "control_id": "ISO-27001-7.11",
+      "name": "Supporting utilities",
+      "family": "Physical Controls",
+      "description": "Protect information processing facilities from utility failures",
+      "article": {
+        "article_number": "7.11",
+        "section_name": "Supporting utilities",
+        "full_text": "Information processing facilities shall be protected from power failures and other disruptions caused by failures in supporting utilities.",
+        "guidance": "Utility protection should include: UPS systems; backup generators; redundant power feeds; telecommunications redundancy; water supply; HVAC backup; fuel supplies; regular testing.",
+        "external_references": "ISO/IEC 27002:2022 Section 7.11"
+      }
+    },
+    {
+      "control_id": "ISO-27001-7.12",
+      "name": "Cabling security",
+      "family": "Physical Controls",
+      "description": "Protect cables from interception, interference or damage",
+      "article": {
+        "article_number": "7.12",
+        "section_name": "Cabling security",
+        "full_text": "Cables carrying power, data or supporting information services shall be protected from interception, interference or damage.",
+        "guidance": "Cable security should include: underground or protected routing; cable shielding; separation of power and data cables; access restrictions; cable labeling; documentation; regular inspection.",
+        "external_references": "ISO/IEC 27002:2022 Section 7.12"
+      }
+    },
+    {
+      "control_id": "ISO-27001-7.13",
+      "name": "Equipment maintenance",
+      "family": "Physical Controls",
+      "description": "Maintain equipment to ensure availability and integrity",
+      "article": {
+        "article_number": "7.13",
+        "section_name": "Equipment maintenance",
+        "full_text": "Equipment shall be maintained correctly to ensure availability, integrity and confidentiality of information.",
+        "guidance": "Equipment maintenance should include: regular servicing; maintenance records; authorized personnel only; data sanitization before service; spare parts availability; vendor support agreements.",
+        "external_references": "ISO/IEC 27002:2022 Section 7.13"
+      }
+    },
+    {
+      "control_id": "ISO-27001-7.14",
+      "name": "Secure disposal or re-use of equipment",
+      "family": "Physical Controls",
+      "description": "Securely dispose of or re-use equipment containing storage media",
+      "article": {
+        "article_number": "7.14",
+        "section_name": "Secure disposal or re-use of equipment",
+        "full_text": "Items of equipment containing storage media shall be verified to ensure that any sensitive data and licensed software has been removed or securely overwritten prior to disposal or re-use.",
+        "guidance": "Equipment disposal should include: data sanitization procedures; physical destruction when necessary; verification of data removal; disposal tracking; certificate of destruction; environmental considerations.",
+        "external_references": "ISO/IEC 27002:2022 Section 7.14"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.1",
+      "name": "User endpoint devices",
+      "family": "Technological Controls",
+      "description": "Protect information on user endpoint devices",
+      "article": {
+        "article_number": "8.1",
+        "section_name": "User endpoint devices",
+        "full_text": "Information stored on, processed by or accessible via user endpoint devices shall be protected.",
+        "guidance": "Endpoint protection should include: anti-malware; encryption; screen locks; approved software only; patch management; mobile device management; remote wipe capability; BYOD policies.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.1"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.2",
+      "name": "Privileged access rights",
+      "family": "Technological Controls",
+      "description": "Restrict and control allocation of privileged access rights",
+      "article": {
+        "article_number": "8.2",
+        "section_name": "Privileged access rights",
+        "full_text": "The allocation and use of privileged access rights shall be restricted and managed.",
+        "guidance": "Privileged access should be: granted based on need; regularly reviewed; monitored and logged; subject to approval; time-limited where appropriate; used through dedicated accounts; protected by strong authentication.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.2"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.3",
+      "name": "Information access restriction",
+      "family": "Technological Controls",
+      "description": "Restrict access to information and application system functions",
+      "article": {
+        "article_number": "8.3",
+        "section_name": "Information access restriction",
+        "full_text": "Access to information and other associated assets shall be restricted in accordance with the established topic-specific policy on access control.",
+        "guidance": "Access restrictions should implement: need-to-know principle; role-based access; attribute-based access; least privilege; separation of duties; default deny; access logging.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.3"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.4",
+      "name": "Access to source code",
+      "family": "Technological Controls",
+      "description": "Control read and write access to source code",
+      "article": {
+        "article_number": "8.4",
+        "section_name": "Access to source code",
+        "full_text": "Read and write access to source code, development tools and software libraries shall be appropriately managed.",
+        "guidance": "Source code protection should include: version control; access restrictions; code review requirements; separation of environments; change management; backup procedures; intellectual property protection.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.4"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.5",
+      "name": "Secure authentication",
+      "family": "Technological Controls",
+      "description": "Implement secure authentication technologies and procedures",
+      "article": {
+        "article_number": "8.5",
+        "section_name": "Secure authentication",
+        "full_text": "Secure authentication technologies and procedures shall be implemented based on information access restrictions and the topic-specific policy on access control.",
+        "guidance": "Authentication should include: multi-factor authentication; password complexity; biometrics where appropriate; single sign-on; session management; authentication logs; account lockout.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.5"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.6",
+      "name": "Capacity management",
+      "family": "Technological Controls",
+      "description": "Monitor and adjust capacity to meet performance requirements",
+      "article": {
+        "article_number": "8.6",
+        "section_name": "Capacity management",
+        "full_text": "The use of resources shall be monitored and adjusted in line with current and expected capacity requirements.",
+        "guidance": "Capacity management should include: resource monitoring; trend analysis; capacity planning; performance tuning; scalability planning; bottleneck identification; regular reviews.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.6"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.7",
+      "name": "Protection against malware",
+      "family": "Technological Controls",
+      "description": "Implement protection against malware",
+      "article": {
+        "article_number": "8.7",
+        "section_name": "Protection against malware",
+        "full_text": "Protection against malware shall be implemented and supported by appropriate user awareness.",
+        "guidance": "Malware protection should include: anti-malware software; regular updates; scanning procedures; quarantine capabilities; incident response; user training; application whitelisting; email filtering.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.7"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.8",
+      "name": "Management of technical vulnerabilities",
+      "family": "Technological Controls",
+      "description": "Identify and manage technical vulnerabilities",
+      "article": {
+        "article_number": "8.8",
+        "section_name": "Management of technical vulnerabilities",
+        "full_text": "Information about technical vulnerabilities of information systems in use shall be obtained, the organization's exposure to such vulnerabilities evaluated and appropriate measures taken.",
+        "guidance": "Vulnerability management should include: vulnerability scanning; patch management; vulnerability assessment; risk evaluation; remediation prioritization; tracking and metrics; vendor notifications.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.8"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.9",
+      "name": "Configuration management",
+      "family": "Technological Controls",
+      "description": "Establish and maintain configurations including security configurations",
+      "article": {
+        "article_number": "8.9",
+        "section_name": "Configuration management",
+        "full_text": "Configurations, including security configurations, of hardware, software, services and networks shall be established, documented, implemented, monitored and reviewed.",
+        "guidance": "Configuration management should include: baseline configurations; change control; configuration documentation; automated deployment; compliance monitoring; configuration audits; version control.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.9"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.10",
+      "name": "Information deletion",
+      "family": "Technological Controls",
+      "description": "Delete information when no longer required",
+      "article": {
+        "article_number": "8.10",
+        "section_name": "Information deletion",
+        "full_text": "Information stored in information systems, devices or in any other storage media shall be deleted when no longer required.",
+        "guidance": "Information deletion should address: retention requirements; deletion procedures; secure deletion methods; verification of deletion; automated deletion; backup considerations; legal holds.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.10"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.11",
+      "name": "Data masking",
+      "family": "Technological Controls",
+      "description": "Use data masking according to access control policy",
+      "article": {
+        "article_number": "8.11",
+        "section_name": "Data masking",
+        "full_text": "Data masking shall be used in accordance with the organization's topic-specific policy on access control and other related topic-specific policies, and business requirements, taking applicable legislation into consideration.",
+        "guidance": "Data masking should include: test data masking; production data protection; masking methods (redaction, substitution, shuffling); masking consistency; reversibility considerations; audit logging.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.11"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.12",
+      "name": "Data leakage prevention",
+      "family": "Technological Controls",
+      "description": "Apply data leakage prevention measures",
+      "article": {
+        "article_number": "8.12",
+        "section_name": "Data leakage prevention",
+        "full_text": "Data leakage prevention measures shall be applied to systems, networks and any other devices that process, store or transmit sensitive information.",
+        "guidance": "DLP should include: content inspection; contextual analysis; policy enforcement; encryption enforcement; removable media control; email monitoring; cloud access security; incident alerting.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.12"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.13",
+      "name": "Information backup",
+      "family": "Technological Controls",
+      "description": "Maintain backup copies of information and test restoration",
+      "article": {
+        "article_number": "8.13",
+        "section_name": "Information backup",
+        "full_text": "Backup copies of information, software and systems shall be maintained and regularly tested in accordance with the agreed topic-specific policy on backup.",
+        "guidance": "Backup procedures should include: backup scheduling; off-site storage; encryption of backups; retention management; restoration testing; backup monitoring; documentation; version control.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.13"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.14",
+      "name": "Redundancy of information processing facilities",
+      "family": "Technological Controls",
+      "description": "Implement redundancy for availability requirements",
+      "article": {
+        "article_number": "8.14",
+        "section_name": "Redundancy of information processing facilities",
+        "full_text": "Information processing facilities shall be implemented with redundancy sufficient to meet availability requirements.",
+        "guidance": "Redundancy should include: redundant systems; load balancing; failover capabilities; geographic distribution; regular testing; maintenance procedures; capacity planning.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.14"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.15",
+      "name": "Logging",
+      "family": "Technological Controls",
+      "description": "Produce, store and protect logs recording activities and events",
+      "article": {
+        "article_number": "8.15",
+        "section_name": "Logging",
+        "full_text": "Logs that record activities, exceptions, faults and other relevant events shall be produced, stored, protected and analyzed.",
+        "guidance": "Logging should include: event logging; log protection; time synchronization; log retention; log analysis; security information and event management (SIEM); alerting; audit trails.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.15"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.16",
+      "name": "Monitoring activities",
+      "family": "Technological Controls",
+      "description": "Monitor networks, systems and applications for anomalies",
+      "article": {
+        "article_number": "8.16",
+        "section_name": "Monitoring activities",
+        "full_text": "Networks, systems and applications shall be monitored for anomalous behaviour and appropriate action taken to evaluate potential information security incidents.",
+        "guidance": "Monitoring should include: real-time monitoring; baseline establishment; anomaly detection; security monitoring; performance monitoring; capacity monitoring; automated alerting; investigation procedures.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.16"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.17",
+      "name": "Clock synchronization",
+      "family": "Technological Controls",
+      "description": "Synchronize clocks of all systems",
+      "article": {
+        "article_number": "8.17",
+        "section_name": "Clock synchronization",
+        "full_text": "The clocks of information processing systems used by the organization shall be synchronized to approved time sources.",
+        "guidance": "Clock synchronization should use: NTP or equivalent; authoritative time sources; monitoring of synchronization; protection of time sources; consideration of time zones; logging of time adjustments.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.17"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.18",
+      "name": "Use of privileged utility programs",
+      "family": "Technological Controls",
+      "description": "Restrict and control use of privileged utility programs",
+      "article": {
+        "article_number": "8.18",
+        "section_name": "Use of privileged utility programs",
+        "full_text": "The use of utility programs that might be capable of overriding system and application controls shall be restricted and tightly controlled.",
+        "guidance": "Utility program controls should include: restricted access; approval requirements; logging of use; separation from production systems; time-limited access; monitoring; regular reviews.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.18"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.19",
+      "name": "Installation of software on operational systems",
+      "family": "Technological Controls",
+      "description": "Implement procedures to control software installation",
+      "article": {
+        "article_number": "8.19",
+        "section_name": "Installation of software on operational systems",
+        "full_text": "Procedures and measures shall be implemented to securely manage software installation on operational systems.",
+        "guidance": "Software installation controls should include: approval process; testing requirements; change management; configuration management; vulnerability assessment; compatibility testing; rollback procedures.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.19"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.20",
+      "name": "Networks security",
+      "family": "Technological Controls",
+      "description": "Secure networks and protect network services",
+      "article": {
+        "article_number": "8.20",
+        "section_name": "Networks security",
+        "full_text": "Networks and network devices shall be secured, managed and controlled to protect information in systems and applications.",
+        "guidance": "Network security should include: network segregation; firewalls; intrusion detection/prevention; network access control; wireless security; VPNs; DMZ; regular security assessments.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.20"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.21",
+      "name": "Security of network services",
+      "family": "Technological Controls",
+      "description": "Identify and implement security mechanisms for network services",
+      "article": {
+        "article_number": "8.21",
+        "section_name": "Security of network services",
+        "full_text": "Security mechanisms, service levels and service requirements of network services shall be identified, implemented and monitored.",
+        "guidance": "Network service security should address: service level agreements; security features; capacity management; traffic management; redundancy; monitoring; vendor management.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.21"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.22",
+      "name": "Segregation of networks",
+      "family": "Technological Controls",
+      "description": "Segregate groups of information services and users",
+      "article": {
+        "article_number": "8.22",
+        "section_name": "Segregation of networks",
+        "full_text": "Groups of information services, users and information systems shall be segregated in the organization's networks.",
+        "guidance": "Network segregation should use: VLANs; subnets; DMZ; zero trust architecture; microsegmentation; application segmentation; access control lists; routing controls.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.22"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.23",
+      "name": "Web filtering",
+      "family": "Technological Controls",
+      "description": "Manage access to external websites",
+      "article": {
+        "article_number": "8.23",
+        "section_name": "Web filtering",
+        "full_text": "Access to external websites shall be managed to reduce exposure to malicious content.",
+        "guidance": "Web filtering should include: category-based filtering; malware protection; content inspection; HTTPS inspection; bypass prevention; logging; acceptable use enforcement; regular updates.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.23"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.24",
+      "name": "Use of cryptography",
+      "family": "Technological Controls",
+      "description": "Define and implement rules for effective use of cryptography",
+      "article": {
+        "article_number": "8.24",
+        "section_name": "Use of cryptography",
+        "full_text": "Rules for the effective use of cryptography, including cryptographic key management, shall be defined and implemented.",
+        "guidance": "Cryptography use should address: encryption algorithms; key lengths; key management; certificate management; regulatory compliance; quantum-readiness; crypto-agility; secure protocols.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.24"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.25",
+      "name": "Secure development life cycle",
+      "family": "Technological Controls",
+      "description": "Establish and apply rules for secure development",
+      "article": {
+        "article_number": "8.25",
+        "section_name": "Secure development life cycle",
+        "full_text": "Rules for the secure development of software and systems shall be established and applied.",
+        "guidance": "Secure SDLC should include: security requirements; threat modeling; secure coding standards; code review; security testing; vulnerability management; DevSecOps; security training.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.25"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.26",
+      "name": "Application security requirements",
+      "family": "Technological Controls",
+      "description": "Identify and specify security requirements for applications",
+      "article": {
+        "article_number": "8.26",
+        "section_name": "Application security requirements",
+        "full_text": "Information security requirements shall be identified, specified and approved when developing or acquiring applications.",
+        "guidance": "Application security requirements should include: input validation; authentication; authorization; session management; error handling; logging; data protection; secure communications.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.26"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.27",
+      "name": "Secure system architecture and engineering principles",
+      "family": "Technological Controls",
+      "description": "Establish and apply principles for engineering secure systems",
+      "article": {
+        "article_number": "8.27",
+        "section_name": "Secure system architecture and engineering principles",
+        "full_text": "Principles for engineering secure systems shall be established, documented, maintained and applied to any information system development activities.",
+        "guidance": "Secure architecture should include: defense in depth; least privilege; separation of duties; fail secure; simplicity; attack surface reduction; secure defaults; zero trust.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.27"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.28",
+      "name": "Secure coding",
+      "family": "Technological Controls",
+      "description": "Apply secure coding principles in software development",
+      "article": {
+        "article_number": "8.28",
+        "section_name": "Secure coding",
+        "full_text": "Secure coding principles shall be applied to software development.",
+        "guidance": "Secure coding should address: input validation; output encoding; parameterized queries; error handling; cryptography; authentication; session management; OWASP Top 10; code review.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.28, OWASP"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.29",
+      "name": "Security testing in development and acceptance",
+      "family": "Technological Controls",
+      "description": "Define and implement security testing processes",
+      "article": {
+        "article_number": "8.29",
+        "section_name": "Security testing in development and acceptance",
+        "full_text": "Security testing processes shall be defined and implemented in the development life cycle.",
+        "guidance": "Security testing should include: static analysis; dynamic analysis; penetration testing; security scanning; fuzz testing; dependency checking; acceptance criteria; remediation verification.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.29"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.30",
+      "name": "Outsourced development",
+      "family": "Technological Controls",
+      "description": "Supervise and monitor outsourced system development",
+      "article": {
+        "article_number": "8.30",
+        "section_name": "Outsourced development",
+        "full_text": "The organization shall direct, monitor and review the activities related to outsourced system development.",
+        "guidance": "Outsourced development should address: contractual requirements; security requirements; code review; intellectual property; escrow arrangements; quality assurance; acceptance testing.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.30"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.31",
+      "name": "Separation of development, test and production environments",
+      "family": "Technological Controls",
+      "description": "Separate development, test and production environments",
+      "article": {
+        "article_number": "8.31",
+        "section_name": "Separation of development, test and production environments",
+        "full_text": "Development, testing and production environments shall be separated and secured.",
+        "guidance": "Environment separation should include: physical or logical separation; access controls; data protection; change management; different credentials; network segregation; monitoring.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.31"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.32",
+      "name": "Change management",
+      "family": "Technological Controls",
+      "description": "Control changes to information processing facilities and systems",
+      "article": {
+        "article_number": "8.32",
+        "section_name": "Change management",
+        "full_text": "Changes to information processing facilities and information systems shall be subject to change management procedures.",
+        "guidance": "Change management should include: formal approval; impact assessment; security review; testing; rollback procedures; documentation; communication; post-implementation review.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.32"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.33",
+      "name": "Test information",
+      "family": "Technological Controls",
+      "description": "Protect and control test information",
+      "article": {
+        "article_number": "8.33",
+        "section_name": "Test information",
+        "full_text": "Test information shall be appropriately selected, protected and managed.",
+        "guidance": "Test information should be: based on production data structure; sanitized/anonymized; access controlled; regularly refreshed; disposed securely; monitored; subject to data protection requirements.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.33"
+      }
+    },
+    {
+      "control_id": "ISO-27001-8.34",
+      "name": "Protection of information systems during audit testing",
+      "family": "Technological Controls",
+      "description": "Plan and agree audit tests to minimize disruption",
+      "article": {
+        "article_number": "8.34",
+        "section_name": "Protection of information systems during audit testing",
+        "full_text": "Audit tests and other assurance activities involving assessment of operational systems shall be planned and agreed between the tester and appropriate management.",
+        "guidance": "Audit testing should include: advance planning; management approval; scope definition; timing considerations; backup verification; non-production testing; monitoring during testing; rollback capability.",
+        "external_references": "ISO/IEC 27002:2022 Section 8.34"
+      }
+    }
+  ]
+}
