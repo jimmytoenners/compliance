@@ -1,0 +1,412 @@
+{
+  "templates": [
+    {
+      "id": "eu-startup-getting-started",
+      "name": "Getting Started - Essential Compliance",
+      "description": "Foundational controls for European startups. Focus on GDPR basics, essential security, and incident response. Suitable for pre-seed to seed stage (1-10 employees).",
+      "maturity_level": "getting_started",
+      "recommended_for": "Startups with < 10 employees, handling personal data, limited IT infrastructure",
+      "estimated_time": "2-4 weeks to implement",
+      "control_count": 15,
+      "controls": [
+        {
+          "control_id": "GDPR-Art5",
+          "priority": "critical",
+          "rationale": "Core GDPR principles - lawfulness, fairness, transparency"
+        },
+        {
+          "control_id": "GDPR-Art6",
+          "priority": "critical",
+          "rationale": "Legal basis for processing - fundamental requirement"
+        },
+        {
+          "control_id": "GDPR-Art13",
+          "priority": "critical",
+          "rationale": "Privacy notices - must inform data subjects"
+        },
+        {
+          "control_id": "GDPR-Art30",
+          "priority": "critical",
+          "rationale": "Records of processing activities (ROPA) - mandatory documentation"
+        },
+        {
+          "control_id": "GDPR-Art32",
+          "priority": "critical",
+          "rationale": "Security of processing - technical and organizational measures"
+        },
+        {
+          "control_id": "GDPR-Art33",
+          "priority": "critical",
+          "rationale": "Breach notification to supervisory authority (72 hours)"
+        },
+        {
+          "control_id": "ISO27001-A.5.1",
+          "priority": "high",
+          "rationale": "Information security policies - foundational governance"
+        },
+        {
+          "control_id": "ISO27001-A.5.2",
+          "priority": "high",
+          "rationale": "Define security roles and responsibilities"
+        },
+        {
+          "control_id": "ISO27001-A.5.16",
+          "priority": "high",
+          "rationale": "Identity management - control who has access"
+        },
+        {
+          "control_id": "ISO27001-A.5.17",
+          "priority": "high",
+          "rationale": "Authentication - password policies"
+        },
+        {
+          "control_id": "ISO27001-A.8.5",
+          "priority": "high",
+          "rationale": "Secure authentication - MFA for critical systems"
+        },
+        {
+          "control_id": "CIS-1.1",
+          "priority": "high",
+          "rationale": "Asset inventory - know what you need to protect"
+        },
+        {
+          "control_id": "CIS-4.1",
+          "priority": "high",
+          "rationale": "Secure configuration - establish baseline security"
+        },
+        {
+          "control_id": "CIS-5.1",
+          "priority": "high",
+          "rationale": "Account management - control user accounts"
+        },
+        {
+          "control_id": "CIS-18.1",
+          "priority": "high",
+          "rationale": "Incident response - establish basic process"
+        }
+      ]
+    },
+    {
+      "id": "eu-startup-move-on",
+      "name": "Move On - Growth & Maturity",
+      "description": "Expanded controls for growing European startups. Adds vendor management, enhanced security monitoring, and formal risk management. Suitable for Series A-B stage (10-50 employees).",
+      "maturity_level": "move_on",
+      "recommended_for": "Growing startups with 10-50 employees, using cloud services, handling sensitive data at scale",
+      "estimated_time": "1-3 months to implement",
+      "control_count": 25,
+      "controls": [
+        {
+          "control_id": "GDPR-Art7",
+          "priority": "high",
+          "rationale": "Consent management - proper consent mechanisms"
+        },
+        {
+          "control_id": "GDPR-Art15",
+          "priority": "high",
+          "rationale": "Right of access - data subject requests"
+        },
+        {
+          "control_id": "GDPR-Art17",
+          "priority": "high",
+          "rationale": "Right to erasure - implement deletion procedures"
+        },
+        {
+          "control_id": "GDPR-Art25",
+          "priority": "high",
+          "rationale": "Data protection by design and by default"
+        },
+        {
+          "control_id": "GDPR-Art28",
+          "priority": "high",
+          "rationale": "Processor agreements - vendor contracts"
+        },
+        {
+          "control_id": "GDPR-Art35",
+          "priority": "high",
+          "rationale": "Data Protection Impact Assessment (DPIA)"
+        },
+        {
+          "control_id": "NIS2-Art6.1",
+          "priority": "high",
+          "rationale": "Risk analysis and security policies"
+        },
+        {
+          "control_id": "NIS2-Art6.2",
+          "priority": "critical",
+          "rationale": "Incident handling procedures"
+        },
+        {
+          "control_id": "NIS2-Art6.4",
+          "priority": "high",
+          "rationale": "Supply chain security - vendor risk management"
+        },
+        {
+          "control_id": "ISO27001-A.5.3",
+          "priority": "medium",
+          "rationale": "Segregation of duties - prevent conflicts of interest"
+        },
+        {
+          "control_id": "ISO27001-A.5.7",
+          "priority": "medium",
+          "rationale": "Threat intelligence - stay informed of risks"
+        },
+        {
+          "control_id": "ISO27001-A.5.23",
+          "priority": "high",
+          "rationale": "Cloud security - manage SaaS/IaaS risks"
+        },
+        {
+          "control_id": "ISO27001-A.8.2",
+          "priority": "high",
+          "rationale": "Privileged access rights - admin account control"
+        },
+        {
+          "control_id": "ISO27001-A.8.9",
+          "priority": "medium",
+          "rationale": "Configuration management - track changes"
+        },
+        {
+          "control_id": "ISO27001-A.8.16",
+          "priority": "high",
+          "rationale": "Monitoring activities - detect anomalies"
+        },
+        {
+          "control_id": "CIS-2.1",
+          "priority": "medium",
+          "rationale": "Software inventory - track all applications"
+        },
+        {
+          "control_id": "CIS-3.1",
+          "priority": "high",
+          "rationale": "Data protection - encryption at rest"
+        },
+        {
+          "control_id": "CIS-6.1",
+          "priority": "medium",
+          "rationale": "Access control policies - formal RBAC"
+        },
+        {
+          "control_id": "CIS-7.1",
+          "priority": "high",
+          "rationale": "Vulnerability management - regular scanning"
+        },
+        {
+          "control_id": "CIS-8.1",
+          "priority": "medium",
+          "rationale": "Audit log management - collect security logs"
+        },
+        {
+          "control_id": "SOC2-CC6.1",
+          "priority": "high",
+          "rationale": "Logical access controls - systematic access management"
+        },
+        {
+          "control_id": "SOC2-CC7.1",
+          "priority": "high",
+          "rationale": "System monitoring - detect security events"
+        },
+        {
+          "control_id": "SOC2-A1.1",
+          "priority": "medium",
+          "rationale": "Availability commitments - uptime monitoring"
+        },
+        {
+          "control_id": "SOC2-C1.1",
+          "priority": "high",
+          "rationale": "Confidentiality - protect sensitive information"
+        },
+        {
+          "control_id": "SOC2-P1.1",
+          "priority": "high",
+          "rationale": "Privacy notice - comprehensive privacy documentation"
+        }
+      ]
+    },
+    {
+      "id": "eu-startup-master",
+      "name": "Master - Enterprise-Grade Compliance",
+      "description": "Comprehensive controls for mature European startups. Includes advanced security controls, formal ISMS, business continuity, and full regulatory compliance. Suitable for Series C+ or pre-IPO (50+ employees).",
+      "maturity_level": "master",
+      "recommended_for": "Mature startups with 50+ employees, enterprise customers, regulatory scrutiny, or preparing for exit/IPO",
+      "estimated_time": "3-6 months to implement",
+      "control_count": 35,
+      "controls": [
+        {
+          "control_id": "GDPR-Art37",
+          "priority": "medium",
+          "rationale": "Data Protection Officer (DPO) - consider appointing"
+        },
+        {
+          "control_id": "GDPR-Art44",
+          "priority": "high",
+          "rationale": "International data transfers - SCCs/BCRs"
+        },
+        {
+          "control_id": "NIS2-Art6.3",
+          "priority": "high",
+          "rationale": "Business continuity and crisis management"
+        },
+        {
+          "control_id": "NIS2-Art6.5",
+          "priority": "high",
+          "rationale": "Secure SDLC - security in development"
+        },
+        {
+          "control_id": "NIS2-Art6.6",
+          "priority": "high",
+          "rationale": "Cryptography policies - encryption standards"
+        },
+        {
+          "control_id": "NIS2-Art6.8",
+          "priority": "high",
+          "rationale": "MFA and secure communications - enforce everywhere"
+        },
+        {
+          "control_id": "NIS2-Art20.1",
+          "priority": "critical",
+          "rationale": "Management body approval - board oversight"
+        },
+        {
+          "control_id": "ISO27001-A.5.10",
+          "priority": "medium",
+          "rationale": "Acceptable use policy - define proper usage"
+        },
+        {
+          "control_id": "ISO27001-A.5.15",
+          "priority": "high",
+          "rationale": "Access control - comprehensive policies"
+        },
+        {
+          "control_id": "ISO27001-A.5.30",
+          "priority": "high",
+          "rationale": "ICT readiness - business continuity"
+        },
+        {
+          "control_id": "ISO27001-A.8.1",
+          "priority": "medium",
+          "rationale": "User endpoint devices - mobile device management"
+        },
+        {
+          "control_id": "ISO27001-A.8.3",
+          "priority": "high",
+          "rationale": "Information access restriction - need-to-know"
+        },
+        {
+          "control_id": "ISO27001-A.8.4",
+          "priority": "high",
+          "rationale": "Source code access control - protect IP"
+        },
+        {
+          "control_id": "ISO27001-A.8.10",
+          "priority": "medium",
+          "rationale": "Information deletion - secure disposal"
+        },
+        {
+          "control_id": "ISO27001-A.8.11",
+          "priority": "medium",
+          "rationale": "Data masking - protect in non-prod"
+        },
+        {
+          "control_id": "ISO27001-A.8.12",
+          "priority": "high",
+          "rationale": "Data leakage prevention - DLP controls"
+        },
+        {
+          "control_id": "ISO27001-A.8.23",
+          "priority": "medium",
+          "rationale": "Web filtering - block malicious sites"
+        },
+        {
+          "control_id": "ISO27001-A.8.24",
+          "priority": "high",
+          "rationale": "Cryptography - encryption everywhere"
+        },
+        {
+          "control_id": "ISO27001-A.8.28",
+          "priority": "high",
+          "rationale": "Secure coding - SAST/DAST in pipeline"
+        },
+        {
+          "control_id": "ISO27001-A.8.31",
+          "priority": "high",
+          "rationale": "Environment separation - dev/test/prod"
+        },
+        {
+          "control_id": "CIS-9.1",
+          "priority": "medium",
+          "rationale": "Email security - anti-phishing"
+        },
+        {
+          "control_id": "CIS-10.1",
+          "priority": "medium",
+          "rationale": "Network security - firewall rules"
+        },
+        {
+          "control_id": "CIS-11.1",
+          "priority": "high",
+          "rationale": "Data recovery - backup and restore"
+        },
+        {
+          "control_id": "CIS-12.1",
+          "priority": "medium",
+          "rationale": "Network monitoring - traffic analysis"
+        },
+        {
+          "control_id": "CIS-13.1",
+          "priority": "medium",
+          "rationale": "Network protection - segmentation"
+        },
+        {
+          "control_id": "CIS-14.1",
+          "priority": "high",
+          "rationale": "Security awareness training - regular programs"
+        },
+        {
+          "control_id": "CIS-17.1",
+          "priority": "high",
+          "rationale": "Incident response plan - tested procedures"
+        },
+        {
+          "control_id": "CIS-18.3",
+          "priority": "medium",
+          "rationale": "Penetration testing - annual assessments"
+        },
+        {
+          "control_id": "SOC2-CC2.1",
+          "priority": "high",
+          "rationale": "Communication of objectives - governance"
+        },
+        {
+          "control_id": "SOC2-CC3.1",
+          "priority": "high",
+          "rationale": "Risk assessment process - formal program"
+        },
+        {
+          "control_id": "SOC2-CC5.1",
+          "priority": "medium",
+          "rationale": "Control activities - operational controls"
+        },
+        {
+          "control_id": "SOC2-CC8.1",
+          "priority": "high",
+          "rationale": "Change management - formal processes"
+        },
+        {
+          "control_id": "SOC2-CC9.1",
+          "priority": "medium",
+          "rationale": "Vendor management - third-party risk"
+        },
+        {
+          "control_id": "SOC2-PI1.1",
+          "priority": "high",
+          "rationale": "Processing integrity - data quality controls"
+        },
+        {
+          "control_id": "SOC2-P2.1",
+          "priority": "high",
+          "rationale": "Privacy - comprehensive privacy program"
+        }
+      ]
+    }
+  ]
+}

@@ -3060,8 +3060,7 @@ func (s *Store) ImportStandard(ctx context.Context, data StandardImportData) err
 
 	articleQuery := `INSERT INTO control_articles (control_library_id, standard_id, article_number, section_name, full_text, guidance, external_references)
 					 VALUES ($1, $2, $3, $4, $5, $6, $7)
-					 ON CONFLICT (control_library_id) DO UPDATE SET
-						standardID = EXCLUDED.standard_id,
+					 ON CONFLICT (control_library_id, standard_id) DO UPDATE SET
 						article_number = EXCLUDED.article_number,
 						section_name = EXCLUDED.section_name,
 						full_text = EXCLUDED.full_text,

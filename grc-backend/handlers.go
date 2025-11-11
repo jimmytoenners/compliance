@@ -2478,7 +2478,7 @@ func (s *ApiServer) HandleGetStandards(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(standards)
+	json.NewEncoder(w).Encode(map[string]interface{}{"standards": standards})
 }
 
 func (s *ApiServer) HandleGetStandardByID(w http.ResponseWriter, r *http.Request) {
@@ -2490,7 +2490,7 @@ func (s *ApiServer) HandleGetStandardByID(w http.ResponseWriter, r *http.Request
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(standard)
+	json.NewEncoder(w).Encode(map[string]interface{}{"standard": standard})
 }
 
 func (s *ApiServer) HandleGetControlsByStandard(w http.ResponseWriter, r *http.Request) {
@@ -2502,7 +2502,7 @@ func (s *ApiServer) HandleGetControlsByStandard(w http.ResponseWriter, r *http.R
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(controls)
+	json.NewEncoder(w).Encode(map[string]interface{}{"controls": controls})
 }
 
 func (s *ApiServer) HandleGetArticleByControlID(w http.ResponseWriter, r *http.Request) {
@@ -2518,7 +2518,7 @@ func (s *ApiServer) HandleGetArticleByControlID(w http.ResponseWriter, r *http.R
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(article)
+	json.NewEncoder(w).Encode(map[string]interface{}{"article": article})
 }
 
 func (s *ApiServer) HandleImportStandard(w http.ResponseWriter, r *http.Request) {

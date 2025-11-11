@@ -337,3 +337,24 @@ CREATE TRIGGER set_timestamp_vendor_assessments
 BEFORE UPDATE ON vendor_assessments
 FOR EACH ROW
 EXECUTE FUNCTION trigger_set_timestamp();
+
+-- ### 8. CONTROL ACTIVATION TEMPLATES ###
+
+CREATE TABLE control_templates (
+  id TEXT PRIMARY KEY, -- e.g., 'eu-startup-getting-started'
+  name TEXT NOT NULL,
+  description TEXT NOT NULL,
+  maturity_level TEXT NOT NULL, -- 'getting_started', 'move_on', 'master'
+  recommended_for TEXT,
+  estimated_time TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE TRIGGER set_timestamp BEFORE UPDATE ON control_templates FOR EACH ROW EXECUTE PROCEDURE trigger_set_timestamp();
+
+CREATE TABLE template_controls (\n  template_id TEXT NOT NULL REFERENCES control_templates(id) ON DELETE CASCADE,
+  control_library_id TEXT NOT NULL REFERENCES control_library(id) ON DELETE CASCADE,
+  priority TEXT NOT NULL, -- 'critical', 'high', 'medium', 'low'
+  rationale TEXT,
+  PRIMARY KEY (template_id, control_library_id)
+);
