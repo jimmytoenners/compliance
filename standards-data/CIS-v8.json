@@ -1,0 +1,1150 @@
+{
+  "standard": {
+    "code": "CIS-v8",
+    "name": "CIS Controls Version 8",
+    "version": "8.0",
+    "organization": "Center for Internet Security (CIS)",
+    "published_date": "2021-05-18",
+    "description": "The CIS Critical Security Controls are a prioritized set of actions to protect organizations and data from known cyber attack vectors.",
+    "website_url": "https://www.cisecurity.org/controls/v8",
+    "total_controls": 153
+  },
+  "controls": [
+    {
+      "control_id": "CIS-1.1",
+      "name": "Establish and Maintain Detailed Enterprise Asset Inventory",
+      "family": "Inventory and Control of Enterprise Assets",
+      "description": "Establish and maintain an accurate, detailed, and up-to-date inventory of all enterprise assets with the potential to store or process data",
+      "implementation_group": "IG1",
+      "asset_type": "Devices",
+      "security_function": "Identify",
+      "article": {
+        "article_number": "1.1",
+        "section_name": "Establish and Maintain Detailed Enterprise Asset Inventory",
+        "full_text": "Establish and maintain an accurate, detailed, and up-to-date inventory of all enterprise assets with the potential to store or process data, to include: end-user devices (including portable and mobile), network devices, non-computing/IoT devices, and servers. Ensure the inventory records the network address (if static), hardware address, machine name, enterprise asset owner, department for each asset, and whether the asset has been approved to connect to the network. For mobile end-user devices, MDM type tools can support this process, where appropriate. This inventory includes assets connected to the infrastructure physically, virtually, remotely, and those within cloud environments. Additionally, it includes assets that are regularly connected to the enterprise's network infrastructure, even if they are not under control of the enterprise. Review and update the inventory of all enterprise assets bi-annually, or more frequently.",
+        "guidance": "The first step in securing enterprise assets is knowing what needs to be secured. Creating and maintaining an accurate and up-to-date inventory is the foundation for an effective security program. Without knowing what assets exist, how can vulnerabilities be identified and remediated? Organizations should automate the process of maintaining an asset inventory wherever possible. Asset management tools, network discovery tools, and configuration management databases (CMDBs) can help maintain accurate inventories.",
+        "external_references": "NIST CSF: ID.AM-1, ISO 27001: A.8.1.1"
+      }
+    },
+    {
+      "control_id": "CIS-1.2",
+      "name": "Address Unauthorized Assets",
+      "family": "Inventory and Control of Enterprise Assets",
+      "description": "Ensure that only authorized assets are given access to the network",
+      "implementation_group": "IG1",
+      "asset_type": "Devices",
+      "security_function": "Respond",
+      "article": {
+        "article_number": "1.2",
+        "section_name": "Address Unauthorized Assets",
+        "full_text": "Ensure that a process exists to address unauthorized assets on a weekly, or more frequent, basis. The enterprise may choose to remove the asset from the network, deny the asset from connecting remotely to the network, or quarantine the asset.",
+        "guidance": "Unauthorized assets represent a significant security risk as they are outside the control of the security team and may not have appropriate security controls applied. Automated network access control (NAC) solutions can help identify and remediate unauthorized assets. The response to unauthorized assets should be proportional to the risk they represent.",
+        "external_references": "NIST CSF: PR.IP-3, ISO 27001: A.11.2.6"
+      }
+    },
+    {
+      "control_id": "CIS-1.3",
+      "name": "Utilize an Active Discovery Tool",
+      "family": "Inventory and Control of Enterprise Assets",
+      "description": "Utilize an active discovery tool to identify assets connected to the enterprise's network",
+      "implementation_group": "IG2",
+      "asset_type": "Devices",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "1.3",
+        "section_name": "Utilize an Active Discovery Tool",
+        "full_text": "Utilize an active discovery tool to identify assets connected to the enterprise's network. Configure the active discovery tool to execute daily, or more frequently.",
+        "guidance": "Passive network monitoring may not detect all assets, particularly those that communicate infrequently. Active discovery tools send queries to identify connected devices. These tools should be configured to run frequently enough to detect new assets quickly. Consider using multiple discovery methods for comprehensive coverage.",
+        "external_references": "NIST CSF: ID.AM-1"
+      }
+    },
+    {
+      "control_id": "CIS-1.4",
+      "name": "Use Dynamic Host Configuration Protocol (DHCP) Logging",
+      "family": "Inventory and Control of Enterprise Assets",
+      "description": "Use DHCP logging on all DHCP servers to update the enterprise's asset inventory",
+      "implementation_group": "IG2",
+      "asset_type": "Devices",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "1.4",
+        "section_name": "Use Dynamic Host Configuration Protocol (DHCP) Logging",
+        "full_text": "Use Dynamic Host Configuration Protocol (DHCP) logging on all DHCP servers or Internet Protocol (IP) address management tools to update the enterprise's asset inventory. Review and use logs to update the enterprise's asset inventory weekly, or more frequently.",
+        "guidance": "DHCP logs provide valuable information about devices connecting to the network, including MAC addresses, hostnames, and timestamps. This data can help identify new or unauthorized devices. Automated correlation of DHCP logs with asset inventory can improve accuracy.",
+        "external_references": "NIST CSF: ID.AM-1"
+      }
+    },
+    {
+      "control_id": "CIS-1.5",
+      "name": "Use a Passive Asset Discovery Tool",
+      "family": "Inventory and Control of Enterprise Assets",
+      "description": "Use a passive discovery tool to identify assets connected to the enterprise's network",
+      "implementation_group": "IG3",
+      "asset_type": "Devices",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "1.5",
+        "section_name": "Use a Passive Asset Discovery Tool",
+        "full_text": "Use a passive discovery tool to identify assets connected to the enterprise's network. Review and use scans to update the enterprise's asset inventory at least weekly, or more frequently.",
+        "guidance": "Passive discovery tools monitor network traffic to identify connected devices without actively querying them. This approach is less intrusive and can detect devices that might not respond to active scans. Combining passive and active discovery provides the most comprehensive visibility.",
+        "external_references": "NIST CSF: ID.AM-1"
+      }
+    },
+    {
+      "control_id": "CIS-2.1",
+      "name": "Establish and Maintain a Software Inventory",
+      "family": "Inventory and Control of Software Assets",
+      "description": "Establish and maintain a detailed inventory of all licensed software installed on enterprise assets",
+      "implementation_group": "IG1",
+      "asset_type": "Applications",
+      "security_function": "Identify",
+      "article": {
+        "article_number": "2.1",
+        "section_name": "Establish and Maintain a Software Inventory",
+        "full_text": "Establish and maintain a detailed inventory of all licensed software installed on enterprise assets. The software inventory must document the title, publisher, initial install/use date, and business purpose for each entry; where appropriate, include the Uniform Resource Locator (URL), app store(s), version(s), deployment mechanism, and decommission date. Review and update the software inventory bi-annually, or more frequently.",
+        "guidance": "A software inventory is essential for managing licenses, identifying vulnerabilities, and preventing unauthorized software. Automated software inventory tools can integrate with endpoint management systems to maintain accurate records. The inventory should distinguish between authorized and unauthorized software.",
+        "external_references": "NIST CSF: ID.AM-2, ISO 27001: A.8.1.1"
+      }
+    },
+    {
+      "control_id": "CIS-2.2",
+      "name": "Ensure Authorized Software is Currently Supported",
+      "family": "Inventory and Control of Software Assets",
+      "description": "Ensure that only currently supported software is designated as authorized",
+      "implementation_group": "IG1",
+      "asset_type": "Applications",
+      "security_function": "Identify",
+      "article": {
+        "article_number": "2.2",
+        "section_name": "Ensure Authorized Software is Currently Supported",
+        "full_text": "Ensure that only currently supported software is designated as authorized in the software inventory for enterprise assets. If software is unsupported, yet necessary for the fulfillment of the enterprise's mission, document an exception detailing mitigating controls and residual risk acceptance. For any unsupported software without an exception documentation, designate as unauthorized. Review the software list to verify software support at least monthly, or more frequently.",
+        "guidance": "Unsupported software no longer receives security updates, making it a significant vulnerability. Organizations must track software lifecycles and plan migrations before support ends. Risk acceptance should be formal and include compensating controls.",
+        "external_references": "NIST CSF: ID.AM-2"
+      }
+    },
+    {
+      "control_id": "CIS-2.3",
+      "name": "Address Unauthorized Software",
+      "family": "Inventory and Control of Software Assets",
+      "description": "Ensure that unauthorized software is either removed or the inventory is updated",
+      "implementation_group": "IG1",
+      "asset_type": "Applications",
+      "security_function": "Respond",
+      "article": {
+        "article_number": "2.3",
+        "section_name": "Address Unauthorized Software",
+        "full_text": "Ensure that unauthorized software is either removed from use on enterprise assets or receives a documented exception. Review monthly, or more frequently.",
+        "guidance": "Unauthorized software may introduce vulnerabilities, violate licensing agreements, or perform malicious activities. Automated tools can detect and remove unauthorized software. Exception processes should require business justification and security review.",
+        "external_references": "NIST CSF: PR.IP-3"
+      }
+    },
+    {
+      "control_id": "CIS-2.4",
+      "name": "Utilize Automated Software Inventory Tools",
+      "family": "Inventory and Control of Software Assets",
+      "description": "Utilize software inventory tools throughout the enterprise",
+      "implementation_group": "IG2",
+      "asset_type": "Applications",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "2.4",
+        "section_name": "Utilize Automated Software Inventory Tools",
+        "full_text": "Utilize software inventory tools, when possible, throughout the enterprise to automate the documentation of all software on enterprise assets.",
+        "guidance": "Manual software inventory is time-consuming and error-prone. Automated tools can continuously monitor installed software and report changes. These tools should integrate with asset management systems for centralized visibility.",
+        "external_references": "NIST CSF: ID.AM-2"
+      }
+    },
+    {
+      "control_id": "CIS-2.5",
+      "name": "Allowlist Authorized Software",
+      "family": "Inventory and Control of Software Assets",
+      "description": "Use technical controls to ensure only authorized software can execute",
+      "implementation_group": "IG2",
+      "asset_type": "Applications",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "2.5",
+        "section_name": "Allowlist Authorized Software",
+        "full_text": "Use technical controls, such as application allowlisting, to ensure that only authorized software can execute or be accessed. Reassess bi-annually, or more frequently.",
+        "guidance": "Application allowlisting prevents unauthorized software from executing, providing strong protection against malware. Implementation should balance security with operational needs. Modern allowlisting solutions use multiple attributes (hash, certificate, path) for flexibility.",
+        "external_references": "NIST CSF: PR.PT-2"
+      }
+    },
+    {
+      "control_id": "CIS-2.6",
+      "name": "Allowlist Authorized Libraries",
+      "family": "Inventory and Control of Software Assets",
+      "description": "Use technical controls to ensure only authorized software libraries can be loaded",
+      "implementation_group": "IG2",
+      "asset_type": "Applications",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "2.6",
+        "section_name": "Allowlist Authorized Libraries",
+        "full_text": "Use technical controls, such as digital signatures and version control, to ensure that only authorized software libraries, such as specific .dll, .ocx, .so, etc., are allowed to load into a system process. Block unauthorized libraries from loading into a system process. Reassess bi-annually, or more frequently.",
+        "guidance": "DLL hijacking and library injection are common attack vectors. Allowlisting authorized libraries prevents malicious code execution. This control complements application allowlisting for defense in depth.",
+        "external_references": "NIST CSF: PR.PT-2"
+      }
+    },
+    {
+      "control_id": "CIS-2.7",
+      "name": "Allowlist Authorized Scripts",
+      "family": "Inventory and Control of Software Assets",
+      "description": "Use technical controls to ensure only authorized scripts can execute",
+      "implementation_group": "IG3",
+      "asset_type": "Applications",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "2.7",
+        "section_name": "Allowlist Authorized Scripts",
+        "full_text": "Use technical controls, such as digital signatures and version control, to ensure that only authorized scripts, such as specific .ps1, .py, etc., are allowed to execute. Block unauthorized scripts from executing. Reassess bi-annually, or more frequently.",
+        "guidance": "Scripts are frequently used by attackers due to their flexibility and prevalence. PowerShell, Python, and other scripting languages should be controlled. Consider script execution policies, digital signing requirements, and constrained language modes.",
+        "external_references": "NIST CSF: PR.PT-2"
+      }
+    },
+    {
+      "control_id": "CIS-3.1",
+      "name": "Establish and Maintain a Data Management Process",
+      "family": "Data Protection",
+      "description": "Establish and maintain a data management process",
+      "implementation_group": "IG1",
+      "asset_type": "Data",
+      "security_function": "Identify",
+      "article": {
+        "article_number": "3.1",
+        "section_name": "Establish and Maintain a Data Management Process",
+        "full_text": "Establish and maintain a data management process. In the process, address data sensitivity, data owner, handling of data, data retention limits, and disposal requirements, based on sensitivity and retention standards for the enterprise. Review and update documentation annually, or when significant enterprise changes occur that could impact this Safeguard.",
+        "guidance": "Understanding what data exists, where it resides, and how sensitive it is forms the foundation of data protection. The data management process should identify data owners, classify data, and establish handling requirements. Regular reviews ensure the process remains current.",
+        "external_references": "NIST CSF: ID.AM-5, ISO 27001: A.8.2.1"
+      }
+    },
+    {
+      "control_id": "CIS-3.2",
+      "name": "Establish and Maintain a Data Inventory",
+      "family": "Data Protection",
+      "description": "Establish and maintain a data inventory based on the enterprise's data management process",
+      "implementation_group": "IG1",
+      "asset_type": "Data",
+      "security_function": "Identify",
+      "article": {
+        "article_number": "3.2",
+        "section_name": "Establish and Maintain a Data Inventory",
+        "full_text": "Establish and maintain a data inventory, based on the enterprise's data management process. Inventory sensitive data, at a minimum. Review and update inventory annually, at a minimum, with a priority on sensitive data.",
+        "guidance": "A data inventory documents what sensitive data exists, where it's stored, and who is responsible for it. This enables appropriate protection measures and supports compliance requirements. Data discovery tools can automate inventory creation and maintenance.",
+        "external_references": "NIST CSF: ID.AM-5"
+      }
+    },
+    {
+      "control_id": "CIS-3.3",
+      "name": "Configure Data Access Control Lists",
+      "family": "Data Protection",
+      "description": "Configure data access control lists based on a user's need to know",
+      "implementation_group": "IG1",
+      "asset_type": "Data",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "3.3",
+        "section_name": "Configure Data Access Control Lists",
+        "full_text": "Configure data access control lists based on a user's need to know. Apply data access control lists, also known as access permissions, to local and remote file systems, databases, and applications.",
+        "guidance": "The principle of least privilege should govern data access. Users should only access data necessary for their role. Regular access reviews ensure permissions remain appropriate. Automated tools can help manage and audit access controls.",
+        "external_references": "NIST CSF: PR.AC-4, ISO 27001: A.9.4.1"
+      }
+    },
+    {
+      "control_id": "CIS-3.4",
+      "name": "Enforce Data Retention",
+      "family": "Data Protection",
+      "description": "Retain data according to the enterprise's data management process",
+      "implementation_group": "IG1",
+      "asset_type": "Data",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "3.4",
+        "section_name": "Enforce Data Retention",
+        "full_text": "Retain data according to the enterprise's data management process. Data retention must include both minimum and maximum timelines.",
+        "guidance": "Data retention requirements balance legal/regulatory obligations with storage costs and security risks. Retaining data beyond necessity increases exposure. Automated retention policies ensure consistent application.",
+        "external_references": "ISO 27001: A.8.3.3"
+      }
+    },
+    {
+      "control_id": "CIS-3.5",
+      "name": "Securely Dispose of Data",
+      "family": "Data Protection",
+      "description": "Securely dispose of data as outlined in the enterprise's data management process",
+      "implementation_group": "IG1",
+      "asset_type": "Data",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "3.5",
+        "section_name": "Securely Dispose of Data",
+        "full_text": "Securely dispose of data as outlined in the enterprise's data management process. Ensure the disposal process and method are commensurate with the data sensitivity.",
+        "guidance": "Improper data disposal can lead to unauthorized disclosure. Disposal methods should match data sensitivity: secure deletion for digital data, shredding/incineration for physical media. Verify disposal is complete and irreversible.",
+        "external_references": "NIST CSF: PR.IP-6, ISO 27001: A.8.3.2"
+      }
+    },
+    {
+      "control_id": "CIS-3.6",
+      "name": "Encrypt Data on End-User Devices",
+      "family": "Data Protection",
+      "description": "Encrypt data on end-user devices containing sensitive data",
+      "implementation_group": "IG1",
+      "asset_type": "Data",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "3.6",
+        "section_name": "Encrypt Data on End-User Devices",
+        "full_text": "Encrypt data on end-user devices containing sensitive data. Example implementations can include: Windows BitLocker®, Apple FileVault®, Linux® dm-crypt.",
+        "guidance": "Lost or stolen devices are a common data breach source. Full disk encryption protects data at rest, rendering it unreadable without proper authentication. Modern operating systems include built-in encryption capabilities.",
+        "external_references": "NIST CSF: PR.DS-1, ISO 27001: A.8.2.3"
+      }
+    },
+    {
+      "control_id": "CIS-3.7",
+      "name": "Establish and Maintain a Data Classification Scheme",
+      "family": "Data Protection",
+      "description": "Establish and maintain an overall data classification scheme for the enterprise",
+      "implementation_group": "IG2",
+      "asset_type": "Data",
+      "security_function": "Identify",
+      "article": {
+        "article_number": "3.7",
+        "section_name": "Establish and Maintain a Data Classification Scheme",
+        "full_text": "Establish and maintain an overall data classification scheme for the enterprise. Enterprises may use labels, such as "Sensitive," "Confidential," and "Public," and classify their data according to those labels. Review and update the classification scheme annually, or when significant enterprise changes occur that could impact this Safeguard.",
+        "guidance": "Data classification provides a framework for applying appropriate security controls based on sensitivity. The scheme should be simple enough to use consistently but granular enough to differentiate protection needs. Train users on proper classification.",
+        "external_references": "NIST CSF: ID.AM-5, ISO 27001: A.8.2.1"
+      }
+    },
+    {
+      "control_id": "CIS-3.8",
+      "name": "Document Data Flows",
+      "family": "Data Protection",
+      "description": "Document data flows for sensitive data",
+      "implementation_group": "IG2",
+      "asset_type": "Data",
+      "security_function": "Identify",
+      "article": {
+        "article_number": "3.8",
+        "section_name": "Document Data Flows",
+        "full_text": "Document data flows. Data flow documentation includes service provider data flows and should be based on the enterprise's data management process. Review and update documentation annually, or when significant enterprise changes occur that could impact this Safeguard.",
+        "guidance": "Understanding how data moves through systems helps identify security gaps and compliance requirements. Data flow diagrams should show collection points, processing locations, storage systems, and transmission paths. This is essential for privacy impact assessments.",
+        "external_references": "NIST CSF: ID.AM-5"
+      }
+    },
+    {
+      "control_id": "CIS-3.9",
+      "name": "Encrypt Data on Removable Media",
+      "family": "Data Protection",
+      "description": "Encrypt data on removable media",
+      "implementation_group": "IG2",
+      "asset_type": "Data",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "3.9",
+        "section_name": "Encrypt Data on Removable Media",
+        "full_text": "Encrypt data on removable media.",
+        "guidance": "Removable media (USB drives, external hard drives) are easily lost or stolen. Encryption protects data if media falls into wrong hands. Consider restricting removable media use through technical controls where appropriate.",
+        "external_references": "NIST CSF: PR.DS-1"
+      }
+    },
+    {
+      "control_id": "CIS-3.10",
+      "name": "Encrypt Sensitive Data in Transit",
+      "family": "Data Protection",
+      "description": "Encrypt sensitive data in transit",
+      "implementation_group": "IG2",
+      "asset_type": "Data",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "3.10",
+        "section_name": "Encrypt Sensitive Data in Transit",
+        "full_text": "Encrypt sensitive data in transit. Example implementations can include: Transport Layer Security (TLS) and Open Secure Shell (OpenSSH).",
+        "guidance": "Network traffic can be intercepted, exposing sensitive data. Encryption protects data during transmission. Use strong, current protocols (TLS 1.2+) and disable weak ciphers. Implement certificate validation to prevent man-in-the-middle attacks.",
+        "external_references": "NIST CSF: PR.DS-2, ISO 27001: A.10.1.1"
+      }
+    },
+    {
+      "control_id": "CIS-3.11",
+      "name": "Encrypt Sensitive Data at Rest",
+      "family": "Data Protection",
+      "description": "Encrypt sensitive data at rest on servers, applications, and databases",
+      "implementation_group": "IG2",
+      "asset_type": "Data",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "3.11",
+        "section_name": "Encrypt Sensitive Data at Rest",
+        "full_text": "Encrypt sensitive data at rest on servers, applications, and databases containing sensitive data. Storage-layer encryption, also known as server-side encryption, meets the minimum requirement of this Safeguard. Additional encryption methods may include application-layer encryption, also known as client-side encryption, where access to the data storage device(s) does not permit access to the plain-text data.",
+        "guidance": "Database and filesystem encryption protect data if physical media is stolen or improperly disposed. Key management is critical - keys must be protected and rotated regularly. Consider encryption performance impact on high-volume systems.",
+        "external_references": "NIST CSF: PR.DS-1, ISO 27001: A.10.1.1"
+      }
+    },
+    {
+      "control_id": "CIS-3.12",
+      "name": "Segment Data Processing and Storage",
+      "family": "Data Protection",
+      "description": "Segment data processing and storage based on the sensitivity of the data",
+      "implementation_group": "IG2",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "3.12",
+        "section_name": "Segment Data Processing and Storage",
+        "full_text": "Segment data processing and storage based on the sensitivity of the data. Do not process sensitive data on enterprise assets intended for lower sensitivity data.",
+        "guidance": "Network segmentation limits the impact of a breach. Sensitive data should be isolated on separate systems with stricter controls. This reduces the attack surface and simplifies compliance. Use firewalls, VLANs, and access controls to enforce segmentation.",
+        "external_references": "NIST CSF: PR.AC-5"
+      }
+    },
+    {
+      "control_id": "CIS-3.13",
+      "name": "Deploy a Data Loss Prevention Solution",
+      "family": "Data Protection",
+      "description": "Deploy an automated tool to prevent sensitive data exfiltration",
+      "implementation_group": "IG3",
+      "asset_type": "Data",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "3.13",
+        "section_name": "Deploy a Data Loss Prevention Solution",
+        "full_text": "Deploy an automated tool, such as a host-based Data Loss Prevention (DLP) tool to identify all sensitive data stored, processed, or transmitted through enterprise assets, including those located onsite or at a remote service provider, and update the enterprise's sensitive data inventory.",
+        "guidance": "DLP tools monitor data in motion, at rest, and in use to prevent unauthorized disclosure. Effective DLP requires accurate data classification and well-defined policies. Start with monitoring mode before enforcement to tune policies.",
+        "external_references": "NIST CSF: PR.DS-5"
+      }
+    },
+    {
+      "control_id": "CIS-3.14",
+      "name": "Log Sensitive Data Access",
+      "family": "Data Protection",
+      "description": "Log sensitive data access including modification and disposal",
+      "implementation_group": "IG3",
+      "asset_type": "Data",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "3.14",
+        "section_name": "Log Sensitive Data Access",
+        "full_text": "Log sensitive data access, including modification and disposal.",
+        "guidance": "Logging sensitive data access enables detection of unauthorized access and supports forensic investigations. Logs should capture who accessed what data, when, and from where. Protect logs from tampering and retain according to policy.",
+        "external_references": "NIST CSF: PR.PT-1"
+      }
+    },
+    {
+      "control_id": "CIS-4.1",
+      "name": "Establish and Maintain a Secure Configuration Process",
+      "family": "Secure Configuration of Enterprise Assets and Software",
+      "description": "Establish and maintain a secure configuration process for enterprise assets",
+      "implementation_group": "IG1",
+      "asset_type": "Devices",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "4.1",
+        "section_name": "Establish and Maintain a Secure Configuration Process",
+        "full_text": "Establish and maintain a secure configuration process for enterprise assets (end-user devices, including portable and mobile, non-computing/IoT devices, and servers) and software (operating systems and applications). Review and update documentation annually, or when significant enterprise changes occur that could impact this Safeguard.",
+        "guidance": "Default configurations are rarely secure. A documented secure configuration process ensures consistent security across assets. The process should define baseline configurations, change procedures, and exception handling. Use industry benchmarks (CIS Benchmarks, DISA STIGs) as starting points.",
+        "external_references": "NIST CSF: PR.IP-1, ISO 27001: A.12.6.1"
+      }
+    },
+    {
+      "control_id": "CIS-4.2",
+      "name": "Establish and Maintain a Secure Configuration Process for Network Infrastructure",
+      "family": "Secure Configuration of Enterprise Assets and Software",
+      "description": "Establish and maintain a secure configuration process for network devices",
+      "implementation_group": "IG1",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "4.2",
+        "section_name": "Establish and Maintain a Secure Configuration Process for Network Infrastructure",
+        "full_text": "Establish and maintain a secure configuration process for network infrastructure. Review and update documentation annually, or when significant enterprise changes occur that could impact this Safeguard.",
+        "guidance": "Network devices (routers, switches, firewalls) require hardening. Disable unnecessary services, change default credentials, enable logging, and restrict management access. Maintain configuration backups and use configuration management tools.",
+        "external_references": "NIST CSF: PR.IP-1"
+      }
+    },
+    {
+      "control_id": "CIS-4.3",
+      "name": "Configure Automatic Session Locking",
+      "family": "Secure Configuration of Enterprise Assets and Software",
+      "description": "Configure automatic session locking on enterprise assets after inactivity",
+      "implementation_group": "IG1",
+      "asset_type": "Devices",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "4.3",
+        "section_name": "Configure Automatic Session Locking",
+        "full_text": "Configure automatic session locking on enterprise assets after a defined period of inactivity. For general purpose operating systems, the period must not exceed 15 minutes. For mobile end-user devices, the period must not exceed 2 minutes.",
+        "guidance": "Unattended sessions are vulnerable to unauthorized access. Automatic locking mitigates this risk. Shorter timeouts provide better security but may impact user productivity - balance based on environment sensitivity.",
+        "external_references": "NIST CSF: PR.AC-7"
+      }
+    },
+    {
+      "control_id": "CIS-4.4",
+      "name": "Implement and Manage a Firewall",
+      "family": "Secure Configuration of Enterprise Assets and Software",
+      "description": "Implement and manage a firewall on end-user devices",
+      "implementation_group": "IG1",
+      "asset_type": "Devices",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "4.4",
+        "section_name": "Implement and Manage a Firewall on Servers",
+        "full_text": "Implement and manage a firewall on servers, where supported. Example implementations include a virtual firewall, operating system firewall, or a third-party firewall agent.",
+        "guidance": "Host-based firewalls provide defense in depth by filtering traffic at the endpoint. Configure firewalls to deny by default and only allow necessary connections. Centralized management ensures consistent policies across the enterprise.",
+        "external_references": "NIST CSF: PR.AC-5, ISO 27001: A.13.1.3"
+      }
+    },
+    {
+      "control_id": "CIS-4.5",
+      "name": "Implement and Manage a Firewall on End-User Devices",
+      "family": "Secure Configuration of Enterprise Assets and Software",
+      "description": "Implement and manage a firewall on end-user devices",
+      "implementation_group": "IG1",
+      "asset_type": "Devices",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "4.5",
+        "section_name": "Implement and Manage a Firewall on End-User Devices",
+        "full_text": "Implement and manage a host-based firewall or port-filtering tool on end-user devices, with a default-deny rule that drops all traffic except those services and ports that are explicitly allowed.",
+        "guidance": "End-user device firewalls protect against network-based attacks and lateral movement. Enable firewalls by default and prevent users from disabling them. Regular audits ensure firewalls remain enabled and properly configured.",
+        "external_references": "NIST CSF: PR.AC-5"
+      }
+    },
+    {
+      "control_id": "CIS-4.6",
+      "name": "Securely Manage Enterprise Assets and Software",
+      "family": "Secure Configuration of Enterprise Assets and Software",
+      "description": "Securely manage enterprise assets and software",
+      "implementation_group": "IG2",
+      "asset_type": "Devices",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "4.6",
+        "section_name": "Securely Manage Enterprise Assets and Software",
+        "full_text": "Securely manage enterprise assets and software. Example implementations include managing configuration through version-controlled-infrastructure-as-code and accessing administrative interfaces over secure network protocols, such as Secure Shell (SSH) and Hypertext Transfer Protocol Secure (HTTPS). Do not use insecure management protocols, such as Telnet (Teletype Network) and HTTP, unless operationally essential.",
+        "guidance": "Management interfaces are high-value targets. Protect them with secure protocols, strong authentication, and network segmentation. Infrastructure-as-code enables consistent, auditable configuration management. Eliminate insecure protocols wherever possible.",
+        "external_references": "NIST CSF: PR.AC-5"
+      }
+    },
+    {
+      "control_id": "CIS-4.7",
+      "name": "Manage Default Accounts",
+      "family": "Secure Configuration of Enterprise Assets and Software",
+      "description": "Manage default accounts on enterprise assets and software",
+      "implementation_group": "IG1",
+      "asset_type": "Users",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "4.7",
+        "section_name": "Manage Default Accounts on Enterprise Assets and Software",
+        "full_text": "Manage default accounts on enterprise assets and software, such as root, administrator, and other pre-configured vendor accounts. Example implementations can include: disabling default accounts or making them unusable.",
+        "guidance": "Default accounts with well-known credentials are frequently exploited. Disable, rename, or change passwords for all default accounts. Audit systems regularly to detect new default accounts introduced by software installations or updates.",
+        "external_references": "NIST CSF: PR.AC-1, ISO 27001: A.9.2.3"
+      }
+    },
+    {
+      "control_id": "CIS-4.8",
+      "name": "Uninstall or Disable Unnecessary Services",
+      "family": "Secure Configuration of Enterprise Assets and Software",
+      "description": "Uninstall or disable unnecessary services on enterprise assets and software",
+      "implementation_group": "IG1",
+      "asset_type": "Applications",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "4.8",
+        "section_name": "Uninstall or Disable Unnecessary Services on Enterprise Assets and Software",
+        "full_text": "Uninstall or disable unnecessary services on enterprise assets and software, such as an unused file sharing service, web application module, or service function.",
+        "guidance": "Every enabled service increases the attack surface. Disable services not required for business function. Regular reviews identify services that become unnecessary over time. Use minimum viable deployment principles.",
+        "external_references": "NIST CSF: PR.IP-1"
+      }
+    },
+    {
+      "control_id": "CIS-4.9",
+      "name": "Configure Trusted DNS Servers",
+      "family": "Secure Configuration of Enterprise Assets and Software",
+      "description": "Configure trusted DNS servers on enterprise assets",
+      "implementation_group": "IG2",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "4.9",
+        "section_name": "Configure Trusted DNS Servers on Enterprise Assets",
+        "full_text": "Configure trusted DNS servers on enterprise assets. Example implementations include: configuring assets to use enterprise-controlled DNS servers and/or reputable externally accessible DNS servers.",
+        "guidance": "DNS is critical infrastructure that can be attacked to redirect traffic or exfiltrate data. Use trusted, secure DNS servers. Consider DNS filtering services to block malicious domains. Implement DNSSEC where possible.",
+        "external_references": "NIST CSF: PR.DS-5"
+      }
+    },
+    {
+      "control_id": "CIS-4.10",
+      "name": "Enforce Automatic Device Lockout",
+      "family": "Secure Configuration of Enterprise Assets and Software",
+      "description": "Enforce automatic device lockout following failed authentication attempts",
+      "implementation_group": "IG2",
+      "asset_type": "Devices",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "4.10",
+        "section_name": "Enforce Automatic Device Lockout on Portable End-User Devices",
+        "full_text": "Enforce automatic device lockout following a predetermined threshold of local failed authentication attempts on portable end-user devices, where supported. For laptops, the lockout must occur after no more than five (5) failed login attempts. For tablets and smartphones, the lockout must occur after no more than ten (10) failed login attempts. Mobile Device Management (MDM) is the recommended solution to enforce device lockouts on mobile end-user devices.",
+        "guidance": "Failed login lockout protects against brute force attacks. Balance security with usability - too strict may cause operational issues. Implement account unlocking procedures that verify identity. Track lockout events for anomaly detection.",
+        "external_references": "NIST CSF: PR.AC-7"
+      }
+    },
+    {
+      "control_id": "CIS-4.11",
+      "name": "Enforce Remote Wipe Capability",
+      "family": "Secure Configuration of Enterprise Assets and Software",
+      "description": "Enforce remote wipe capability on portable devices",
+      "implementation_group": "IG2",
+      "asset_type": "Devices",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "4.11",
+        "section_name": "Enforce Remote Wipe Capability on Portable End-User Devices",
+        "full_text": "Remotely wipe enterprise data from enterprise-owned portable end-user devices when deemed appropriate such as: lost or stolen devices, devices that are out of compliance with security policies, or devices that are being retired. Mobile Device Management (MDM) tools include the capability to remotely wipe devices.",
+        "guidance": "Lost or stolen mobile devices pose significant data breach risk. Remote wipe capabilities enable rapid response. Test wipe functionality regularly. Consider selective wipe to preserve personal data on BYOD devices.",
+        "external_references": "NIST CSF: PR.IP-4"
+      }
+    },
+    {
+      "control_id": "CIS-4.12",
+      "name": "Separate Enterprise Workspaces",
+      "family": "Secure Configuration of Enterprise Assets and Software",
+      "description": "Separate enterprise workspace from personal workspaces on mobile devices",
+      "implementation_group": "IG3",
+      "asset_type": "Devices",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "4.12",
+        "section_name": "Separate Enterprise Workspaces on Mobile End-User Devices",
+        "full_text": "Ensure separate enterprise workspaces are used on mobile end-user devices, where supported. Example implementations include: using an Apple® managed Apple ID, Android™ Work Profile, or Microsoft® Intune App Protection Policies. Managed Apple ID is also utilized by mobile devices managed directly through an MDM, where an Apple® Business Manager account has been associated with an enterprise.",
+        "guidance": "BYOD creates challenges separating corporate and personal data. Containerization technologies create secure workspaces for enterprise data while respecting privacy. This enables selective wipe of only corporate data.",
+        "external_references": "NIST CSF: PR.DS-1"
+      }
+    },
+    {
+      "control_id": "CIS-5.1",
+      "name": "Establish and Maintain an Inventory of Accounts",
+      "family": "Account Management",
+      "description": "Establish and maintain an inventory of all accounts managed in the enterprise",
+      "implementation_group": "IG1",
+      "asset_type": "Users",
+      "security_function": "Identify",
+      "article": {
+        "article_number": "5.1",
+        "section_name": "Establish and Maintain an Inventory of Accounts",
+        "full_text": "Establish and maintain an inventory of all accounts managed in the enterprise. The inventory must include both user and administrator accounts. The inventory, at a minimum, should contain the person's name, username, start date, and end date. Review the inventory quarterly, or more frequently.",
+        "guidance": "Account inventory enables identity governance and access management. Track account lifecycle from creation to deletion. Regular reviews identify orphaned accounts from terminated employees. Automated IAM systems can maintain dynamic inventories.",
+        "external_references": "NIST CSF: PR.AC-1, ISO 27001: A.9.2.1"
+      }
+    },
+    {
+      "control_id": "CIS-5.2",
+      "name": "Use Unique Passwords",
+      "family": "Account Management",
+      "description": "Use unique passwords for all enterprise assets",
+      "implementation_group": "IG1",
+      "asset_type": "Users",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "5.2",
+        "section_name": "Use Unique Passwords",
+        "full_text": "Use unique passwords for all enterprise assets. Best practice implementation includes, at a minimum, an 8-character password for accounts using MFA and a 14-character password for accounts not using MFA.",
+        "guidance": "Password reuse enables credential stuffing attacks. Unique passwords limit breach impact to individual accounts. Password managers facilitate unique password use. Length is more important than complexity for password strength.",
+        "external_references": "NIST CSF: PR.AC-1"
+      }
+    },
+    {
+      "control_id": "CIS-5.3",
+      "name": "Disable Dormant Accounts",
+      "family": "Account Management",
+      "description": "Delete or disable dormant accounts after 45 days of inactivity",
+      "implementation_group": "IG1",
+      "asset_type": "Users",
+      "security_function": "Respond",
+      "article": {
+        "article_number": "5.3",
+        "section_name": "Disable Dormant Accounts",
+        "full_text": "Delete or disable any dormant accounts after a period of 45 days of inactivity, where supported.",
+        "guidance": "Dormant accounts are attractive targets as compromise may go unnoticed. Automated processes should flag inactive accounts for review. Consider temporary suspension before permanent deletion. Document exceptions for seasonal workers.",
+        "external_references": "NIST CSF: PR.AC-1, ISO 27001: A.9.2.6"
+      }
+    },
+    {
+      "control_id": "CIS-5.4",
+      "name": "Restrict Administrator Privileges to Dedicated Accounts",
+      "family": "Account Management",
+      "description": "Restrict administrator privileges to dedicated administrator accounts",
+      "implementation_group": "IG1",
+      "asset_type": "Users",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "5.4",
+        "section_name": "Restrict Administrator Privileges to Dedicated Administrator Accounts",
+        "full_text": "Restrict administrator privileges to dedicated administrator accounts on enterprise assets. Conduct general computing activities, such as internet browsing, email, and productivity suite use, from the user's primary, non-privileged account.",
+        "guidance": "Using administrative accounts for routine tasks increases risk. Attackers targeting administrators gain elevated access. Separate accounts for administrative duties limit exposure. Privileged access management (PAM) solutions enforce this separation.",
+        "external_references": "NIST CSF: PR.AC-4, ISO 27001: A.9.2.3"
+      }
+    },
+    {
+      "control_id": "CIS-5.5",
+      "name": "Establish and Maintain an Inventory of Service Accounts",
+      "family": "Account Management",
+      "description": "Establish and maintain an inventory of service accounts",
+      "implementation_group": "IG2",
+      "asset_type": "Users",
+      "security_function": "Identify",
+      "article": {
+        "article_number": "5.5",
+        "section_name": "Establish and Maintain an Inventory of Service Accounts",
+        "full_text": "Establish and maintain an inventory of service accounts. The inventory, at a minimum, must contain department owner, review date, and purpose. Perform service account reviews to validate that all active accounts are authorized, on a recurring schedule at a minimum quarterly, or more frequently.",
+        "guidance": "Service accounts often have broad privileges and weak password policies. Maintaining an inventory ensures accountability. Regular reviews identify unused or excessive privileges. Consider managed service identities where possible.",
+        "external_references": "NIST CSF: PR.AC-1"
+      }
+    },
+    {
+      "control_id": "CIS-5.6",
+      "name": "Centralize Account Management",
+      "family": "Account Management",
+      "description": "Centralize account management through directory services",
+      "implementation_group": "IG2",
+      "asset_type": "Users",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "5.6",
+        "section_name": "Centralize Account Management",
+        "full_text": "Centralize account management through a directory or identity service.",
+        "guidance": "Centralized identity management enables consistent access control, simplifies administration, and provides centralized audit trails. Directory services (AD, LDAP, cloud identity providers) should be the authoritative source. Integrate applications via SSO where possible.",
+        "external_references": "NIST CSF: PR.AC-1, ISO 27001: A.9.2.1"
+      }
+    },
+    {
+      "control_id": "CIS-6.1",
+      "name": "Establish an Access Granting Process",
+      "family": "Access Control Management",
+      "description": "Establish and follow a process for granting access to enterprise assets",
+      "implementation_group": "IG1",
+      "asset_type": "Users",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "6.1",
+        "section_name": "Establish an Access Granting Process",
+        "full_text": "Establish and follow a process, preferably automated, for granting access to enterprise assets upon new hire, rights grant, or role change of a user.",
+        "guidance": "Formal access provisioning ensures appropriate access based on role. Automated workflows improve speed and consistency while maintaining audit trails. Access should be granted based on principle of least privilege and approved by asset owners.",
+        "external_references": "NIST CSF: PR.AC-4, ISO 27001: A.9.2.2"
+      }
+    },
+    {
+      "control_id": "CIS-6.2",
+      "name": "Establish an Access Revoking Process",
+      "family": "Access Control Management",
+      "description": "Establish and follow a process for revoking access to enterprise assets",
+      "implementation_group": "IG1",
+      "asset_type": "Users",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "6.2",
+        "section_name": "Establish an Access Revoking Process",
+        "full_text": "Establish and follow a process, preferably automated, for revoking access to enterprise assets, through disabling accounts immediately upon termination, rights revocation, or role change of a user. Disabling accounts, instead of deleting accounts, may be necessary to preserve audit trails.",
+        "guidance": "Prompt access revocation upon termination is critical security. Automated deprovisioning triggered by HR systems ensures timely execution. Disable rather than delete to maintain audit trails. Immediately revoke remote access and administrative privileges.",
+        "external_references": "NIST CSF: PR.AC-4, ISO 27001: A.9.2.6"
+      }
+    },
+    {
+      "control_id": "CIS-6.3",
+      "name": "Require MFA for Externally-Exposed Applications",
+      "family": "Access Control Management",
+      "description": "Require multi-factor authentication for all externally-exposed enterprise applications",
+      "implementation_group": "IG1",
+      "asset_type": "Users",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "6.3",
+        "section_name": "Require MFA for Externally-Exposed Applications",
+        "full_text": "Require all externally-exposed enterprise or third-party applications to enforce MFA, where supported. Enforcing MFA through a directory service or SSO provider is a satisfactory implementation of this Safeguard.",
+        "guidance": "Internet-facing applications are constant attack targets. MFA significantly reduces credential compromise risk. Phishing-resistant MFA (hardware tokens, biometrics) provides stronger protection than SMS-based codes. Plan for MFA reset procedures.",
+        "external_references": "NIST CSF: PR.AC-7, ISO 27001: A.9.4.2"
+      }
+    },
+    {
+      "control_id": "CIS-6.4",
+      "name": "Require MFA for Remote Network Access",
+      "family": "Access Control Management",
+      "description": "Require multi-factor authentication for all remote network access",
+      "implementation_group": "IG1",
+      "asset_type": "Users",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "6.4",
+        "section_name": "Require MFA for Remote Network Access",
+        "full_text": "Require MFA for remote network access.",
+        "guidance": "VPN and remote access are frequent attack vectors. MFA prevents unauthorized access from stolen credentials. Consider risk-based authentication that adjusts requirements based on location, device, and behavior patterns.",
+        "external_references": "NIST CSF: PR.AC-7"
+      }
+    },
+    {
+      "control_id": "CIS-6.5",
+      "name": "Require MFA for Administrative Access",
+      "family": "Access Control Management",
+      "description": "Require multi-factor authentication for all administrative access accounts",
+      "implementation_group": "IG1",
+      "asset_type": "Users",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "6.5",
+        "section_name": "Require MFA for Administrative Access",
+        "full_text": "Require MFA for all administrative access accounts, where supported, on all enterprise assets, whether managed on-site or through a third-party provider.",
+        "guidance": "Administrative accounts are high-value targets. MFA is essential for protecting privileged access. Use phishing-resistant MFA for administrators. PAM solutions can enforce MFA for administrative sessions.",
+        "external_references": "NIST CSF: PR.AC-7, ISO 27001: A.9.4.3"
+      }
+    },
+    {
+      "control_id": "CIS-6.6",
+      "name": "Establish and Maintain an Inventory of Authentication Systems",
+      "family": "Access Control Management",
+      "description": "Establish and maintain an inventory of authentication systems",
+      "implementation_group": "IG2",
+      "asset_type": "Users",
+      "security_function": "Identify",
+      "article": {
+        "article_number": "6.6",
+        "section_name": "Establish and Maintain an Inventory of Authentication and Authorization Systems",
+        "full_text": "Establish and maintain an inventory of the enterprise's authentication and authorization systems, including those hosted on-site or at a third-party provider. Review and update the inventory, at a minimum, annually, or more frequently.",
+        "guidance": "Multiple authentication systems increase complexity and security gaps. Inventory helps consolidate and standardize. Document integration points, supported protocols, and dependencies. Work toward centralized identity management.",
+        "external_references": "NIST CSF: ID.AM-1"
+      }
+    },
+    {
+      "control_id": "CIS-6.7",
+      "name": "Centralize Access Control",
+      "family": "Access Control Management",
+      "description": "Centralize access control for all enterprise assets",
+      "implementation_group": "IG2",
+      "asset_type": "Users",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "6.7",
+        "section_name": "Centralize Access Control",
+        "full_text": "Centralize access control for all enterprise assets through a directory service or SSO provider, where supported.",
+        "guidance": "Centralized access control simplifies management and improves security visibility. SSO reduces password fatigue while enabling centralized policies. Implement with strong MFA and monitor for anomalous access patterns.",
+        "external_references": "NIST CSF: PR.AC-1"
+      }
+    },
+    {
+      "control_id": "CIS-6.8",
+      "name": "Define and Maintain Role-Based Access Control",
+      "family": "Access Control Management",
+      "description": "Define and maintain role-based access control",
+      "implementation_group": "IG2",
+      "asset_type": "Users",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "6.8",
+        "section_name": "Define and Maintain Role-Based Access Control",
+        "full_text": "Define and maintain role-based access control, through determining and documenting the access rights necessary for each role within the enterprise to successfully carry out its assigned duties. Perform access control reviews of enterprise assets to validate that all privileges are authorized, on a recurring schedule at a minimum annually, or more frequently.",
+        "guidance": "RBAC simplifies access management by granting permissions based on job functions rather than individuals. Document standard roles and their permissions. Regular reviews ensure roles remain appropriate as job functions evolve. Avoid role explosion through careful design.",
+        "external_references": "NIST CSF: PR.AC-4, ISO 27001: A.9.2.3"
+      }
+    },
+    {
+      "control_id": "CIS-7.1",
+      "name": "Establish and Maintain a Vulnerability Management Process",
+      "family": "Continuous Vulnerability Management",
+      "description": "Establish and maintain a vulnerability management process",
+      "implementation_group": "IG1",
+      "asset_type": "Applications",
+      "security_function": "Identify",
+      "article": {
+        "article_number": "7.1",
+        "section_name": "Establish and Maintain a Vulnerability Management Process",
+        "full_text": "Establish and maintain a documented vulnerability management process for enterprise assets. Review and update documentation annually, or when significant enterprise changes occur that could impact this Safeguard.",
+        "guidance": "Systematic vulnerability management is essential for maintaining security posture. The process should define roles, scanning frequency, prioritization criteria, and remediation timeframes. Integrate with change management and asset inventory.",
+        "external_references": "NIST CSF: ID.RA-1, ISO 27001: A.12.6.1"
+      }
+    },
+    {
+      "control_id": "CIS-7.2",
+      "name": "Establish and Maintain a Remediation Process",
+      "family": "Continuous Vulnerability Management",
+      "description": "Establish and maintain a remediation process",
+      "implementation_group": "IG1",
+      "asset_type": "Applications",
+      "security_function": "Respond",
+      "article": {
+        "article_number": "7.2",
+        "section_name": "Establish and Maintain a Remediation Process",
+        "full_text": "Establish and maintain a risk-based remediation strategy documented in a remediation process, with monthly, or more frequent, reviews.",
+        "guidance": "Not all vulnerabilities pose equal risk. Risk-based remediation prioritizes based on exploitability, business impact, and threat intelligence. Define SLAs for different severity levels. Track remediation metrics to measure program effectiveness.",
+        "external_references": "NIST CSF: RS.MI-3"
+      }
+    },
+    {
+      "control_id": "CIS-7.3",
+      "name": "Perform Automated Vulnerability Scans",
+      "family": "Continuous Vulnerability Management",
+      "description": "Perform automated vulnerability scans of internal enterprise assets",
+      "implementation_group": "IG1",
+      "asset_type": "Applications",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "7.3",
+        "section_name": "Perform Automated Operating System Patch Management",
+        "full_text": "Perform automated operating system patch management on enterprise assets on a monthly, or more frequent, basis.",
+        "guidance": "Operating system vulnerabilities are frequently exploited. Automated patch management ensures timely deployment. Test patches in non-production before widespread deployment. Emergency patching procedures should exist for critical vulnerabilities.",
+        "external_references": "NIST CSF: PR.IP-12, ISO 27001: A.12.6.1"
+      }
+    },
+    {
+      "control_id": "CIS-7.4",
+      "name": "Perform Automated Application Patch Management",
+      "family": "Continuous Vulnerability Management",
+      "description": "Perform automated application patch management",
+      "implementation_group": "IG1",
+      "asset_type": "Applications",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "7.4",
+        "section_name": "Perform Automated Application Patch Management",
+        "full_text": "Perform automated application patch management on a monthly, or more frequent, basis.",
+        "guidance": "Applications introduce vulnerabilities distinct from OS patches. Many applications lack auto-update capabilities. Third-party patch management tools can help. Prioritize internet-facing and high-risk applications.",
+        "external_references": "NIST CSF: PR.IP-12"
+      }
+    },
+    {
+      "control_id": "CIS-7.5",
+      "name": "Perform Automated Vulnerability Scans",
+      "family": "Continuous Vulnerability Management",
+      "description": "Perform automated vulnerability scans of internal systems",
+      "implementation_group": "IG2",
+      "asset_type": "Applications",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "7.5",
+        "section_name": "Perform Automated Vulnerability Scans of Internal Enterprise Assets",
+        "full_text": "Perform automated vulnerability scans of internal enterprise assets on a quarterly, or more frequent, basis. Conduct both authenticated and unauthenticated scans, using a SCAP-compliant vulnerability scanning tool.",
+        "guidance": "Regular vulnerability scanning identifies security weaknesses before attackers exploit them. Authenticated scans provide deeper visibility. SCAP compliance ensures standardized reporting. Continuous scanning provides better coverage than periodic scans.",
+        "external_references": "NIST CSF: DE.CM-8, ISO 27001: A.12.6.1"
+      }
+    },
+    {
+      "control_id": "CIS-7.6",
+      "name": "Perform Automated Vulnerability Scans of Externally-Exposed Assets",
+      "family": "Continuous Vulnerability Management",
+      "description": "Perform automated vulnerability scans of externally-exposed enterprise assets",
+      "implementation_group": "IG2",
+      "asset_type": "Applications",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "7.6",
+        "section_name": "Perform Automated Vulnerability Scans of Externally-Exposed Enterprise Assets",
+        "full_text": "Perform automated vulnerability scans of externally-exposed enterprise assets using a SCAP-compliant vulnerability scanning tool. Perform scans on a monthly, or more frequent, basis.",
+        "guidance": "External assets face constant attack. More frequent scanning of internet-facing systems is warranted. Consider continuous external monitoring services. Coordinate scans to avoid triggering security controls or affecting availability.",
+        "external_references": "NIST CSF: DE.CM-8"
+      }
+    },
+    {
+      "control_id": "CIS-7.7",
+      "name": "Remediate Detected Vulnerabilities",
+      "family": "Continuous Vulnerability Management",
+      "description": "Remediate detected vulnerabilities in software within timeframes based on risk",
+      "implementation_group": "IG1",
+      "asset_type": "Applications",
+      "security_function": "Respond",
+      "article": {
+        "article_number": "7.7",
+        "section_name": "Remediate Detected Vulnerabilities",
+        "full_text": "Remediate detected vulnerabilities in software through processes and tooling on a monthly, or more frequent, basis, based on the remediation process.",
+        "guidance": "Vulnerability discovery is meaningless without remediation. Track time-to-remediate metrics. When patches aren't available, implement compensating controls. Vulnerability management tools should integrate with ticketing systems for workflow.",
+        "external_references": "NIST CSF: RS.MI-3, ISO 27001: A.12.6.1"
+      }
+    },
+    {
+      "control_id": "CIS-8.1",
+      "name": "Establish and Maintain an Audit Log Management Process",
+      "family": "Audit Log Management",
+      "description": "Establish and maintain an audit log management process",
+      "implementation_group": "IG1",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "8.1",
+        "section_name": "Establish and Maintain an Audit Log Management Process",
+        "full_text": "Establish and maintain an audit log management process that defines the enterprise's logging requirements. At a minimum, address the collection, review, and retention of audit logs for enterprise assets. Review and update documentation annually, or when significant enterprise changes occur that could impact this Safeguard.",
+        "guidance": "Logs provide evidence of security events and support incident investigation. The log management process should define what to log, retention periods, review procedures, and protection measures. Consider regulatory requirements when setting retention policies.",
+        "external_references": "NIST CSF: PR.PT-1, ISO 27001: A.12.4.1"
+      }
+    },
+    {
+      "control_id": "CIS-8.2",
+      "name": "Collect Audit Logs",
+      "family": "Audit Log Management",
+      "description": "Collect audit logs from enterprise assets",
+      "implementation_group": "IG1",
+      "asset_type": "Network",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "8.2",
+        "section_name": "Collect Audit Logs",
+        "full_text": "Collect audit logs. Ensure that logging, per the enterprise's audit log management process, has been enabled across enterprise assets.",
+        "guidance": "Comprehensive logging is foundational for security monitoring. Enable logging on operating systems, applications, network devices, and security tools. Ensure time synchronization for accurate correlation. Monitor for logging failures.",
+        "external_references": "NIST CSF: DE.AE-3, ISO 27001: A.12.4.1"
+      }
+    },
+    {
+      "control_id": "CIS-8.3",
+      "name": "Ensure Adequate Audit Log Storage",
+      "family": "Audit Log Management",
+      "description": "Ensure adequate storage for all collected audit logs",
+      "implementation_group": "IG1",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "8.3",
+        "section_name": "Ensure Adequate Audit Log Storage",
+        "full_text": "Ensure that logging destinations maintain adequate storage to comply with the enterprise's audit log management process.",
+        "guidance": "Insufficient storage causes log loss, creating security blind spots. Monitor storage capacity and plan for growth. Consider tiered storage: hot storage for recent logs, cold storage for archives. Compression can extend capacity.",
+        "external_references": "NIST CSF: PR.PT-1"
+      }
+    },
+    {
+      "control_id": "CIS-8.4",
+      "name": "Standardize Time Synchronization",
+      "family": "Audit Log Management",
+      "description": "Standardize time synchronization across all enterprise assets",
+      "implementation_group": "IG2",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "8.4",
+        "section_name": "Standardize Time Synchronization",
+        "full_text": "Standardize time synchronization. Configure enterprise assets to synchronize time with an authenticated and designated time source to ensure that any discrepancies can be corrected.",
+        "guidance": "Accurate timestamps are critical for log correlation and forensics. Use NTP with authenticated time sources. Monitor for time drift. Maintain redundant time sources for reliability. Document timezone handling in log management.",
+        "external_references": "NIST CSF: DE.AE-3, ISO 27001: A.12.4.4"
+      }
+    },
+    {
+      "control_id": "CIS-8.5",
+      "name": "Collect Detailed Audit Logs",
+      "family": "Audit Log Management",
+      "description": "Collect detailed audit logs with all relevant information",
+      "implementation_group": "IG2",
+      "asset_type": "Network",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "8.5",
+        "section_name": "Collect Detailed Audit Logs",
+        "full_text": "Configure detailed audit logging for enterprise assets containing sensitive data. Include event source, date, username, timestamp, source addresses, destination addresses, and other useful elements that could assist in a forensic investigation.",
+        "guidance": "Detailed logs support effective investigation. Log verbosity should balance detail with storage/performance. Focus detailed logging on high-value assets and sensitive data. Ensure personally identifiable information in logs is handled appropriately.",
+        "external_references": "NIST CSF: DE.AE-3"
+      }
+    },
+    {
+      "control_id": "CIS-8.6",
+      "name": "Collect DNS Query Audit Logs",
+      "family": "Audit Log Management",
+      "description": "Collect DNS query audit logs",
+      "implementation_group": "IG2",
+      "asset_type": "Network",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "8.6",
+        "section_name": "Collect DNS Query Audit Logs",
+        "full_text": "Collect DNS query audit logs on enterprise assets, where appropriate and supported.",
+        "guidance": "DNS queries reveal communication patterns and can indicate malicious activity (C2 communications, data exfiltration, malware). DNS logging should capture query, response, source, and timestamp. Consider privacy implications of DNS logging.",
+        "external_references": "NIST CSF: DE.AE-3"
+      }
+    },
+    {
+      "control_id": "CIS-8.7",
+      "name": "Collect URL Request Audit Logs",
+      "family": "Audit Log Management",
+      "description": "Collect URL request audit logs",
+      "implementation_group": "IG2",
+      "asset_type": "Network",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "8.7",
+        "section_name": "Collect URL Request Audit Logs",
+        "full_text": "Collect URL request audit logs on enterprise assets, where appropriate and supported.",
+        "guidance": "URL logs help identify malicious sites, policy violations, and data exfiltration. Web proxies and secure web gateways provide this capability. Balance security visibility with user privacy. Consider SSL/TLS inspection for encrypted traffic.",
+        "external_references": "NIST CSF: DE.AE-3"
+      }
+    },
+    {
+      "control_id": "CIS-8.8",
+      "name": "Collect Command-Line Audit Logs",
+      "family": "Audit Log Management",
+      "description": "Collect command-line audit logs",
+      "implementation_group": "IG2",
+      "asset_type": "Devices",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "8.8",
+        "section_name": "Collect Command-Line Audit Logs",
+        "full_text": "Collect command-line audit logs. Example implementations include collecting audit logs from PowerShell®, BASH™, and remote administrative terminals.",
+        "guidance": "Command-line activity reveals attacker actions and insider threats. PowerShell, Bash, and other shells should have enhanced logging enabled. Be mindful of sensitive data in command parameters. Consider obfuscating passwords in logs.",
+        "external_references": "NIST CSF: DE.CM-1"
+      }
+    },
+    {
+      "control_id": "CIS-8.9",
+      "name": "Centralize Audit Logs",
+      "family": "Audit Log Management",
+      "description": "Centralize audit log collection and retention",
+      "implementation_group": "IG2",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "8.9",
+        "section_name": "Centralize Audit Logs",
+        "full_text": "Centralize, to the extent possible, audit log collection and retention across enterprise assets.",
+        "guidance": "Centralized logging enables efficient analysis, correlation, and long-term retention. SIEM or log management systems aggregate logs from multiple sources. Protect log infrastructure as it contains sensitive information. Ensure secure log transmission.",
+        "external_references": "NIST CSF: DE.AE-3, ISO 27001: A.12.4.1"
+      }
+    },
+    {
+      "control_id": "CIS-8.10",
+      "name": "Retain Audit Logs",
+      "family": "Audit Log Management",
+      "description": "Retain audit logs for appropriate time periods",
+      "implementation_group": "IG1",
+      "asset_type": "Network",
+      "security_function": "Protect",
+      "article": {
+        "article_number": "8.10",
+        "section_name": "Retain Audit Logs",
+        "full_text": "Retain audit logs across enterprise assets for a minimum of 90 days.",
+        "guidance": "Retention periods should support incident investigation while considering storage costs and regulatory requirements. Longer retention may be required for compliance. Archive old logs to cold storage. Protect archived logs from tampering.",
+        "external_references": "NIST CSF: PR.PT-1, ISO 27001: A.12.4.1"
+      }
+    },
+    {
+      "control_id": "CIS-8.11",
+      "name": "Conduct Audit Log Reviews",
+      "family": "Audit Log Management",
+      "description": "Conduct reviews of audit logs to detect anomalies",
+      "implementation_group": "IG2",
+      "asset_type": "Network",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "8.11",
+        "section_name": "Conduct Audit Log Reviews",
+        "full_text": "Conduct reviews of audit logs to detect anomalies or abnormal events that could indicate a potential threat. Conduct reviews on a weekly, or more frequent, basis.",
+        "guidance": "Logs are worthless without analysis. Regular reviews identify suspicious activity. SIEM tools automate analysis using correlation rules and anomaly detection. Focus reviews on high-value assets and known attack patterns. Document findings.",
+        "external_references": "NIST CSF: DE.AE-5, ISO 27001: A.12.4.1"
+      }
+    },
+    {
+      "control_id": "CIS-8.12",
+      "name": "Collect Service Provider Logs",
+      "family": "Audit Log Management",
+      "description": "Collect service provider logs",
+      "implementation_group": "IG3",
+      "asset_type": "Network",
+      "security_function": "Detect",
+      "article": {
+        "article_number": "8.12",
+        "section_name": "Collect Service Provider Logs",
+        "full_text": "Collect service provider logs, where supported. Example implementations include collecting authentication and authorization events, data creation and disposal events, and user management events.",
+        "guidance": "Cloud and SaaS provider logs are essential for comprehensive visibility. API access may be required to collect logs. Integrate provider logs into central log management. Understand provider retention policies and export logs as needed.",
+        "external_references": "NIST CSF: DE.AE-3"
+      }
+    }
+  ]
+}
