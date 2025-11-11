@@ -1,0 +1,728 @@
+{
+  "standard": {
+    "code": "SOC-2",
+    "name": "SOC 2 Trust Service Criteria",
+    "version": "2017",
+    "organization": "American Institute of Certified Public Accountants (AICPA)",
+    "published_date": "2017-05-01",
+    "description": "Trust Services Criteria for Security, Availability, Processing Integrity, Confidentiality, and Privacy. Used for service organization control (SOC) reports to evaluate controls at service organizations.",
+    "website_url": "https://www.aicpa.org/soc4so",
+    "total_controls": 64
+  },
+  "controls": [
+    {
+      "control_id": "CC1.1",
+      "name": "Control Environment - Integrity and Ethical Values",
+      "family": "Common Criteria - Control Environment",
+      "trust_principle": "All",
+      "description": "The entity demonstrates a commitment to integrity and ethical values",
+      "article": {
+        "article_number": "CC1.1",
+        "section_name": "Control Environment - Integrity and Ethical Values",
+        "full_text": "The entity demonstrates a commitment to integrity and ethical values. Points of focus include: setting the tone at the top; establishing standards of conduct; evaluating adherence to standards of conduct; addressing deviations in a timely manner.",
+        "guidance": "Establish a code of conduct that addresses acceptable business practices, conflicts of interest, and expected standards of ethical and moral behavior. The board and management should demonstrate the importance of integrity and ethics through their directives, actions, and behavior. Implement mechanisms to detect and address instances of fraud, illegal acts, and violations of company policies. Consider ethics training and confidential reporting mechanisms.",
+        "external_references": "COSO Internal Control Framework, ISO 27001 Clause 5.2"
+      }
+    },
+    {
+      "control_id": "CC1.2",
+      "name": "Control Environment - Board Independence and Oversight",
+      "family": "Common Criteria - Control Environment",
+      "trust_principle": "All",
+      "description": "The board of directors demonstrates independence and exercises oversight",
+      "article": {
+        "article_number": "CC1.2",
+        "section_name": "Control Environment - Board Independence",
+        "full_text": "The board of directors demonstrates independence from management and exercises oversight of the development and performance of internal control. Points of focus include: establishing oversight responsibilities; applying relevant expertise; operating independently; providing oversight for the system of internal control.",
+        "guidance": "The board should include independent members with relevant expertise. Establish audit committees or equivalent oversight bodies. Conduct regular board meetings addressing risk, compliance, and internal controls. Ensure the board receives timely, accurate information about control effectiveness. Document board oversight activities and decisions. For organizations without a board, alternative governance structures should provide equivalent oversight.",
+        "external_references": "SOX Section 301, NYSE/NASDAQ listing requirements"
+      }
+    },
+    {
+      "control_id": "CC1.3",
+      "name": "Control Environment - Organizational Structure",
+      "family": "Common Criteria - Control Environment",
+      "trust_principle": "All",
+      "description": "Management establishes structures, reporting lines, and authorities",
+      "article": {
+        "article_number": "CC1.3",
+        "section_name": "Control Environment - Organizational Structure",
+        "full_text": "Management establishes, with board oversight, structures, reporting lines, and appropriate authorities and responsibilities in the pursuit of objectives. Points of focus include: considering all structures of the entity; establishing reporting lines; defining, assigning, and limiting authorities and responsibilities.",
+        "guidance": "Document organizational structure with clear reporting lines and authority limits. Define roles and responsibilities for key positions. Establish appropriate segregation of duties. Consider centralized versus decentralized operations. Document delegation of authority. Address how the organizational structure supports the achievement of objectives and management of risks. Maintain organization charts and role descriptions.",
+        "external_references": "COBIT 5 EDM02, ISO 27001 A.7.1"
+      }
+    },
+    {
+      "control_id": "CC1.4",
+      "name": "Control Environment - Commitment to Competence",
+      "family": "Common Criteria - Control Environment",
+      "trust_principle": "All",
+      "description": "The entity demonstrates commitment to competence",
+      "article": {
+        "article_number": "CC1.4",
+        "section_name": "Control Environment - Commitment to Competence",
+        "full_text": "The entity demonstrates a commitment to attract, develop, and retain competent individuals in alignment with objectives. Points of focus include: establishing policies and practices; evaluating competence and addressing shortcomings; attracting, developing, and retaining individuals; planning and preparing for succession.",
+        "guidance": "Define competency requirements for roles involving financial reporting, operations, and technology. Implement training and development programs. Conduct performance evaluations assessing competence. Establish succession planning for critical roles. Consider certification requirements for key positions. Address competency gaps through hiring, training, or outsourcing. Document competency requirements and assessment results.",
+        "external_references": "ISO 27001 A.7.2, NIST SP 800-16"
+      }
+    },
+    {
+      "control_id": "CC1.5",
+      "name": "Control Environment - Accountability",
+      "family": "Common Criteria - Control Environment",
+      "trust_principle": "All",
+      "description": "The entity holds individuals accountable for internal control responsibilities",
+      "article": {
+        "article_number": "CC1.5",
+        "section_name": "Control Environment - Accountability",
+        "full_text": "The entity holds individuals accountable for their internal control responsibilities in the pursuit of objectives. Points of focus include: enforcing accountability through structures, authorities, and responsibilities; establishing performance measures, incentives, and rewards; evaluating performance measures, incentives, and rewards for ongoing relevance; considering excessive pressures; evaluating performance and rewarding or disciplining individuals.",
+        "guidance": "Establish clear accountability for control responsibilities. Link performance evaluations to control objectives. Implement incentive structures that promote appropriate behavior. Enforce consequences for control failures. Consider pressure points that might lead to inappropriate behavior. Conduct regular performance reviews. Document disciplinary actions when controls are violated. Ensure accountability extends to all levels including senior management.",
+        "external_references": "COSO Internal Control Framework"
+      }
+    },
+    {
+      "control_id": "CC2.1",
+      "name": "Communication - Internal Communication",
+      "family": "Common Criteria - Communication and Information",
+      "trust_principle": "All",
+      "description": "The entity obtains or generates and uses relevant information to support internal control",
+      "article": {
+        "article_number": "CC2.1",
+        "section_name": "Communication - Internal Information",
+        "full_text": "The entity obtains or generates and uses relevant, quality information to support the functioning of internal control. Points of focus include: identifying information requirements; capturing internal and external sources of data; processing relevant data into information; maintaining quality throughout processing; considering costs and benefits.",
+        "guidance": "Identify information needs for operations, financial reporting, and compliance. Establish processes to capture, process, and distribute information. Ensure information quality, accuracy, and timeliness. Implement systems and procedures for information management. Consider both internal and external information sources. Maintain appropriate information retention. Use technology appropriately to enhance information quality and accessibility.",
+        "external_references": "COBIT 5 APO07, ISO 27001 A.18.1"
+      }
+    },
+    {
+      "control_id": "CC2.2",
+      "name": "Communication - Internal Control Information",
+      "family": "Common Criteria - Communication and Information",
+      "trust_principle": "All",
+      "description": "The entity internally communicates information to support internal control",
+      "article": {
+        "article_number": "CC2.2",
+        "section_name": "Communication - Internal Control Communication",
+        "full_text": "The entity internally communicates information, including objectives and responsibilities for internal control, necessary to support the functioning of internal control. Points of focus include: communicating internal control information; communicating with the board of directors; providing separate communication lines; selecting relevant method of communication.",
+        "guidance": "Communicate control objectives and responsibilities to all personnel. Provide multiple channels for communication including confidential reporting mechanisms. Ensure board receives appropriate information about control effectiveness. Tailor communication methods to the audience and message. Document key communications. Establish feedback mechanisms. Address communication barriers. Use various media (email, intranet, meetings) as appropriate.",
+        "external_references": "COSO ERM Framework"
+      }
+    },
+    {
+      "control_id": "CC2.3",
+      "name": "Communication - External Communication",
+      "family": "Common Criteria - Communication and Information",
+      "trust_principle": "All",
+      "description": "The entity communicates with external parties regarding matters affecting internal control",
+      "article": {
+        "article_number": "CC2.3",
+        "section_name": "Communication - External Parties",
+        "full_text": "The entity communicates with external parties regarding matters affecting the functioning of internal control. Points of focus include: communicating to external parties; enabling inbound communications; communicating with the board of directors; providing separate communication lines; selecting relevant method of communication.",
+        "guidance": "Establish channels for receiving external communications (customer complaints, vendor issues, regulatory inquiries). Communicate with external parties as needed (customers, vendors, regulators, auditors). Provide mechanisms for anonymous external reporting of concerns. Ensure the board is informed of significant external communications. Document external communications related to internal control. Respond appropriately to external communications.",
+        "external_references": "SOX Section 301"
+      }
+    },
+    {
+      "control_id": "CC3.1",
+      "name": "Risk Assessment - Specifying Objectives",
+      "family": "Common Criteria - Risk Assessment",
+      "trust_principle": "All",
+      "description": "The entity specifies objectives with sufficient clarity",
+      "article": {
+        "article_number": "CC3.1",
+        "section_name": "Risk Assessment - Objectives",
+        "full_text": "The entity specifies objectives with sufficient clarity to enable the identification and assessment of risks relating to objectives. Points of focus include: reflecting management's choices; considering tolerances for risk; including operations and financial performance objectives; reflecting entity activities; considering suitability of specific to the entity.",
+        "guidance": "Define clear, measurable objectives at entity, business process, and transaction levels. Objectives should align with strategy and risk appetite. Consider operations, reporting, and compliance objectives. Define risk tolerances for key objectives. Document objectives in policies, procedures, and plans. Communicate objectives throughout the organization. Review and update objectives as circumstances change. Link objectives to performance measures.",
+        "external_references": "COSO ERM Framework, ISO 31000"
+      }
+    },
+    {
+      "control_id": "CC3.2",
+      "name": "Risk Assessment - Identifying and Analyzing Risk",
+      "family": "Common Criteria - Risk Assessment",
+      "trust_principle": "All",
+      "description": "The entity identifies and analyzes risks to the achievement of objectives",
+      "article": {
+        "article_number": "CC3.2",
+        "section_name": "Risk Assessment - Risk Identification and Analysis",
+        "full_text": "The entity identifies risks to the achievement of its objectives across the entity and analyzes risks as a basis for determining how the risks should be managed. Points of focus include: including entity, subsidiary, division, operating unit, and functional levels; analyzing internal and external factors; involving appropriate levels of management; estimating significance of risks identified; determining how to respond to risks.",
+        "guidance": "Conduct comprehensive risk assessments considering internal and external factors. Analyze likelihood and impact of identified risks. Consider risks at all levels (entity-wide, process-level, transaction-level). Involve appropriate personnel in risk identification. Use various techniques (workshops, interviews, data analysis). Assess changes in the risk landscape. Consider risk interactions and aggregation. Determine risk responses (accept, avoid, reduce, share). Document risk assessment results.",
+        "external_references": "NIST SP 800-30, ISO 27005"
+      }
+    },
+    {
+      "control_id": "CC3.3",
+      "name": "Risk Assessment - Assessing Fraud Risk",
+      "family": "Common Criteria - Risk Assessment",
+      "trust_principle": "All",
+      "description": "The entity considers potential for fraud in assessing risks",
+      "article": {
+        "article_number": "CC3.3",
+        "section_name": "Risk Assessment - Fraud Risk",
+        "full_text": "The entity considers the potential for fraud in assessing risks to the achievement of objectives. Points of focus include: considering various types of fraud; assessing incentive and pressures; assessing opportunities; assessing attitudes and rationalizations.",
+        "guidance": "Assess fraud risks including fraudulent financial reporting, asset misappropriation, and corruption. Consider fraud triangle elements: incentive/pressure, opportunity, and rationalization. Evaluate fraud risks at all organizational levels. Consider management override of controls. Assess risks from both internal and external sources. Develop specific fraud risk responses. Implement fraud detection and prevention controls. Provide fraud awareness training.",
+        "external_references": "SAS 99, ACFE Fraud Risk Assessment"
+      }
+    },
+    {
+      "control_id": "CC3.4",
+      "name": "Risk Assessment - Assessing Change",
+      "family": "Common Criteria - Risk Assessment",
+      "trust_principle": "All",
+      "description": "The entity identifies and assesses changes that could significantly impact internal control",
+      "article": {
+        "article_number": "CC3.4",
+        "section_name": "Risk Assessment - Significant Changes",
+        "full_text": "The entity identifies and assesses changes that could significantly impact the system of internal control. Points of focus include: assessing changes in the external environment; assessing changes in the business model; assessing changes in leadership.",
+        "guidance": "Monitor and assess changes in: external environment (economic, regulatory, competitive); business model (new products, markets, restructuring); leadership (turnover in key positions). Establish change management processes. Assess impact of changes on control environment and risk profile. Update risk assessments when significant changes occur. Communicate changes and their implications. Adjust controls to address new or changed risks. Document assessment of significant changes.",
+        "external_references": "ITIL Change Management, ISO 27001 A.8.32"
+      }
+    },
+    {
+      "control_id": "CC4.1",
+      "name": "Monitoring - Ongoing and Separate Evaluations",
+      "family": "Common Criteria - Monitoring Activities",
+      "trust_principle": "All",
+      "description": "The entity conducts ongoing evaluations and separate evaluations of internal control",
+      "article": {
+        "article_number": "CC4.1",
+        "section_name": "Monitoring - Evaluations",
+        "full_text": "The entity selects, develops, and performs ongoing and/or separate evaluations to ascertain whether the components of internal control are present and functioning. Points of focus include: establishing a baseline; using knowledgeable personnel; integrating with business processes; adjusting scope and frequency; objectively evaluating.",
+        "guidance": "Implement continuous monitoring activities embedded in business processes. Conduct periodic separate evaluations (internal audits, management reviews). Use various evaluation methods (self-assessments, testing, analytics). Consider evaluation scope, frequency, and depth. Use qualified personnel for evaluations. Balance ongoing monitoring with separate evaluations. Document evaluation results and follow-up. Track and report control deficiencies.",
+        "external_references": "IIA Standards, COBIT 5 MEA03"
+      }
+    },
+    {
+      "control_id": "CC4.2",
+      "name": "Monitoring - Evaluating and Communicating Deficiencies",
+      "family": "Common Criteria - Monitoring Activities",
+      "trust_principle": "All",
+      "description": "The entity evaluates and communicates internal control deficiencies",
+      "article": {
+        "article_number": "CC4.2",
+        "section_name": "Monitoring - Deficiency Communication",
+        "full_text": "The entity evaluates and communicates internal control deficiencies in a timely manner to parties responsible for taking corrective action, including senior management and the board of directors, as appropriate. Points of focus include: assessing results; communicating deficiencies; monitoring corrective action.",
+        "guidance": "Establish criteria for assessing and classifying deficiencies (design deficiency, operating deficiency, material weakness). Define escalation procedures based on deficiency severity. Communicate deficiencies to appropriate levels (process owners, management, board). Track remediation efforts. Verify corrective actions are effective. Report status of remediation to oversight bodies. Maintain deficiency tracking system. Consider root causes to prevent recurrence.",
+        "external_references": "PCAOB AS 2201, COSO Internal Control Framework"
+      }
+    },
+    {
+      "control_id": "CC5.1",
+      "name": "Control Activities - Selection and Development",
+      "family": "Common Criteria - Control Activities",
+      "trust_principle": "All",
+      "description": "The entity selects and develops control activities to mitigate risks",
+      "article": {
+        "article_number": "CC5.1",
+        "section_name": "Control Activities - Selection",
+        "full_text": "The entity selects and develops control activities that contribute to the mitigation of risks to the achievement of objectives to acceptable levels. Points of focus include: integrating with risk assessment; considering entity-specific factors; determining relevant business processes; evaluating a mix of control activity types; considering at what level activities are applied; addressing segregation of duties.",
+        "guidance": "Design control activities addressing identified risks. Consider various control types (preventive, detective, corrective; manual, automated). Implement controls at appropriate levels (entity, division, operating unit, function, activity). Address segregation of duties in control design. Consider cost-benefit in control selection. Document control activities in policies and procedures. Ensure controls address all relevant objectives. Link controls to specific risks.",
+        "external_references": "COBIT 5, ISO 27002"
+      }
+    },
+    {
+      "control_id": "CC5.2",
+      "name": "Control Activities - Technology Controls",
+      "family": "Common Criteria - Control Activities",
+      "trust_principle": "All",
+      "description": "The entity develops general control activities over technology",
+      "article": {
+        "article_number": "CC5.2",
+        "section_name": "Control Activities - Technology General Controls",
+        "full_text": "The entity also selects and develops general control activities over technology to support the achievement of objectives. Points of focus include: determining dependency between the use of technology in business processes and technology general controls; establishing relevant technology infrastructure control activities; establishing relevant security management process control activities; establishing relevant technology acquisition, development, and maintenance process control activities.",
+        "guidance": "Implement IT general controls (ITGCs) including: access controls; change management; computer operations; system development. Ensure infrastructure controls address networks, databases, operating systems. Implement security management processes (vulnerability management, incident response, security monitoring). Establish controls over acquisition, development, and maintenance. Consider dependencies between application controls and ITGCs. Test ITGCs regularly. Document IT control environment.",
+        "external_references": "COBIT 5, ITIL, ISO 27002"
+      }
+    },
+    {
+      "control_id": "CC5.3",
+      "name": "Control Activities - Policies and Procedures",
+      "family": "Common Criteria - Control Activities",
+      "trust_principle": "All",
+      "description": "The entity deploys control activities through policies and procedures",
+      "article": {
+        "article_number": "CC5.3",
+        "section_name": "Control Activities - Deployment",
+        "full_text": "The entity deploys control activities through policies that establish what is expected and in procedures that put policies into action. Points of focus include: establishing policies and procedures to support deployment of management's directives; establishing responsibility and accountability for executing policies and procedures; performing in a timely manner; taking corrective action; performing using competent personnel; reassessing policies and procedures.",
+        "guidance": "Document control activities in formal policies and procedures. Communicate policies and procedures to relevant personnel. Train personnel on control execution. Assign responsibility for control performance. Establish expectations for timeliness and quality. Monitor control performance. Update policies and procedures as needed. Ensure procedures reflect actual practices. Use competent personnel to perform controls. Periodically review and update control documentation.",
+        "external_references": "ISO 9001, ITIL"
+      }
+    },
+    {
+      "control_id": "CC6.1",
+      "name": "Logical and Physical Access - System Access",
+      "family": "Common Criteria - Logical and Physical Access Controls",
+      "trust_principle": "Security",
+      "description": "The entity implements logical access controls to protect information assets",
+      "article": {
+        "article_number": "CC6.1",
+        "section_name": "Logical Access - System Protection",
+        "full_text": "The entity implements logical access security software, infrastructure, and architectures over protected information assets to protect them from security events to meet the entity's objectives. Points of focus include: identifying and managing the inventory of information assets; restricting logical access; identifying and authenticating users; considering the use of encryption, where appropriate.",
+        "guidance": "Maintain inventory of systems and data assets. Implement access control lists and role-based access. Use strong authentication mechanisms (passwords, MFA, biometrics). Encrypt sensitive data at rest and in transit. Implement network security controls (firewalls, segmentation). Use privileged access management for administrative accounts. Monitor and log access activities. Conduct access reviews regularly. Implement secure session management. Use principle of least privilege.",
+        "external_references": "NIST SP 800-53 AC family, ISO 27001 A.9"
+      }
+    },
+    {
+      "control_id": "CC6.2",
+      "name": "Logical and Physical Access - Provisioning and Termination",
+      "family": "Common Criteria - Logical and Physical Access Controls",
+      "trust_principle": "Security",
+      "description": "Logical access provisioning and de-provisioning procedures",
+      "article": {
+        "article_number": "CC6.2",
+        "section_name": "Logical Access - Access Management",
+        "full_text": "Prior to issuing system credentials and granting system access, the entity registers and authorizes new internal and external users whose access is administered by the entity. For those users whose access is administered by the entity, user system credentials are removed when user access is no longer authorized. Points of focus include: controlling access credentials to protected assets; requiring identification and authentication; removing access to protected assets when appropriate.",
+        "guidance": "Implement formal access request and approval process. Verify identity before granting access. Use automated provisioning where possible. Conduct background checks for sensitive access. Remove access promptly upon termination or role change. Conduct regular access reviews. Disable inactive accounts. Maintain audit trail of access changes. Use automated identity management systems. Establish exception approval process.",
+        "external_references": "NIST SP 800-63, ISO 27001 A.9.2"
+      }
+    },
+    {
+      "control_id": "CC6.3",
+      "name": "Logical and Physical Access - Network Security",
+      "family": "Common Criteria - Logical and Physical Access Controls",
+      "trust_principle": "Security",
+      "description": "The entity authorizes, modifies, or removes access to data and systems",
+      "article": {
+        "article_number": "CC6.3",
+        "section_name": "Logical Access - Authorization",
+        "full_text": "The entity authorizes, modifies, or removes access to data, software, functions, and other protected information assets based on roles, responsibilities, or the system design and changes, giving consideration to the concepts of least privilege and segregation of duties, to meet the entity's objectives. Points of focus include: creating and modifying access credentials; removing access credentials; reviewing access roles and rules.",
+        "guidance": "Define roles and associated access rights. Document authorization requirements. Implement workflow for access changes. Apply least privilege principle. Maintain segregation of duties matrix. Conduct periodic access recertification. Monitor for unauthorized privilege escalation. Document justification for elevated privileges. Use role-based or attribute-based access control. Implement compensating controls where segregation isn't feasible.",
+        "external_references": "NIST SP 800-53 AC-2, ISO 27001 A.9.2"
+      }
+    },
+    {
+      "control_id": "CC6.4",
+      "name": "Logical and Physical Access - Physical Security",
+      "family": "Common Criteria - Logical and Physical Access Controls",
+      "trust_principle": "Security",
+      "description": "Physical access to facilities and data centers is restricted",
+      "article": {
+        "article_number": "CC6.4",
+        "section_name": "Physical Access",
+        "full_text": "The entity restricts physical access to facilities and protected information assets (for example, data center facilities, backup media storage, and other sensitive locations) to authorized personnel to meet the entity's objectives. Points of focus include: using environmental protections and controls; establishing physical access control systems; implementing visitor management.",
+        "guidance": "Implement physical security controls (badge readers, biometrics, guards). Establish visitor management procedures. Monitor and log physical access. Define and enforce security zones. Implement environmental controls (fire suppression, HVAC, power). Secure cabling and equipment. Control physical media (backup tapes, laptops). Conduct physical security assessments. Use CCTV monitoring. Implement clear desk/clear screen policies.",
+        "external_references": "ISO 27001 A.11, TIA-942 Data Center Standard"
+      }
+    },
+    {
+      "control_id": "CC6.5",
+      "name": "Logical and Physical Access - Removal or Disposal",
+      "family": "Common Criteria - Logical and Physical Access Controls",
+      "trust_principle": "Security",
+      "description": "Logical and physical access is removed or disabled in a timely manner",
+      "article": {
+        "article_number": "CC6.5",
+        "section_name": "Access Termination",
+        "full_text": "The entity discontinues logical and physical protections over physical assets only after the ability to read or recover data and software from those assets has been diminished and is no longer required to meet the entity's objectives. Points of focus include: identifying data and software stored on equipment to be removed; rendering data and software on equipment to be removed unreadable; destroying physical information assets appropriately.",
+        "guidance": "Implement secure disposal procedures for equipment and media. Use data sanitization tools (wiping, degaussing). Physical destruction for highly sensitive media. Maintain certificates of destruction. Track asset disposal. Remove data before equipment repair or return. Consider cloud/SaaS data deletion. Comply with data retention requirements before disposal. Verify data removal effectiveness. Address legal holds on data disposal.",
+        "external_references": "NIST SP 800-88, ISO 27001 A.11.2.7"
+      }
+    },
+    {
+      "control_id": "CC6.6",
+      "name": "Logical and Physical Access - Transmission Security",
+      "family": "Common Criteria - Logical and Physical Access Controls",
+      "trust_principle": "Security",
+      "description": "The entity implements encryption to protect data in transit",
+      "article": {
+        "article_number": "CC6.6",
+        "section_name": "Data Transmission",
+        "full_text": "The entity implements logical access security measures to protect against threats from sources outside its system boundaries. Points of focus include: restricting access; protecting identification and authentication credentials; protecting security configuration; protecting against boundary threats.",
+        "guidance": "Use encryption for data in transit (TLS 1.2+, VPN). Implement secure protocols (HTTPS, SFTP, SSH). Use strong encryption algorithms and key lengths. Protect against man-in-the-middle attacks. Implement certificate management. Use network segmentation and DMZ. Deploy firewalls and intrusion prevention systems. Monitor network traffic for anomalies. Implement DDoS protection. Use secure email gateways.",
+        "external_references": "NIST SP 800-52, ISO 27001 A.13.1"
+      }
+    },
+    {
+      "control_id": "CC6.7",
+      "name": "Logical and Physical Access - Detection and Monitoring",
+      "family": "Common Criteria - Logical and Physical Access Controls",
+      "trust_principle": "Security",
+      "description": "The entity monitors system access and reviews logs",
+      "article": {
+        "article_number": "CC6.7",
+        "section_name": "Access Monitoring",
+        "full_text": "The entity restricts the transmission, movement, and removal of information to authorized internal and external users and processes, and protects it during transmission, movement, or removal to meet the entity's objectives. Points of focus include: protecting data at rest; protecting data in transit; using encryption where appropriate; protecting mobile devices.",
+        "guidance": "Implement security information and event management (SIEM). Configure comprehensive logging across systems. Monitor for suspicious activities and access patterns. Review logs regularly. Establish alerting for security events. Correlate logs from multiple sources. Retain logs per policy. Protect log integrity. Automate log analysis where possible. Investigate anomalies. Implement user behavior analytics (UBA).",
+        "external_references": "NIST SP 800-92, ISO 27001 A.12.4"
+      }
+    },
+    {
+      "control_id": "CC6.8",
+      "name": "Logical and Physical Access - Remediation",
+      "family": "Common Criteria - Logical and Physical Access Controls",
+      "trust_principle": "Security",
+      "description": "The entity assesses and remediates identified security events",
+      "article": {
+        "article_number": "CC6.8",
+        "section_name": "Security Event Response",
+        "full_text": "The entity implements controls to prevent or detect and act upon the introduction of unauthorized or malicious software to meet the entity's objectives. Points of focus include: restricting application and software installation; detecting unauthorized changes; conducting vulnerability scans; using anti-malware software.",
+        "guidance": "Implement anti-malware solutions with regular updates. Conduct vulnerability scanning and penetration testing. Apply patches and updates promptly. Use application whitelisting where appropriate. Implement intrusion detection/prevention systems. Conduct security assessments regularly. Respond to security findings in a timely manner. Track remediation efforts. Use automated patch management. Implement configuration management.",
+        "external_references": "NIST SP 800-40, ISO 27001 A.12.6"
+      }
+    },
+    {
+      "control_id": "CC7.1",
+      "name": "System Operations - Detection",
+      "family": "Common Criteria - System Operations",
+      "trust_principle": "Security",
+      "description": "The entity detects and responds to system security breaches, incidents, and unauthorized access",
+      "article": {
+        "article_number": "CC7.1",
+        "section_name": "System Operations - Detection",
+        "full_text": "To meet its objectives, the entity uses detection and monitoring procedures to identify (1) changes to configurations that result in the introduction of new vulnerabilities, and (2) susceptibilities to newly discovered vulnerabilities. Points of focus include: using defined configuration standards; conducting vulnerability scans; conducting penetration testing; analyzing results; managing security exceptions.",
+        "guidance": "Establish baseline configurations. Monitor for configuration drift. Conduct regular vulnerability assessments. Perform penetration testing periodically. Subscribe to threat intelligence feeds. Participate in information sharing. Monitor security advisories. Test detection capabilities. Implement honeypots/deception technology where appropriate. Conduct red team exercises. Maintain asset inventory for vulnerability tracking.",
+        "external_references": "NIST SP 800-115, OWASP Testing Guide"
+      }
+    },
+    {
+      "control_id": "CC7.2",
+      "name": "System Operations - Incident Response",
+      "family": "Common Criteria - System Operations",
+      "trust_principle": "Security",
+      "description": "The entity responds to identified security incidents",
+      "article": {
+        "article_number": "CC7.2",
+        "section_name": "System Operations - Response",
+        "full_text": "The entity monitors system components and the operation of those components for anomalies that are indicative of malicious acts, natural disasters, and errors affecting the entity's ability to meet its objectives; anomalies are analyzed to determine whether they represent security events. Points of focus include: monitoring the system; implementing security monitoring; analyzing logs; managing incidents.",
+        "guidance": "Develop and maintain incident response plan. Define incident classification criteria. Establish incident response team with defined roles. Implement incident detection and alerting. Document incident response procedures. Conduct incident response training and exercises. Maintain forensic capabilities. Establish communication protocols. Integrate with business continuity. Conduct post-incident reviews. Track incident metrics. Engage law enforcement when appropriate.",
+        "external_references": "NIST SP 800-61, ISO 27035"
+      }
+    },
+    {
+      "control_id": "CC7.3",
+      "name": "System Operations - Communication of Incidents",
+      "family": "Common Criteria - System Operations",
+      "trust_principle": "Security",
+      "description": "The entity communicates identified security events and incidents",
+      "article": {
+        "article_number": "CC7.3",
+        "section_name": "System Operations - Communication",
+        "full_text": "The entity evaluates security events to determine whether they could or have resulted in a failure of the entity to meet its objectives (security incidents) and, if so, takes actions to prevent or address such failures. Points of focus include: analyzing security events; responding to security incidents; developing and implementing incident response plans; communicating security events.",
+        "guidance": "Establish incident notification procedures. Define stakeholders requiring notification (management, board, customers, regulators). Determine notification timelines based on incident severity. Prepare communication templates. Coordinate with legal and PR teams. Consider regulatory reporting requirements. Document incident communications. Implement secure communication channels. Balance transparency with security. Follow breach notification laws where applicable.",
+        "external_references": "State breach notification laws, GDPR Art. 33, PCI DSS Req. 12.10"
+      }
+    },
+    {
+      "control_id": "CC7.4",
+      "name": "System Operations - Mitigation and Recovery",
+      "family": "Common Criteria - System Operations",
+      "trust_principle": "Security",
+      "description": "The entity identifies, develops, and implements activities to recover from security incidents",
+      "article": {
+        "article_number": "CC7.4",
+        "section_name": "System Operations - Recovery",
+        "full_text": "The entity responds to identified security incidents by executing a defined incident response program to understand, contain, remediate, and communicate security incidents, as appropriate. Points of focus include: containing security incidents; mitigating security incidents; ending threats posed by security incidents; restoring operations; developing and implementing communication protocols.",
+        "guidance": "Develop recovery procedures for various incident scenarios. Implement containment strategies (network isolation, account disabling). Perform root cause analysis. Implement remediation measures. Restore affected systems and data. Validate system integrity after incidents. Update controls based on lessons learned. Test recovery procedures. Maintain incident runbooks. Document recovery activities. Consider cyber insurance for incident costs.",
+        "external_references": "NIST SP 800-61, ISO 27031"
+      }
+    },
+    {
+      "control_id": "CC7.5",
+      "name": "System Operations - Assessment and Improvement",
+      "family": "Common Criteria - System Operations",
+      "trust_principle": "Security",
+      "description": "The entity assesses and improves incident response capabilities",
+      "article": {
+        "article_number": "CC7.5",
+        "section_name": "System Operations - Continuous Improvement",
+        "full_text": "The entity identifies, develops, and implements activities to recover from identified security incidents. Points of focus include: restoring the affected environment; restoring operations; communicating information about the incident; determining whether to re-design processes.",
+        "guidance": "Conduct post-incident lessons learned sessions. Update incident response procedures based on experience. Track incident response metrics (detection time, containment time, recovery time). Conduct tabletop exercises and simulations. Train incident responders regularly. Participate in threat intelligence communities. Update detection rules based on incidents. Improve monitoring based on blind spots discovered. Document process improvements. Share lessons learned appropriately.",
+        "external_references": "NIST SP 800-61, ISO 27035"
+      }
+    },
+    {
+      "control_id": "CC8.1",
+      "name": "Change Management - System Change Detection",
+      "family": "Common Criteria - Change Management",
+      "trust_principle": "Security",
+      "description": "The entity authorizes, designs, develops, configures, documents, tests, and implements changes to infrastructure, data, software, and procedures",
+      "article": {
+        "article_number": "CC8.1",
+        "section_name": "Change Management - Change Process",
+        "full_text": "The entity authorizes, designs, develops or acquires, configures, documents, tests, approves, and implements changes to infrastructure, data, software, and procedures to meet its objectives. Points of focus include: using a defined change management process; authorizing changes; designing and developing changes; documenting changes; tracking system changes; configuring software; testing changes; approving changes; deploying changes; preparing and providing for release documentation; deploying release documentation and identifying system changes; tracking and reporting system changes; completing change management process activities.",
+        "guidance": "Implement formal change management process with request, approval, testing, and implementation phases. Maintain change calendar. Assess risk and impact of changes. Require testing in non-production environments. Document changes thoroughly. Maintain configuration management database (CMDB). Implement emergency change procedures. Conduct change advisory board (CAB) reviews. Track change success/failure. Implement rollback procedures. Segregate change management duties. Use change management tools.",
+        "external_references": "ITIL Change Management, COBIT 5 BAI06, ISO 20000"
+      }
+    },
+    {
+      "control_id": "CC9.1",
+      "name": "Risk Mitigation - Third-Party Services",
+      "family": "Common Criteria - Risk Mitigation",
+      "trust_principle": "Security",
+      "description": "The entity assesses vendor and business partner risks",
+      "article": {
+        "article_number": "CC9.1",
+        "section_name": "Risk Mitigation - Vendor Management",
+        "full_text": "The entity identifies, selects, and manages third-party service providers that can significantly affect the system. The entity establishes requirements for the services to be provided and activities to be performed by third-party service providers. Points of focus include: establishing policies and procedures for the design, acquisition, implementation, and management of third-party services; establishing requirements; assessing third-party service providers; monitoring third-party services.",
+        "guidance": "Maintain inventory of third-party service providers. Conduct due diligence on new vendors. Include security requirements in contracts. Assess vendor security controls (questionnaires, SOC reports, certifications). Monitor vendor performance and security posture. Conduct vendor risk assessments. Review vendor audit reports. Establish escalation procedures. Plan for vendor termination. Address fourth-party risks. Implement vendor access controls. Review vendor insurance coverage.",
+        "external_references": "SSAE 18, ISAE 3402, ISO 27001 A.15"
+      }
+    },
+    {
+      "control_id": "CC9.2",
+      "name": "Risk Mitigation - Complementary User Entity Controls",
+      "family": "Common Criteria - Risk Mitigation",
+      "trust_principle": "All",
+      "description": "Complementary user entity controls are identified and communicated to user entities",
+      "article": {
+        "article_number": "CC9.2",
+        "section_name": "Risk Mitigation - User Entity Responsibilities",
+        "full_text": "The entity communicates to external users the system changes and risks that may affect users' IT system. The entity communicates to external users the responsibilities of the service organization and those that remain with the user entities. Points of focus include: communicating responsibilities; communicating system changes; addressing risks; establishing specific expectations.",
+        "guidance": "Document complementary user entity controls (CUECs) in description of system. Communicate CUECs to customers. Define shared responsibility model. Specify customer configuration requirements. Provide security guidance and documentation. Notify customers of relevant changes. Clarify boundaries of service organization responsibilities. Address user entity monitoring responsibilities. Provide training on secure use of services. Include CUECs in SOC report.",
+        "external_references": "SSAE 18 AT-C 320, SOC 2 Report Requirements"
+      }
+    },
+    {
+      "control_id": "A1.1",
+      "name": "Availability - System Components",
+      "family": "Additional Criteria - Availability",
+      "trust_principle": "Availability",
+      "description": "The entity maintains, monitors, and evaluates system components",
+      "article": {
+        "article_number": "A1.1",
+        "section_name": "Availability - Component Management",
+        "full_text": "The entity maintains, monitors, and evaluates current processing capacity and use of system components (infrastructure, data, and software) to manage capacity demand and to enable the implementation of additional capacity to help meet its objectives. Points of focus include: monitoring and evaluating current capacity; forecasting future capacity needs; implementing changes to meet demand.",
+        "guidance": "Monitor system performance and capacity metrics. Establish capacity thresholds and alerting. Forecast future capacity needs based on growth trends. Implement scalability in system design. Conduct capacity planning exercises. Address capacity bottlenecks. Consider cloud elasticity for scalability. Monitor database sizes and growth rates. Plan for peak usage periods. Test capacity under load. Document capacity planning decisions.",
+        "external_references": "ITIL Capacity Management, ISO 20000"
+      }
+    },
+    {
+      "control_id": "A1.2",
+      "name": "Availability - Environmental Protection",
+      "family": "Additional Criteria - Availability",
+      "trust_principle": "Availability",
+      "description": "The entity implements environmental protections",
+      "article": {
+        "article_number": "A1.2",
+        "section_name": "Availability - Environmental Controls",
+        "full_text": "The entity authorizes, designs, develops or acquires, implements, operates, approves, maintains, and monitors environmental protections, software, data back-up processes, and recovery infrastructure to meet its objectives. Points of focus include: implementing environmental protection mechanisms; implementing backup and recovery mechanisms; conducting backups; maintaining offsite backup storage; restoring data; implementing redundant processing capacity.",
+        "guidance": "Implement environmental controls (temperature, humidity, power). Use redundant power supplies and generators. Implement fire suppression systems. Protect against water damage. Establish backup and disaster recovery capabilities. Maintain offsite backups. Test restoration procedures regularly. Implement geographic redundancy where appropriate. Document recovery time objectives (RTO) and recovery point objectives (RPO). Use backup monitoring and alerting.",
+        "external_references": "TIA-942, ISO 27031, NIST SP 800-34"
+      }
+    },
+    {
+      "control_id": "A1.3",
+      "name": "Availability - Recovery and Backup",
+      "family": "Additional Criteria - Availability",
+      "trust_principle": "Availability",
+      "description": "The entity maintains backup and recovery procedures",
+      "article": {
+        "article_number": "A1.3",
+        "section_name": "Availability - Business Continuity",
+        "full_text": "The entity tests recovery plan procedures supporting system recovery to meet its objectives. Points of focus include: testing recovery plans; conducting business continuity and disaster recovery exercises; communicating recovery plans; updating recovery plans.",
+        "guidance": "Develop and document business continuity and disaster recovery plans. Define recovery strategies for various disruption scenarios. Test recovery procedures regularly (annually at minimum). Conduct tabletop exercises and simulations. Document test results and lessons learned. Update plans based on test findings. Train personnel on recovery procedures. Maintain emergency contact lists. Establish alternate processing facilities. Consider dependencies on third parties in recovery planning.",
+        "external_references": "ISO 22301, BS 25999, DRI Professional Practices"
+      }
+    },
+    {
+      "control_id": "C1.1",
+      "name": "Confidentiality - Data Classification",
+      "family": "Additional Criteria - Confidentiality",
+      "trust_principle": "Confidentiality",
+      "description": "The entity identifies and maintains confidential information",
+      "article": {
+        "article_number": "C1.1",
+        "section_name": "Confidentiality - Information Classification",
+        "full_text": "The entity identifies and maintains confidential information to meet the entity's objectives related to confidentiality. Points of focus include: identifying information requiring confidentiality protection; maintaining inventory; classifying information; monitoring classification; handling confidential information.",
+        "guidance": "Implement data classification policy and procedures. Define classification levels (e.g., public, internal, confidential, highly confidential). Classify data assets based on sensitivity. Maintain data inventory with classifications. Apply appropriate controls based on classification. Label documents and files with classifications. Train personnel on data classification. Review classifications periodically. Address data classification in system design.",
+        "external_references": "ISO 27001 A.8.2, NIST SP 800-60"
+      }
+    },
+    {
+      "control_id": "C1.2",
+      "name": "Confidentiality - Access Controls",
+      "family": "Additional Criteria - Confidentiality",
+      "trust_principle": "Confidentiality",
+      "description": "The entity restricts access to confidential information",
+      "article": {
+        "article_number": "C1.2",
+        "section_name": "Confidentiality - Access Restriction",
+        "full_text": "The entity disposes of confidential information to meet the entity's objectives related to confidentiality. Points of focus include: establishing disposal requirements; disposing of confidential information; monitoring disposal; addressing end-of-life disposal.",
+        "guidance": "Apply access controls proportional to data sensitivity. Limit confidential data access to authorized personnel only. Implement need-to-know restrictions. Use encryption for confidential data. Apply data loss prevention (DLP) controls. Monitor access to confidential information. Conduct regular access reviews focusing on confidential data. Implement enhanced authentication for highly confidential information. Use data masking in non-production environments.",
+        "external_references": "ISO 27001 A.9, NIST SP 800-53 AC family"
+      }
+    },
+    {
+      "control_id": "PI1.1",
+      "name": "Processing Integrity - Data Quality",
+      "family": "Additional Criteria - Processing Integrity",
+      "trust_principle": "Processing Integrity",
+      "description": "The entity obtains or generates, uses, and communicates relevant quality information",
+      "article": {
+        "article_number": "PI1.1",
+        "section_name": "Processing Integrity - Information Quality",
+        "full_text": "The entity obtains or generates, uses, and communicates relevant, quality information regarding the objectives related to processing, including definitions of data processed and product and service specifications, to support the use of products and services. Points of focus include: obtaining or generating information; determining information requirements; using quality information; communicating information.",
+        "guidance": "Define data quality requirements (accuracy, completeness, validity, timeliness). Implement data validation controls at input. Verify data accuracy through reconciliation. Monitor data quality metrics. Implement data quality rules in systems. Cleanse and correct data errors. Document data sources and lineage. Establish data ownership and stewardship. Use automated data quality tools. Communicate data quality issues.",
+        "external_references": "ISO 8000, DAMA DMBOK"
+      }
+    },
+    {
+      "control_id": "PI1.2",
+      "name": "Processing Integrity - Processing Accuracy",
+      "family": "Additional Criteria - Processing Integrity",
+      "trust_principle": "Processing Integrity",
+      "description": "The entity processes data completely, accurately, and timely",
+      "article": {
+        "article_number": "PI1.2",
+        "section_name": "Processing Integrity - Processing Controls",
+        "full_text": "The entity implements policies and procedures over system inputs, including controls over completeness and accuracy, to result in products, services, and reporting to meet the entity's objectives. Points of focus include: designing processing activities; executing processing activities; monitoring processing activities; addressing errors and exceptions.",
+        "guidance": "Implement input validation and edit checks. Use batch totals and control counts. Reconcile systems and interfaces. Implement exception handling procedures. Monitor processing completeness. Review error logs and exceptions. Reprocess failed transactions. Implement automated controls where possible. Test processing logic thoroughly. Validate calculated fields. Ensure processing timeliness. Document processing procedures.",
+        "external_references": "COBIT 5 DSS06, ISO 20000"
+      }
+    },
+    {
+      "control_id": "PI1.3",
+      "name": "Processing Integrity - Output Review",
+      "family": "Additional Criteria - Processing Integrity",
+      "trust_principle": "Processing Integrity",
+      "description": "The entity creates, retains, and distributes output completely and accurately",
+      "article": {
+        "article_number": "PI1.3",
+        "section_name": "Processing Integrity - Output Controls",
+        "full_text": "The entity implements policies and procedures over system outputs to meet the entity's objectives. Points of focus include: distributing output; retaining output; reviewing output for completeness and accuracy; handling distribution errors.",
+        "guidance": "Review output for reasonableness and accuracy. Implement output reconciliation procedures. Control output distribution to authorized parties. Maintain output retention per requirements. Monitor report generation and distribution. Address output errors promptly. Secure sensitive output. Archive output appropriately. Verify calculations in output. Test output accuracy periodically.",
+        "external_references": "COBIT 5, ISO 9001"
+      }
+    },
+    {
+      "control_id": "PI1.4",
+      "name": "Processing Integrity - Error Correction",
+      "family": "Additional Criteria - Processing Integrity",
+      "trust_principle": "Processing Integrity",
+      "description": "The entity corrects identified errors in a timely manner",
+      "article": {
+        "article_number": "PI1.4",
+        "section_name": "Processing Integrity - Error Management",
+        "full_text": "The entity implements policies and procedures to make available or deliver output completely, accurately, and timely in accordance with specifications to meet the entity's objectives. Points of focus include: analyzing errors; correcting errors; communicating errors; preventing error recurrence.",
+        "guidance": "Establish error identification and reporting procedures. Implement error tracking system. Define error correction procedures and timelines. Analyze root causes of errors. Implement corrective actions. Monitor error trends. Escalate recurring errors. Document error corrections. Test corrections before implementation. Communicate significant errors to stakeholders. Implement preventive measures.",
+        "external_references": "ISO 9001, Six Sigma DMAIC"
+      }
+    },
+    {
+      "control_id": "PI1.5",
+      "name": "Processing Integrity - Interface Controls",
+      "family": "Additional Criteria - Processing Integrity",
+      "trust_principle": "Processing Integrity",
+      "description": "The entity processes data in system interfaces completely and accurately",
+      "article": {
+        "article_number": "PI1.5",
+        "section_name": "Processing Integrity - Integration",
+        "full_text": "The entity implements policies and procedures to store inputs, items in processing, and outputs completely, accurately, and timely in accordance with system specifications to meet the entity's objectives. Points of focus include: managing interface configurations; monitoring interface processing; reconciling interface transactions; addressing interface errors.",
+        "guidance": "Document all system interfaces. Implement interface controls (checksums, sequence numbers, batch totals). Monitor interface failures and errors. Reconcile transactions across interfaces. Implement error handling and retry logic. Test interfaces thoroughly. Maintain interface specifications. Monitor interface performance. Implement alerts for interface failures. Version control interface changes. Use standard protocols and formats.",
+        "external_references": "COBIT 5, ISO 20000"
+      }
+    },
+    {
+      "control_id": "P1.1",
+      "name": "Privacy - Notice and Communication",
+      "family": "Additional Criteria - Privacy",
+      "trust_principle": "Privacy",
+      "description": "The entity provides notice of privacy practices",
+      "article": {
+        "article_number": "P1.1",
+        "section_name": "Privacy - Privacy Notice",
+        "full_text": "The entity provides notice to data subjects about its privacy practices to meet the entity's objectives related to privacy. The notice is updated and communicated to data subjects in a timely manner for changes to the entity's privacy practices, including changes in the use of personal information, to meet the entity's objectives related to privacy. Points of focus include: providing privacy notice; obtaining consent; communicating choices; updating notices.",
+        "guidance": "Develop and publish privacy notice/policy. Communicate privacy practices clearly. Obtain consent where required. Provide notice of changes to practices. Make privacy notice easily accessible. Translate notice for international users. Include all required elements (data collected, uses, sharing, rights). Update notices when practices change. Implement just-in-time notices. Use layered privacy notices. Obtain parental consent where required.",
+        "external_references": "GDPR Articles 13-14, CCPA, PIPEDA, Privacy Shield"
+      }
+    },
+    {
+      "control_id": "P2.1",
+      "name": "Privacy - Choice and Consent",
+      "family": "Additional Criteria - Privacy",
+      "trust_principle": "Privacy",
+      "description": "The entity provides choice regarding collection and use of personal information",
+      "article": {
+        "article_number": "P2.1",
+        "section_name": "Privacy - Consent Management",
+        "full_text": "The entity communicates choices available regarding the collection, use, retention, disclosure, and disposal of personal information to the data subjects and the consequences, if any, of each choice. Explicit consent for the collection, use, retention, disclosure, and disposal of personal information is obtained from data subjects or other authorized persons, if required. Such consent is obtained only for the intended purpose of the information to meet the entity's objectives related to privacy. Points of focus include: providing choices; obtaining consent; managing consent withdrawal; documenting consent.",
+        "guidance": "Implement consent management system. Provide meaningful choices to users. Obtain explicit consent for sensitive data. Allow consent withdrawal. Document consent records. Provide granular consent options. Use affirmative consent (no pre-checked boxes). Separate consent from terms of service. Honor opt-out preferences. Implement preference management. Address children's consent requirements. Support data subject rights to withdraw consent.",
+        "external_references": "GDPR Article 7, CCPA opt-out requirements"
+      }
+    },
+    {
+      "control_id": "P3.1",
+      "name": "Privacy - Collection",
+      "family": "Additional Criteria - Privacy",
+      "trust_principle": "Privacy",
+      "description": "The entity collects personal information only for identified purposes",
+      "article": {
+        "article_number": "P3.1",
+        "section_name": "Privacy - Data Collection",
+        "full_text": "Personal information is collected consistent with the entity's objectives related to privacy. Points of focus include: limiting collection; identifying purposes; obtaining from reliable sources; using fair and lawful means; obtaining authorized.",
+        "guidance": "Implement data minimization principles. Collect only necessary personal information. Identify and document purposes for collection. Obtain data from reliable sources. Use lawful collection methods. Avoid excessive data collection. Implement collection controls in systems. Train personnel on appropriate collection. Review data collection practices regularly. Address collection in privacy impact assessments. Document legal bases for collection.",
+        "external_references": "GDPR Article 5(1)(c), FIPPs, OECD Privacy Guidelines"
+      }
+    },
+    {
+      "control_id": "P4.1",
+      "name": "Privacy - Use, Retention, and Disposal",
+      "family": "Additional Criteria - Privacy",
+      "trust_principle": "Privacy",
+      "description": "The entity uses personal information for identified purposes and disposes when no longer needed",
+      "article": {
+        "article_number": "P4.1",
+        "section_name": "Privacy - Data Lifecycle",
+        "full_text": "The entity limits the use of personal information to the purposes identified in the notice and for which the data subject has provided explicit consent. The entity retains personal information for only as long as necessary to fulfill the stated purposes or as required by law or regulation and thereafter appropriately disposes of such information. Points of focus include: limiting use to purposes; retaining per policy; disposing securely; honoring retention requirements.",
+        "guidance": "Use personal information only for stated purposes. Implement retention schedules for personal data. Dispose of data when no longer needed. Use secure disposal methods. Implement automated retention policies. Address legal hold requirements. Honor data subject deletion requests. Document retention and disposal activities. Purge data from backups where feasible. Consider purpose limitation in new uses. Obtain consent for new purposes.",
+        "external_references": "GDPR Articles 5(1)(b), 5(1)(e), 17; CCPA deletion rights"
+      }
+    },
+    {
+      "control_id": "P5.1",
+      "name": "Privacy - Access",
+      "family": "Additional Criteria - Privacy",
+      "trust_principle": "Privacy",
+      "description": "The entity provides data subjects with access to their personal information",
+      "article": {
+        "article_number": "P5.1",
+        "section_name": "Privacy - Data Subject Access",
+        "full_text": "The entity grants data subjects the ability to access their personal information for review and, upon request, provides physical or electronic copies of that information to data subjects to meet the entity's objectives related to privacy. Points of focus include: providing access mechanisms; authenticating requesters; providing copies; responding timely; addressing access limitations.",
+        "guidance": "Implement data subject access request (DSAR) procedures. Verify identity before providing access. Provide access within required timeframes. Offer access in user-friendly formats. Address limitations on access rights. Document access requests and responses. Train staff on DSAR handling. Use automated tools for data retrieval where possible. Provide clear instructions for access requests. Consider fees where legally permitted. Address third-party data in access requests.",
+        "external_references": "GDPR Article 15, CCPA right to know"
+      }
+    },
+    {
+      "control_id": "P6.1",
+      "name": "Privacy - Disclosure and Notification",
+      "family": "Additional Criteria - Privacy",
+      "trust_principle": "Privacy",
+      "description": "The entity discloses personal information to third parties with consent",
+      "article": {
+        "article_number": "P6.1",
+        "section_name": "Privacy - Third-Party Disclosure",
+        "full_text": "The entity discloses personal information to third parties with the explicit consent of data subjects, and such consent is obtained prior to disclosure to meet the entity's objectives related to privacy. Points of focus include: obtaining consent; limiting disclosures; selecting third parties; monitoring third parties; addressing breaches.",
+        "guidance": "Obtain consent before sharing personal information. Conduct due diligence on third parties receiving data. Include data protection requirements in contracts. Monitor third-party compliance. Maintain inventory of data sharing. Implement transfer restrictions for sensitive data. Address international data transfers. Use data processing agreements. Notify of third-party changes. Respond to data breaches by third parties. Limit data shared to minimum necessary.",
+        "external_references": "GDPR Articles 28, 44-50; Standard Contractual Clauses"
+      }
+    },
+    {
+      "control_id": "P7.1",
+      "name": "Privacy - Quality",
+      "family": "Additional Criteria - Privacy",
+      "trust_principle": "Privacy",
+      "description": "The entity maintains accurate, complete, and relevant personal information",
+      "article": {
+        "article_number": "P7.1",
+        "section_name": "Privacy - Data Quality",
+        "full_text": "The entity collects and maintains accurate, up-to-date, complete, and relevant personal information to meet the entity's objectives related to privacy. Points of focus include: maintaining accuracy; enabling corrections; validating information; reviewing quality.",
+        "guidance": "Implement data quality controls for personal information. Enable data subjects to correct inaccuracies. Validate data at collection. Regularly review data accuracy. Cleanse outdated information. Update information when notified of changes. Document correction requests. Implement processes for rectification. Communicate corrections to third parties where appropriate. Consider automated data quality checks.",
+        "external_references": "GDPR Article 16 (right to rectification), FIPPs accuracy principle"
+      }
+    },
+    {
+      "control_id": "P8.1",
+      "name": "Privacy - Monitoring and Enforcement",
+      "family": "Additional Criteria - Privacy",
+      "trust_principle": "Privacy",
+      "description": "The entity monitors compliance with privacy commitments",
+      "article": {
+        "article_number": "P8.1",
+        "section_name": "Privacy - Compliance Monitoring",
+        "full_text": "The entity implements a process for receiving, addressing, resolving, and communicating the resolution of inquiries, complaints, and disputes from data subjects and others and periodically monitors compliance to meet the entity's objectives related to privacy. Corrections and other necessary actions related to identified deficiencies are made or taken in a timely manner. Points of focus include: receiving complaints; investigating issues; resolving complaints; monitoring compliance; taking corrective action.",
+        "guidance": "Establish privacy complaint handling procedures. Designate privacy officer or equivalent. Monitor compliance with privacy requirements. Conduct privacy audits and assessments. Track and resolve privacy incidents. Implement corrective actions. Report privacy compliance to management. Maintain complaint records. Respond to data subject complaints timely. Cooperate with supervisory authorities. Conduct privacy training. Perform privacy impact assessments (PIAs) for new processing.",
+        "external_references": "GDPR Articles 35 (DPIA), 37-39 (DPO), 77-78 (complaints)"
+      }
+    }
+  ]
+}
