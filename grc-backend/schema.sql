@@ -17,6 +17,11 @@ CREATE TABLE users (
   email TEXT NOT NULL UNIQUE,
   name TEXT NOT NULL,
   role TEXT NOT NULL DEFAULT 'user', -- 'user', 'admin'
+  onboarding_completed BOOLEAN NOT NULL DEFAULT false,
+  company_name TEXT,
+  company_size TEXT, -- '1-10', '11-50', '51-200', '201-500', '500+'
+  company_industry TEXT,
+  primary_regulations TEXT, -- Comma-separated: 'GDPR,ISO27001,NIS-2'
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

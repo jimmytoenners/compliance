@@ -235,6 +235,62 @@ func (s *ApiServer) HandleLogin(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+// HandleUpdateUserProfile handles PUT /api/v1/users/profile
+func (s *ApiServer) HandleUpdateUserProfile(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPut {
+		http.Error(w, "Invalid method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Extract user ID from context (set by auth middleware)
+	userID, ok := r.Context().Value(UserIDKey).(string)
+	if !ok || userID == "" {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	var req UpdateUserProfileRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	// Update user profile
+	updatedUser, err := s.store.UpdateUserProfile(r.Context(), userID, req)
+	if err != nil {
+		if err.Error() == "user not found" {
+			http.Error(w, "User not found", http.StatusNotFound)
+			return
+		}
+		log.Printf("Error updating user profile: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	// Audit log
+	changes := map[string]interface{}{}
+	if req.CompanyName != nil {
+		changes["company_name"] = *req.CompanyName
+	}
+	if req.CompanySize != nil {
+		changes["company_size"] = *req.CompanySize
+	}
+	if req.CompanyIndustry != nil {
+		changes["company_industry"] = *req.CompanyIndustry
+	}
+	if req.PrimaryRegulations != nil {
+		changes["primary_regulations"] = *req.PrimaryRegulations
+	}
+	if req.OnboardingCompleted != nil {
+		changes["onboarding_completed"] = *req.OnboardingCompleted
+	}
+	entityType := "user"
+	s.store.LogAudit(r.Context(), &userID, "USER_PROFILE_UPDATED", &entityType, &userID, changes, nil)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(updatedUser)
+}
+
 // HandleGetControlLibrary handles GET /api/v1/controls/library
 func (s *ApiServer) HandleGetControlLibrary(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {

@@ -120,6 +120,7 @@ func main() {
 	protected.HandleFunc("/dashboard/summary", apiServer.HandleDashboardSummary).Methods("GET", "OPTIONS")
 	protected.HandleFunc("/notifications", apiServer.HandleGetNotifications).Methods("GET", "OPTIONS")
 	protected.HandleFunc("/notifications/{id}/read", apiServer.HandleMarkNotificationAsRead).Methods("POST", "OPTIONS")
+	protected.HandleFunc("/users/profile", apiServer.HandleUpdateUserProfile).Methods("PUT", "OPTIONS")
 	protected.HandleFunc("/controls/library", apiServer.HandleGetControlLibrary).Methods("GET", "OPTIONS")
 	protected.HandleFunc("/controls/library/export", apiServer.HandleExportControls).Methods("GET", "OPTIONS") // Export controls
 	protected.HandleFunc("/controls/activated", apiServer.HandleActivatedControls).Methods("GET", "OPTIONS")

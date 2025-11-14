@@ -3,7 +3,13 @@ import { create } from 'zustand';
 interface User {
   id: string;
   email: string;
+  name: string;
   role: 'admin' | 'user';
+  onboarding_completed: boolean;
+  company_name?: string;
+  company_size?: string;
+  company_industry?: string;
+  primary_regulations?: string;
 }
 
 interface AuthState {
@@ -12,6 +18,7 @@ interface AuthState {
   isAuthenticated: boolean;
   login: (user: User, token: string) => void;
   logout: () => void;
+  setUser: (user: User) => void;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -30,6 +37,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     set({ user: null, token: null, isAuthenticated: false });
+  },
+  setUser: (user) => {
+    localStorage.setItem('user', JSON.stringify(user));
+    set({ user });
   },
 }));
 

@@ -156,10 +156,15 @@ type UpdateTicketRequest struct {
 
 // User represents a row in 'users'
 type User struct {
-	ID    string `json:"id" db:"id"`
-	Email string `json:"email" db:"email"`
-	Name  string `json:"name" db:"name"`
-	Role  string `json:"role" db:"role"`
+	ID                   string `json:"id" db:"id"`
+	Email                string `json:"email" db:"email"`
+	Name                 string `json:"name" db:"name"`
+	Role                 string `json:"role" db:"role"`
+	OnboardingCompleted  bool   `json:"onboarding_completed" db:"onboarding_completed"`
+	CompanyName          string `json:"company_name,omitempty" db:"company_name"`
+	CompanySize          string `json:"company_size,omitempty" db:"company_size"`
+	CompanyIndustry      string `json:"company_industry,omitempty" db:"company_industry"`
+	PrimaryRegulations   string `json:"primary_regulations,omitempty" db:"primary_regulations"`
 }
 
 // LoginRequest is the JSON for login
@@ -900,7 +905,11 @@ func (s *Store) UpdateTicket(ctx context.Context, ticketID string, req UpdateTic
 // AuthenticateUser authenticates a user by email and password
 func (s *Store) AuthenticateUser(ctx context.Context, email, password string) (*User, error) {
 	query := `
-		SELECT id, email, name, role
+		SELECT id, email, name, role, onboarding_completed, 
+		       COALESCE(company_name, '') as company_name,
+		       COALESCE(company_size, '') as company_size,
+		       COALESCE(company_industry, '') as company_industry,
+		       COALESCE(primary_regulations, '') as primary_regulations
 		FROM users
 		WHERE email = $1 AND role IN ('admin', 'user')
 		LIMIT 1;
@@ -908,7 +917,8 @@ func (s *Store) AuthenticateUser(ctx context.Context, email, password string) (*
 
 	var user User
 	err := s.db.QueryRow(ctx, query, email).Scan(
-		&user.ID, &user.Email, &user.Name, &user.Role,
+		&user.ID, &user.Email, &user.Name, &user.Role, &user.OnboardingCompleted,
+		&user.CompanyName, &user.CompanySize, &user.CompanyIndustry, &user.PrimaryRegulations,
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -924,6 +934,107 @@ func (s *Store) AuthenticateUser(ctx context.Context, email, password string) (*
 		return nil, fmt.Errorf("invalid credentials")
 	}
 
+	return &user, nil
+}
+
+// UpdateUserProfileRequest is the JSON for updating user profile
+type UpdateUserProfileRequest struct {
+	CompanyName        *string `json:"company_name,omitempty"`
+	CompanySize        *string `json:"company_size,omitempty"`
+	CompanyIndustry    *string `json:"company_industry,omitempty"`
+	PrimaryRegulations *string `json:"primary_regulations,omitempty"`
+	OnboardingCompleted *bool  `json:"onboarding_completed,omitempty"`
+}
+
+// UpdateUserProfile updates the user's profile and onboarding status
+func (s *Store) UpdateUserProfile(ctx context.Context, userID string, req UpdateUserProfileRequest) (*User, error) {
+	setParts := []string{}
+	args := []interface{}{}
+	argCount := 1
+
+	if req.CompanyName != nil {
+		setParts = append(setParts, fmt.Sprintf("company_name = $%d", argCount))
+		args = append(args, *req.CompanyName)
+		argCount++
+	}
+	if req.CompanySize != nil {
+		setParts = append(setParts, fmt.Sprintf("company_size = $%d", argCount))
+		args = append(args, *req.CompanySize)
+		argCount++
+	}
+	if req.CompanyIndustry != nil {
+		setParts = append(setParts, fmt.Sprintf("company_industry = $%d", argCount))
+		args = append(args, *req.CompanyIndustry)
+		argCount++
+	}
+	if req.PrimaryRegulations != nil {
+		setParts = append(setParts, fmt.Sprintf("primary_regulations = $%d", argCount))
+		args = append(args, *req.PrimaryRegulations)
+		argCount++
+	}
+	if req.OnboardingCompleted != nil {
+		setParts = append(setParts, fmt.Sprintf("onboarding_completed = $%d", argCount))
+		args = append(args, *req.OnboardingCompleted)
+		argCount++
+	}
+
+	if len(setParts) == 0 {
+		// No updates requested - fetch current user
+		return s.GetUserByID(ctx, userID)
+	}
+
+	setClause := strings.Join(setParts, ", ")
+	query := fmt.Sprintf(`
+		UPDATE users
+		SET %s, updated_at = NOW()
+		WHERE id = $%d
+		RETURNING id, email, name, role, onboarding_completed,
+		          COALESCE(company_name, '') as company_name,
+		          COALESCE(company_size, '') as company_size,
+		          COALESCE(company_industry, '') as company_industry,
+		          COALESCE(primary_regulations, '') as primary_regulations;
+	`, setClause, argCount)
+
+	args = append(args, userID)
+
+	var user User
+	err := s.db.QueryRow(ctx, query, args...).Scan(
+		&user.ID, &user.Email, &user.Name, &user.Role, &user.OnboardingCompleted,
+		&user.CompanyName, &user.CompanySize, &user.CompanyIndustry, &user.PrimaryRegulations,
+	)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("user not found")
+		}
+		log.Printf("Error UPDATE user profile: %v", err)
+		return nil, err
+	}
+	return &user, nil
+}
+
+// GetUserByID retrieves a user by ID
+func (s *Store) GetUserByID(ctx context.Context, userID string) (*User, error) {
+	query := `
+		SELECT id, email, name, role, onboarding_completed,
+		       COALESCE(company_name, '') as company_name,
+		       COALESCE(company_size, '') as company_size,
+		       COALESCE(company_industry, '') as company_industry,
+		       COALESCE(primary_regulations, '') as primary_regulations
+		FROM users
+		WHERE id = $1;
+	`
+	var user User
+	err := s.db.QueryRow(ctx, query, userID).Scan(
+		&user.ID, &user.Email, &user.Name, &user.Role, &user.OnboardingCompleted,
+		&user.CompanyName, &user.CompanySize, &user.CompanyIndustry, &user.PrimaryRegulations,
+	)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("user not found")
+		}
+		log.Printf("Error querying user by ID: %v", err)
+		return nil, err
+	}
 	return &user, nil
 }
 
