@@ -235,6 +235,65 @@ func (s *ApiServer) HandleLogin(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+// HandleRegister handles POST /api/v1/auth/register
+func (s *ApiServer) HandleRegister(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Invalid method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req RegisterRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	if req.Email == "" || req.Name == "" || req.Password == "" {
+		http.Error(w, "Email, name, and password are required", http.StatusBadRequest)
+		return
+	}
+
+	// Validate password strength (minimum 6 characters)
+	if len(req.Password) < 6 {
+		http.Error(w, "Password must be at least 6 characters long", http.StatusBadRequest)
+		return
+	}
+
+	// Create user
+	user, err := s.store.RegisterUser(r.Context(), req)
+	if err != nil {
+		if err.Error() == "email already exists" {
+			http.Error(w, "Email already exists", http.StatusConflict)
+			return
+		}
+		log.Printf("Error registering user: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	// Generate JWT token
+	token, err := GenerateJWT(user.ID, user.Email, user.Role)
+	if err != nil {
+		http.Error(w, "Failed to generate token", http.StatusInternalServerError)
+		return
+	}
+
+	// Log successful registration
+	ipAddr := extractIPAddress(r.RemoteAddr)
+	changes := map[string]interface{}{"email": req.Email, "name": req.Name, "role": user.Role}
+	entityType := "user"
+	s.store.LogAudit(r.Context(), &user.ID, "USER_REGISTERED", &entityType, &user.ID, changes, &ipAddr)
+
+	response := LoginResponse{
+		User:  *user,
+		Token: token,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(response)
+}
+
 // HandleUpdateUserProfile handles PUT /api/v1/users/profile
 func (s *ApiServer) HandleUpdateUserProfile(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPut {

@@ -142,9 +142,13 @@ export default function OnboardingPage() {
     } else if (currentStep === 3 && selectedControl) {
       // Activate first control
       await activateControl();
-    } else if (currentStep === 4 && selectedTemplate) {
-      // Activate template and complete onboarding
-      await activateTemplateAndComplete();
+    } else if (currentStep === 4) {
+      // Complete onboarding (with or without template)
+      if (selectedTemplate) {
+        await activateTemplateAndComplete();
+      } else {
+        await completeOnboarding();
+      }
       return;
     }
 
@@ -270,6 +274,33 @@ export default function OnboardingPage() {
 
       if (profileResponse.ok) {
         const updatedUser = await profileResponse.json();
+        setUser(updatedUser);
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      console.error("Failed to complete onboarding:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const completeOnboarding = async () => {
+    setLoading(true);
+    try {
+      // Mark onboarding as complete without activating template
+      const response = await fetch("http://localhost:8080/api/v1/users/profile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          onboarding_completed: true,
+        }),
+      });
+
+      if (response.ok) {
+        const updatedUser = await response.json();
         setUser(updatedUser);
         router.push("/dashboard");
       }

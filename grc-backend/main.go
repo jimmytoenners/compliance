@@ -100,6 +100,7 @@ func main() {
 
 	// Public routes (no auth required)
 	api.HandleFunc("/auth/login", apiServer.HandleLogin).Methods("POST", "OPTIONS")
+	api.HandleFunc("/auth/register", apiServer.HandleRegister).Methods("POST", "OPTIONS")
 	api.HandleFunc("/tickets/external", apiServer.HandleCreateExternalTicket).Methods("POST", "OPTIONS")
 	api.HandleFunc("/tickets/external/{customerRef}", apiServer.HandleGetTicketsByCustomerRef).Methods("GET", "OPTIONS")
 	api.HandleFunc("/gdpr/dsr/public", apiServer.HandleCreateDSR).Methods("POST", "OPTIONS") // Public DSR submission

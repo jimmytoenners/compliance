@@ -19,7 +19,7 @@ type ViewMode = 'list' | 'create' | 'edit';
 
 export default function AssetsPage() {
   const router = useRouter();
-  const { token } = useAuthStore();
+  const { token, user } = useAuthStore();
   const [assets, setAssets] = useState<Asset[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<ViewMode>('list');
@@ -30,7 +30,7 @@ export default function AssetsPage() {
   const [formData, setFormData] = useState({
     name: '',
     asset_type: '',
-    owner_id: '',
+    owner_id: user?.id || '',
   });
 
   useEffect(() => {
@@ -49,7 +49,8 @@ export default function AssetsPage() {
 
       if (response.ok) {
         const data = await response.json();
-        setAssets(data);
+        // Ensure we always set an array, even if API returns null
+        setAssets(Array.isArray(data) ? data : []);
       } else {
         console.error('Failed to fetch assets:', response.status, response.statusText);
         setAssets([]);
@@ -68,7 +69,7 @@ export default function AssetsPage() {
     setFormData({
       name: '',
       asset_type: '',
-      owner_id: '',
+      owner_id: user?.id || '',
     });
     setViewMode('create');
   };
@@ -291,16 +292,16 @@ export default function AssetsPage() {
               </div>
               <div>
                 <label htmlFor="owner_id" className="block text-sm font-medium text-gray-700">
-                  Owner ID
+                  Owner
                 </label>
                 <input
                   type="text"
                   id="owner_id"
-                  value={formData.owner_id}
-                  onChange={(e) => setFormData({ ...formData, owner_id: e.target.value })}
-                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  required
+                  value={user?.name || formData.owner_id}
+                  className="mt-1 block w-full border-gray-300 rounded-md shadow-sm bg-gray-100 sm:text-sm px-3 py-2 border"
+                  disabled
                 />
+                <p className="mt-1 text-sm text-gray-500">Asset will be assigned to you</p>
               </div>
               <div className="flex justify-end space-x-3">
                 <button

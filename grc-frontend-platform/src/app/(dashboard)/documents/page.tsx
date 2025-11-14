@@ -36,7 +36,8 @@ export default function DocumentsPage() {
 
       if (response.ok) {
         const data = await response.json();
-        setDocuments(data);
+        // Ensure we always set an array, even if API returns null
+        setDocuments(Array.isArray(data) ? data : []);
       } else {
         console.error('Failed to fetch documents:', response.status, response.statusText);
         setDocuments([]);
@@ -98,11 +99,22 @@ export default function DocumentsPage() {
           <h1 className="text-2xl font-bold text-gray-900">Documents</h1>
           <p className="text-gray-600">Manage organizational policies, procedures, and compliance documentation</p>
         </div>
+        {user?.role === 'admin' && (
+          <button
+            onClick={() => router.push('/documents/new')}
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            <svg className="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Create Document
+          </button>
+        )}
       </div>
 
       <div className="bg-white shadow overflow-hidden sm:rounded-md">
         <ul className="divide-y divide-gray-200">
-          {documents.map((document) => (
+          {documents && documents.length > 0 && documents.map((document) => (
             <li key={document.id} className="px-6 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex-1">
@@ -131,7 +143,7 @@ export default function DocumentsPage() {
               </div>
             </li>
           ))}
-          {documents.length === 0 && (
+          {(!documents || documents.length === 0) && (
             <li className="px-6 py-4 text-center text-gray-500">
               No documents found.
             </li>

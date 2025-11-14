@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // Store holds the database connection pool
@@ -177,6 +178,13 @@ type LoginRequest struct {
 type LoginResponse struct {
 	User  User   `json:"user"`
 	Token string `json:"token"`
+}
+
+// RegisterRequest is the JSON for registration
+type RegisterRequest struct {
+	Email    string `json:"email"`
+	Name     string `json:"name"`
+	Password string `json:"password"`
 }
 
 // Asset represents a row in 'assets'
@@ -909,16 +917,19 @@ func (s *Store) AuthenticateUser(ctx context.Context, email, password string) (*
 		       COALESCE(company_name, '') as company_name,
 		       COALESCE(company_size, '') as company_size,
 		       COALESCE(company_industry, '') as company_industry,
-		       COALESCE(primary_regulations, '') as primary_regulations
+		       COALESCE(primary_regulations, '') as primary_regulations,
+		       COALESCE(password_hash, '') as password_hash
 		FROM users
 		WHERE email = $1 AND role IN ('admin', 'user')
 		LIMIT 1;
 	`
 
 	var user User
+	var passwordHash string
 	err := s.db.QueryRow(ctx, query, email).Scan(
 		&user.ID, &user.Email, &user.Name, &user.Role, &user.OnboardingCompleted,
 		&user.CompanyName, &user.CompanySize, &user.CompanyIndustry, &user.PrimaryRegulations,
+		&passwordHash,
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -928,10 +939,52 @@ func (s *Store) AuthenticateUser(ctx context.Context, email, password string) (*
 		return nil, err
 	}
 
-	// For demo purposes, accept any password for seeded users
-	// In production, you would hash and compare passwords properly
-	if password != "admin123" && password != "user123" && password != "john123" && password != "password123" {
-		return nil, fmt.Errorf("invalid credentials")
+	// If password_hash exists, verify it with bcrypt
+	if passwordHash != "" {
+		err = bcrypt.CompareHashAndPassword([]byte(passwordHash), []byte(password))
+		if err != nil {
+			return nil, fmt.Errorf("invalid credentials")
+		}
+	} else {
+		// For demo purposes, accept test passwords for seeded users without password_hash
+		if password != "admin123" && password != "user123" && password != "john123" && password != "password123" {
+			return nil, fmt.Errorf("invalid credentials")
+		}
+	}
+
+	return &user, nil
+}
+
+// RegisterUser creates a new user with hashed password
+func (s *Store) RegisterUser(ctx context.Context, req RegisterRequest) (*User, error) {
+	// Hash the password
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		log.Printf("Error hashing password: %v", err)
+		return nil, fmt.Errorf("failed to hash password")
+	}
+
+	query := `
+		INSERT INTO users (email, name, role, password_hash, onboarding_completed)
+		VALUES ($1, $2, 'user', $3, false)
+		RETURNING id, email, name, role, onboarding_completed,
+		          COALESCE(company_name, '') as company_name,
+		          COALESCE(company_size, '') as company_size,
+		          COALESCE(company_industry, '') as company_industry,
+		          COALESCE(primary_regulations, '') as primary_regulations;
+	`
+
+	var user User
+	err = s.db.QueryRow(ctx, query, req.Email, req.Name, string(hashedPassword)).Scan(
+		&user.ID, &user.Email, &user.Name, &user.Role, &user.OnboardingCompleted,
+		&user.CompanyName, &user.CompanySize, &user.CompanyIndustry, &user.PrimaryRegulations,
+	)
+	if err != nil {
+		if strings.Contains(err.Error(), "duplicate key") || strings.Contains(err.Error(), "unique constraint") {
+			return nil, fmt.Errorf("email already exists")
+		}
+		log.Printf("Error INSERT into users: %v", err)
+		return nil, err
 	}
 
 	return &user, nil

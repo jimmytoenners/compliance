@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comply Ant - Smart Compliance. Effortless Assurance.</title>
+    <meta name="description" content="GDPR, NIS-2, ISO 27001 compliance made simple for European startups and growing companies. Start your compliance journey today.">
+    <link rel="icon" type="image/png" href="complyant.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #1e3a5f;
+            --green: #6cb52d;
+            --light-blue: #4a90e2;
+            --gray: #f8f9fa;
+            --text: #333;
+            --text-light: #666;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo img {
+            height: 50px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .logo-text .ant {
+            color: var(--green);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--light-blue);
+        }
+
+        .lang-selector {
+            position: relative;
+        }
+
+        .lang-selector select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .cta-button {
+            background: var(--green);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            background: #5da325;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 181, 45, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a8f 100%);
+            color: white;
+            padding: 100px 20px 80px;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+
+        .hero-logo {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-hero {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .hero-text {
+            flex: 1;
+            min-width: 300px;
+            text-align: left;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .hero .tagline {
+            font-size: 24px;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+
+        .hero p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn-primary {
+            background: var(--green);
+            color: white;
+            padding: 16px 40px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: #5da325;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(108, 181, 45, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--navy);
+            padding: 16px 40px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Trust Badges */
+        .trust-badges {
+            background: white;
+            padding: 40px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .badges-grid {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .badge {
+            font-size: 14px;
+            color: var(--text-light);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            background: var(--gray);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 42px;
+            color: var(--navy);
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            font-size: 18px;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--navy);
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* Standards Section */
+        .standards {
+            padding: 100px 0;
+            background: white;
+        }
+
+        .standards-grid {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+
+        .standard-item {
+            text-align: center;
+        }
+
+        .standard-item a {
+            text-decoration: none;
+            display: block;
+        }
+
+        .standard-badge {
+            width: 140px;
+            height: 140px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .standard-item:nth-child(1) .standard-badge {
+            background: #667eea;
+        }
+
+        .standard-item:nth-child(2) .standard-badge {
+            background: #f5576c;
+        }
+
+        .standard-item:nth-child(3) .standard-badge {
+            background: #4facfe;
+        }
+
+        .standard-item:nth-child(4) .standard-badge {
+            background: #43e97b;
+        }
+
+        .standard-item:hover .standard-badge {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        }
+
+        .standard-item p {
+            font-weight: 600;
+            color: var(--navy);
+            transition: color 0.3s;
+        }
+
+        .standard-item:hover p {
+            color: var(--light-blue);
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 100px 0;
+            background: var(--gray);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            border: 3px solid var(--green);
+            transform: scale(1.05);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            background: var(--green);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .pricing-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--navy);
+        }
+
+        .price {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--navy);
+            margin: 20px 0;
+        }
+
+        .price-period {
+            font-size: 16px;
+            color: var(--text-light);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 10px 0;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pricing-features li::before {
+            content: "✓";
+            color: var(--green);
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--navy) 0%, #2d5a8a 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 42px;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 20px;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--navy);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--green);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 30px;
+            text-align: center;
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-text {
+                text-align: center;
+            }
+
+            .logo-hero {
+                max-width: 350px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero .tagline {
+                font-size: 18px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .section-title h2 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="logo">
+                <img src="complyant.png" alt="Comply Ant Logo">
+                <div class="logo-text">COMPLY <span class="ant">ANT</span></div>
+            </div>
+            <div class="nav-links">
+                <a href="#features" data-i18n="nav.features">Features</a>
+                <a href="#standards" data-i18n="nav.standards">Standards</a>
+                <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+                <div class="lang-selector">
+                    <select id="languageSelector" onchange="changeLanguage(this.value)">
+                        <option value="en">🇬🇧 English</option>
+                        <option value="da">🇩🇰 Dansk</option>
+                        <option value="de">🇩🇪 Deutsch</option>
+                        <option value="sv">🇸🇪 Svenska</option>
+                        <option value="fr">🇫🇷 Français</option>
+                        <option value="it">🇮🇹 Italiano</option>
+                        <option value="es">🇪🇸 Español</option>
+                        <option value="fi">🇫🇮 Suomi</option>
+                    </select>
+                </div>
+                <a href="http://localhost:3040/login" class="cta-button" data-i18n="nav.login">Login</a>
+            </div>
+            <button class="mobile-menu-btn">☰</button>
+        </div>
+    </nav>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-logo">
+                    <img src="complyant.png" alt="Comply Ant - Smart Compliance" class="logo-hero">
+                </div>
+                <div class="hero-text">
+                    <h1 data-i18n="hero.title">Compliance Made Simple for European Startups</h1>
+                    <p class="tagline" data-i18n="hero.tagline">Smart Compliance. Effortless Assurance.</p>
+                    <p class="subtitle" data-i18n="hero.description">Navigate GDPR, NIS-2, ISO 27001, and EU regulations with confidence. Built for startups, trusted by growing companies across Europe.</p>
+                    <div class="cta-buttons">
+                        <a href="http://localhost:3040/signup" class="cta-primary" data-i18n="hero.cta">Start Free Trial</a>
+                        <a href="#features" class="cta-secondary" data-i18n="hero.learn">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </div>
+    </section>
+
+    <!-- Trust Badges -->
+    <section class="trust-badges">
+        <div class="container">
+            <div class="badges-grid">
+                <div class="badge">✓ <span data-i18n="trust.gdpr">GDPR Ready</span></div>
+                <div class="badge">✓ <span data-i18n="trust.nis2">NIS-2 Compliant</span></div>
+                <div class="badge">✓ <span data-i18n="trust.iso">ISO 27001 Framework</span></div>
+                <div class="badge">✓ <span data-i18n="trust.eu">EU-Based & Secure</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-i18n="features.title">Everything You Need for Compliance</h2>
+                <p data-i18n="features.subtitle">Powerful tools designed for European compliance requirements</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3 data-i18n="features.controls.title">Control Management</h3>
+                    <p data-i18n="features.controls.desc">Activate and manage security controls from CIS, ISO 27001, and NIS-2 frameworks. Track review schedules and compliance status.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📄</div>
+                    <h3 data-i18n="features.docs.title">Document Management</h3>
+                    <p data-i18n="features.docs.desc">Version-controlled policies, procedures, and compliance documentation. Publish, track changes, and manage read acknowledgements.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚠️</div>
+                    <h3 data-i18n="features.risk.title">Risk Assessment</h3>
+                    <p data-i18n="features.risk.desc">Identify, assess, and mitigate risks. Calculate risk scores and track mitigation plans to closure.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3 data-i18n="features.audit.title">Audit Trail</h3>
+                    <p data-i18n="features.audit.desc">Complete audit logging of all compliance activities. Demonstrate accountability for auditors and regulators.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🗂️</div>
+                    <h3 data-i18n="features.gdpr.title">GDPR Tools</h3>
+                    <p data-i18n="features.gdpr.desc">Record of Processing Activities (ROPA) and Data Subject Request (DSR) management for GDPR compliance.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3 data-i18n="features.templates.title">Quick Start Templates</h3>
+                    <p data-i18n="features.templates.desc">Pre-configured control sets for Foundation, Growth, and Enterprise maturity levels. Get started in minutes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Standards Section -->
+    <section id="standards" class="standards">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-i18n="standards.title">Built for European Standards</h2>
+                <p data-i18n="standards.subtitle">Comprehensive coverage of major compliance frameworks</p>
+            </div>
+            <div class="standards-grid">
+                <div class="standard-item">
+                    <a href="https://gdpr.eu/" target="_blank" rel="noopener noreferrer">
+                        <div class="standard-badge">GDPR</div>
+                        <p>General Data Protection Regulation</p>
+                    </a>
+                </div>
+                <div class="standard-item">
+                    <a href="https://digital-strategy.ec.europa.eu/en/policies/nis2-directive" target="_blank" rel="noopener noreferrer">
+                        <div class="standard-badge">NIS-2</div>
+                        <p>Network & Information Security</p>
+                    </a>
+                </div>
+                <div class="standard-item">
+                    <a href="https://www.iso.org/standard/27001" target="_blank" rel="noopener noreferrer">
+                        <div class="standard-badge">ISO</div>
+                        <p>ISO 27001:2022</p>
+                    </a>
+                </div>
+                <div class="standard-item">
+                    <a href="https://www.cisecurity.org/controls" target="_blank" rel="noopener noreferrer">
+                        <div class="standard-badge">CIS</div>
+                        <p>CIS Controls v8</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-i18n="pricing.title">Simple, Transparent Pricing</h2>
+                <p data-i18n="pricing.subtitle">Start free, scale as you grow</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3 data-i18n="pricing.starter.name">Starter</h3>
+                    <div class="price">€19<span class="price-period">/month</span></div>
+                    <ul class="pricing-features">
+                        <li data-i18n="pricing.starter.f1">Up to 25 controls</li>
+                        <li data-i18n="pricing.starter.f2">Basic GDPR tools</li>
+                        <li data-i18n="pricing.starter.f3">Community support</li>
+                        <li data-i18n="pricing.starter.f4">1 user</li>
+                    </ul>
+                    <a href="http://localhost:3040/signup" class="btn-secondary" data-i18n="pricing.cta">Get Started</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="popular-badge" data-i18n="pricing.popular">Most Popular</div>
+                    <h3 data-i18n="pricing.growth.name">Growth</h3>
+                    <div class="price">€99<span class="price-period">/month</span></div>
+                    <ul class="pricing-features">
+                        <li data-i18n="pricing.growth.f1">Unlimited controls</li>
+                        <li data-i18n="pricing.growth.f2">Full GDPR & NIS-2 suite</li>
+                        <li data-i18n="pricing.growth.f3">Priority support</li>
+                        <li data-i18n="pricing.growth.f4">Up to 10 users</li>
+                        <li data-i18n="pricing.growth.f5">Risk management</li>
+                    </ul>
+                    <a href="http://localhost:3040/signup" class="btn-primary" data-i18n="pricing.cta">Get Started</a>
+                </div>
+                <div class="pricing-card">
+                    <h3 data-i18n="pricing.enterprise.name">Enterprise</h3>
+                    <div class="price" data-i18n="pricing.custom">Custom</div>
+                    <ul class="pricing-features">
+                        <li data-i18n="pricing.enterprise.f1">Everything in Growth</li>
+                        <li data-i18n="pricing.enterprise.f2">Unlimited users</li>
+                        <li data-i18n="pricing.enterprise.f3">Dedicated support</li>
+                        <li data-i18n="pricing.enterprise.f4">Custom integrations</li>
+                        <li data-i18n="pricing.enterprise.f5">SLA guarantee</li>
+                    </ul>
+                    <a href="mailto:sales@comply-ant.com" class="btn-secondary" data-i18n="pricing.contact">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2 data-i18n="cta.title">Ready to Simplify Your Compliance?</h2>
+            <p data-i18n="cta.subtitle">Join European startups building compliance the smart way</p>
+            <a href="http://localhost:3040/signup" class="btn-primary" data-i18n="cta.button">Start Your Free Trial</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4 data-i18n="footer.product">Product</h4>
+                    <ul>
+                        <li><a href="#features" data-i18n="footer.features">Features</a></li>
+                        <li><a href="#pricing" data-i18n="footer.pricing">Pricing</a></li>
+                        <li><a href="http://localhost:3040/signup" data-i18n="footer.signup">Sign Up</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.compliance">Compliance</h4>
+                    <ul>
+                        <li><a href="#" data-i18n="footer.gdpr">GDPR</a></li>
+                        <li><a href="#" data-i18n="footer.nis2">NIS-2</a></li>
+                        <li><a href="#" data-i18n="footer.iso">ISO 27001</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 data-i18n="footer.company">Company</h4>
+                    <ul>
+                        <li><a href="#" data-i18n="footer.about">About</a></li>
+                        <li><a href="mailto:contact@comply-ant.com" data-i18n="footer.contact">Contact</a></li>
+                        <li><a href="#" data-i18n="footer.privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Comply Ant. <span data-i18n="footer.rights">All rights reserved.</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="translations.js"></script>
+</body>
+</html>
