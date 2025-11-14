@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"strings"
 	"time"
 
@@ -187,7 +188,6 @@ type UpdateAssetRequest struct {
 	OwnerID   *string `json:"owner_id,omitempty"`
 	Status    *string `json:"status,omitempty"`
 }
-
 
 // AssetControlMapping represents a row in 'asset_control_mappings'
 type AssetControlMapping struct {
@@ -1615,19 +1615,19 @@ func (s *Store) DeleteDocumentControlMapping(ctx context.Context, documentID, ac
 
 // GDPRROPA represents a Record of Processing Activities
 type GDPRROPA struct {
-	ID                     string    `json:"id"`
-	ActivityName           string    `json:"activity_name"`
-	Department             string    `json:"department,omitempty"`
-	DataControllerDetails  string    `json:"data_controller_details"`
-	DataCategories         string    `json:"data_categories"`
-	DataSubjectCategories  string    `json:"data_subject_categories"`
-	Recipients             string    `json:"recipients,omitempty"`
-	ThirdCountryTransfers  string    `json:"third_country_transfers,omitempty"`
-	RetentionPeriod        string    `json:"retention_period,omitempty"`
-	SecurityMeasures       string    `json:"security_measures,omitempty"`
-	Status                 string    `json:"status"`
-	CreatedAt              time.Time `json:"created_at"`
-	UpdatedAt              time.Time `json:"updated_at"`
+	ID                    string    `json:"id"`
+	ActivityName          string    `json:"activity_name"`
+	Department            string    `json:"department,omitempty"`
+	DataControllerDetails string    `json:"data_controller_details"`
+	DataCategories        string    `json:"data_categories"`
+	DataSubjectCategories string    `json:"data_subject_categories"`
+	Recipients            string    `json:"recipients,omitempty"`
+	ThirdCountryTransfers string    `json:"third_country_transfers,omitempty"`
+	RetentionPeriod       string    `json:"retention_period,omitempty"`
+	SecurityMeasures      string    `json:"security_measures,omitempty"`
+	Status                string    `json:"status"`
+	CreatedAt             time.Time `json:"created_at"`
+	UpdatedAt             time.Time `json:"updated_at"`
 }
 
 // CreateROPARequest is the JSON for creating a ROPA entry
@@ -1848,15 +1848,15 @@ type RiskAssessment struct {
 	Title              string     `json:"title"`
 	Description        string     `json:"description"`
 	Category           *string    `json:"category"`
-	Likelihood         int        `json:"likelihood"`         // 1-5
-	Impact             int        `json:"impact"`             // 1-5
-	RiskScore          int        `json:"risk_score"`         // Calculated: likelihood * impact
-	Status             string     `json:"status"`             // identified, assessed, mitigated, accepted, closed
+	Likelihood         int        `json:"likelihood"` // 1-5
+	Impact             int        `json:"impact"`     // 1-5
+	RiskScore          int        `json:"risk_score"` // Calculated: likelihood * impact
+	Status             string     `json:"status"`     // identified, assessed, mitigated, accepted, closed
 	OwnerID            *string    `json:"owner_id"`
 	MitigationPlan     *string    `json:"mitigation_plan"`
 	ResidualLikelihood *int       `json:"residual_likelihood"` // After mitigation
 	ResidualImpact     *int       `json:"residual_impact"`     // After mitigation
-	ResidualRiskScore  int        `json:"residual_risk_score"`  // Calculated
+	ResidualRiskScore  int        `json:"residual_risk_score"` // Calculated
 	ReviewDate         *time.Time `json:"review_date"`
 	CreatedAt          time.Time  `json:"created_at"`
 	UpdatedAt          time.Time  `json:"updated_at"`
@@ -2116,22 +2116,22 @@ func (s *Store) GetRiskControls(ctx context.Context, riskID string) ([]MappedCon
 
 // GDPRDSR represents a data subject request
 type GDPRDSR struct {
-	ID                string     `json:"id"`
-	RequestType       string     `json:"request_type"`       // access, erasure, rectification, portability, restriction, objection
-	RequesterName     string     `json:"requester_name"`
-	RequesterEmail    string     `json:"requester_email"`
-	RequesterPhone    *string    `json:"requester_phone"`
-	DataSubjectInfo   string     `json:"data_subject_info"`
-	RequestDetails    *string    `json:"request_details"`
-	Status            string     `json:"status"`             // submitted, under_review, in_progress, completed, rejected
-	Priority          string     `json:"priority"`           // low, normal, high, urgent
-	AssignedToUserID  *string    `json:"assigned_to_user_id"`
-	DeadlineDate      time.Time  `json:"deadline_date"`
-	CompletedDate     *time.Time `json:"completed_date"`
-	ResponseSummary   *string    `json:"response_summary"`
-	RejectionReason   *string    `json:"rejection_reason"`
-	CreatedAt         time.Time  `json:"created_at"`
-	UpdatedAt         time.Time  `json:"updated_at"`
+	ID               string     `json:"id"`
+	RequestType      string     `json:"request_type"` // access, erasure, rectification, portability, restriction, objection
+	RequesterName    string     `json:"requester_name"`
+	RequesterEmail   string     `json:"requester_email"`
+	RequesterPhone   *string    `json:"requester_phone"`
+	DataSubjectInfo  string     `json:"data_subject_info"`
+	RequestDetails   *string    `json:"request_details"`
+	Status           string     `json:"status"`   // submitted, under_review, in_progress, completed, rejected
+	Priority         string     `json:"priority"` // low, normal, high, urgent
+	AssignedToUserID *string    `json:"assigned_to_user_id"`
+	DeadlineDate     time.Time  `json:"deadline_date"`
+	CompletedDate    *time.Time `json:"completed_date"`
+	ResponseSummary  *string    `json:"response_summary"`
+	RejectionReason  *string    `json:"rejection_reason"`
+	CreatedAt        time.Time  `json:"created_at"`
+	UpdatedAt        time.Time  `json:"updated_at"`
 }
 
 // CreateDSRRequest represents the request body for creating a DSR
@@ -2334,10 +2334,10 @@ func (s *Store) CompleteDSR(ctx context.Context, dsrID string, responseSummary s
 
 // ControlComplianceTrend represents control compliance data over time
 type ControlComplianceTrend struct {
-	Date            string `json:"date"`
-	Compliant       int    `json:"compliant"`
-	NonCompliant    int    `json:"non_compliant"`
-	TotalActivated  int    `json:"total_activated"`
+	Date           string `json:"date"`
+	Compliant      int    `json:"compliant"`
+	NonCompliant   int    `json:"non_compliant"`
+	TotalActivated int    `json:"total_activated"`
 }
 
 // GetControlComplianceTrends returns control compliance trends over a date range
@@ -2501,15 +2501,15 @@ func (s *Store) GetRiskTrends(ctx context.Context, months int) ([]RiskTrend, err
 
 // DSRMetrics represents GDPR DSR request metrics
 type DSRMetrics struct {
-	TotalRequests       int     `json:"total_requests"`
-	Submitted           int     `json:"submitted"`
-	UnderReview         int     `json:"under_review"`
-	InProgress          int     `json:"in_progress"`
-	Completed           int     `json:"completed"`
-	Rejected            int     `json:"rejected"`
-	Overdue             int     `json:"overdue"`
-	AvgResponseDays     float64 `json:"avg_response_days"`
-	CompletionRate      float64 `json:"completion_rate"`
+	TotalRequests   int     `json:"total_requests"`
+	Submitted       int     `json:"submitted"`
+	UnderReview     int     `json:"under_review"`
+	InProgress      int     `json:"in_progress"`
+	Completed       int     `json:"completed"`
+	Rejected        int     `json:"rejected"`
+	Overdue         int     `json:"overdue"`
+	AvgResponseDays float64 `json:"avg_response_days"`
+	CompletionRate  float64 `json:"completion_rate"`
 }
 
 // GetDSRMetrics returns comprehensive DSR request metrics
@@ -2627,42 +2627,42 @@ func (s *Store) GetROPAMetrics(ctx context.Context) (*ROPAMetrics, error) {
 // Vendor Management
 
 type Vendor struct {
-	ID                   string     `json:"id"`
-	Name                 string     `json:"name"`
-	Description          *string    `json:"description"`
-	Category             string     `json:"category"`
-	RiskTier             string     `json:"risk_tier"`
-	Status               string     `json:"status"`
-	ContactName          *string    `json:"contact_name"`
-	ContactEmail         *string    `json:"contact_email"`
-	ContactPhone         *string    `json:"contact_phone"`
-	Website              *string    `json:"website"`
-	ContractStartDate    *time.Time `json:"contract_start_date"`
-	ContractEndDate      *time.Time `json:"contract_end_date"`
-	ContractValue        *float64   `json:"contract_value"`
-	LastAssessmentDate   *time.Time `json:"last_assessment_date"`
-	NextAssessmentDue    *time.Time `json:"next_assessment_due"`
-	OwnerID              *string    `json:"owner_id"`
-	Notes                *string    `json:"notes"`
-	CreatedAt            time.Time  `json:"created_at"`
-	UpdatedAt            time.Time  `json:"updated_at"`
+	ID                 string     `json:"id"`
+	Name               string     `json:"name"`
+	Description        *string    `json:"description"`
+	Category           string     `json:"category"`
+	RiskTier           string     `json:"risk_tier"`
+	Status             string     `json:"status"`
+	ContactName        *string    `json:"contact_name"`
+	ContactEmail       *string    `json:"contact_email"`
+	ContactPhone       *string    `json:"contact_phone"`
+	Website            *string    `json:"website"`
+	ContractStartDate  *time.Time `json:"contract_start_date"`
+	ContractEndDate    *time.Time `json:"contract_end_date"`
+	ContractValue      *float64   `json:"contract_value"`
+	LastAssessmentDate *time.Time `json:"last_assessment_date"`
+	NextAssessmentDue  *time.Time `json:"next_assessment_due"`
+	OwnerID            *string    `json:"owner_id"`
+	Notes              *string    `json:"notes"`
+	CreatedAt          time.Time  `json:"created_at"`
+	UpdatedAt          time.Time  `json:"updated_at"`
 }
 
 type VendorAssessment struct {
-	ID                        string     `json:"id"`
-	VendorID                  string     `json:"vendor_id"`
-	AssessmentDate            time.Time  `json:"assessment_date"`
-	AssessorID                *string    `json:"assessor_id"`
-	OverallRiskScore          *int       `json:"overall_risk_score"`
-	DataSecurityScore         *int       `json:"data_security_score"`
-	ComplianceScore           *int       `json:"compliance_score"`
-	FinancialStabilityScore   *int       `json:"financial_stability_score"`
+	ID                         string    `json:"id"`
+	VendorID                   string    `json:"vendor_id"`
+	AssessmentDate             time.Time `json:"assessment_date"`
+	AssessorID                 *string   `json:"assessor_id"`
+	OverallRiskScore           *int      `json:"overall_risk_score"`
+	DataSecurityScore          *int      `json:"data_security_score"`
+	ComplianceScore            *int      `json:"compliance_score"`
+	FinancialStabilityScore    *int      `json:"financial_stability_score"`
 	OperationalCapabilityScore *int      `json:"operational_capability_score"`
-	Findings                  *string    `json:"findings"`
-	Recommendations           *string    `json:"recommendations"`
-	Status                    string     `json:"status"`
-	CreatedAt                 time.Time  `json:"created_at"`
-	UpdatedAt                 time.Time  `json:"updated_at"`
+	Findings                   *string   `json:"findings"`
+	Recommendations            *string   `json:"recommendations"`
+	Status                     string    `json:"status"`
+	CreatedAt                  time.Time `json:"created_at"`
+	UpdatedAt                  time.Time `json:"updated_at"`
 }
 
 func (s *Store) CreateVendor(ctx context.Context, v *Vendor) error {
@@ -2913,29 +2913,29 @@ func (s *Store) DeleteVendorControlMapping(ctx context.Context, vendorID, contro
 
 // ControlStandard represents a compliance standard metadata
 type ControlStandard struct {
-	ID             string     `json:"id" db:"id"`
-	Code           string     `json:"code" db:"code"`
-	Name           string     `json:"name" db:"name"`
-	Version        string     `json:"version" db:"version"`
-	Organization   string     `json:"organization" db:"organization"`
-	PublishedDate  *time.Time `json:"published_date,omitempty" db:"published_date"`
-	Description    string     `json:"description" db:"description"`
-	WebsiteURL     string     `json:"website_url,omitempty" db:"website_url"`
-	TotalControls  int        `json:"total_controls" db:"total_controls"`
-	CreatedAt      time.Time  `json:"created_at" db:"created_at"`
-	UpdatedAt      time.Time  `json:"updated_at" db:"updated_at"`
+	ID            string     `json:"id" db:"id"`
+	Code          string     `json:"code" db:"code"`
+	Name          string     `json:"name" db:"name"`
+	Version       string     `json:"version" db:"version"`
+	Organization  string     `json:"organization" db:"organization"`
+	PublishedDate *time.Time `json:"published_date,omitempty" db:"published_date"`
+	Description   string     `json:"description" db:"description"`
+	WebsiteURL    string     `json:"website_url,omitempty" db:"website_url"`
+	TotalControls int        `json:"total_controls" db:"total_controls"`
+	CreatedAt     time.Time  `json:"created_at" db:"created_at"`
+	UpdatedAt     time.Time  `json:"updated_at" db:"updated_at"`
 }
 
 // ControlArticle represents detailed article/spec text for a control
 type ControlArticle struct {
-	ID                 string `json:"id" db:"id"`
-	ControlLibraryID   string `json:"control_library_id" db:"control_library_id"`
-	StandardID         string `json:"standard_id" db:"standard_id"`
-	ArticleNumber      string `json:"article_number" db:"article_number"`
-	SectionName        string `json:"section_name" db:"section_name"`
-	FullText           string `json:"full_text" db:"full_text"`
-	Guidance           string `json:"guidance,omitempty" db:"guidance"`
-	ExternalReferences string `json:"external_references,omitempty" db:"external_references"`
+	ID                 string    `json:"id" db:"id"`
+	ControlLibraryID   string    `json:"control_library_id" db:"control_library_id"`
+	StandardID         string    `json:"standard_id" db:"standard_id"`
+	ArticleNumber      string    `json:"article_number" db:"article_number"`
+	SectionName        string    `json:"section_name" db:"section_name"`
+	FullText           string    `json:"full_text" db:"full_text"`
+	Guidance           string    `json:"guidance,omitempty" db:"guidance"`
+	ExternalReferences string    `json:"external_references,omitempty" db:"external_references"`
 	CreatedAt          time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt          time.Time `json:"updated_at" db:"updated_at"`
 }
@@ -2943,14 +2943,14 @@ type ControlArticle struct {
 // StandardImportData represents the JSON structure for importing standards
 type StandardImportData struct {
 	Standard struct {
-		Code           string `json:"code"`
-		Name           string `json:"name"`
-		Version        string `json:"version"`
-		Organization   string `json:"organization"`
-		PublishedDate  string `json:"published_date"`
-		Description    string `json:"description"`
-		WebsiteURL     string `json:"website_url"`
-		TotalControls  int    `json:"total_controls"`
+		Code          string `json:"code"`
+		Name          string `json:"name"`
+		Version       string `json:"version"`
+		Organization  string `json:"organization"`
+		PublishedDate string `json:"published_date"`
+		Description   string `json:"description"`
+		WebsiteURL    string `json:"website_url"`
+		TotalControls int    `json:"total_controls"`
 	} `json:"standard"`
 	Controls []struct {
 		ControlID   string `json:"control_id"`
@@ -2981,8 +2981,8 @@ func (s *Store) GetStandards(ctx context.Context) ([]ControlStandard, error) {
 	var standards []ControlStandard
 	for rows.Next() {
 		var std ControlStandard
-		err := rows.Scan(&std.ID, &std.Code, &std.Name, &std.Version, &std.Organization, 
-			&std.PublishedDate, &std.Description, &std.WebsiteURL, &std.TotalControls, 
+		err := rows.Scan(&std.ID, &std.Code, &std.Name, &std.Version, &std.Organization,
+			&std.PublishedDate, &std.Description, &std.WebsiteURL, &std.TotalControls,
 			&std.CreatedAt, &std.UpdatedAt)
 		if err != nil {
 			return nil, err
@@ -3003,8 +3003,8 @@ func (s *Store) GetStandardByID(ctx context.Context, id string) (*ControlStandar
 			  WHERE id = $1`
 
 	var std ControlStandard
-	err := s.db.QueryRow(ctx, query, id).Scan(&std.ID, &std.Code, &std.Name, &std.Version, 
-		&std.Organization, &std.PublishedDate, &std.Description, &std.WebsiteURL, &std.TotalControls, 
+	err := s.db.QueryRow(ctx, query, id).Scan(&std.ID, &std.Code, &std.Name, &std.Version,
+		&std.Organization, &std.PublishedDate, &std.Description, &std.WebsiteURL, &std.TotalControls,
 		&std.CreatedAt, &std.UpdatedAt)
 	if err != nil {
 		return nil, err
@@ -3038,8 +3038,8 @@ func (s *Store) ImportStandard(ctx context.Context, data StandardImportData) err
 						updated_at = NOW()
 					 RETURNING id`
 
-	err := s.db.QueryRow(ctx, standardQuery, data.Standard.Code, data.Standard.Name, 
-		data.Standard.Version, data.Standard.Organization, publishedDate, 
+	err := s.db.QueryRow(ctx, standardQuery, data.Standard.Code, data.Standard.Name,
+		data.Standard.Version, data.Standard.Organization, publishedDate,
 		data.Standard.Description, data.Standard.WebsiteURL, data.Standard.TotalControls).Scan(&standardID)
 	if err != nil {
 		log.Printf("Failed to insert standard: %v", err)
@@ -3071,7 +3071,7 @@ func (s *Store) ImportStandard(ctx context.Context, data StandardImportData) err
 	importedCount := 0
 	for _, control := range data.Controls {
 		// Insert control
-		_, err := s.db.Exec(ctx, controlQuery, control.ControlID, data.Standard.Code, 
+		_, err := s.db.Exec(ctx, controlQuery, control.ControlID, data.Standard.Code,
 			control.Family, control.Name, control.Description, standardID)
 		if err != nil {
 			log.Printf("Failed to insert control %s: %v", control.ControlID, err)
@@ -3081,8 +3081,8 @@ func (s *Store) ImportStandard(ctx context.Context, data StandardImportData) err
 		// Insert article if provided
 		if control.Article.FullText != "" {
 			_, err = s.db.Exec(ctx, articleQuery, control.ControlID, standardID,
-				control.Article.ArticleNumber, control.Article.SectionName, 
-				control.Article.FullText, control.Article.Guidance, 
+				control.Article.ArticleNumber, control.Article.SectionName,
+				control.Article.FullText, control.Article.Guidance,
 				control.Article.ExternalReferences)
 			if err != nil {
 				log.Printf("Failed to insert article for control %s: %v", control.ControlID, err)
@@ -3102,8 +3102,8 @@ func (s *Store) GetArticleByControlID(ctx context.Context, controlID string) (*C
 			  WHERE control_library_id = $1`
 
 	var article ControlArticle
-	err := s.db.QueryRow(ctx, query, controlID).Scan(&article.ID, &article.ControlLibraryID, 
-		&article.StandardID, &article.ArticleNumber, &article.SectionName, &article.FullText, 
+	err := s.db.QueryRow(ctx, query, controlID).Scan(&article.ID, &article.ControlLibraryID,
+		&article.StandardID, &article.ArticleNumber, &article.SectionName, &article.FullText,
 		&article.Guidance, &article.ExternalReferences, &article.CreatedAt, &article.UpdatedAt)
 	if err == sql.ErrNoRows {
 		return nil, nil // No article found, not an error
@@ -3142,4 +3142,48 @@ func (s *Store) GetControlsByStandardID(ctx context.Context, standardID string) 
 	}
 
 	return controls, nil
+}
+
+// ========== QUICK START TEMPLATES ==========
+
+// ControlTemplate represents a curated set of controls for a specific compliance maturity level.
+type ControlTemplate struct {
+	ID             string            `json:"id"`
+	Name           string            `json:"name"`
+	Description    string            `json:"description"`
+	MaturityLevel  string            `json:"maturity_level"`
+	RecommendedFor string            `json:"recommended_for"`
+	EstimatedTime  string            `json:"estimated_time"`
+	ControlCount   int               `json:"control_count"`
+	Controls       []TemplateControl `json:"controls"`
+}
+
+// TemplateControl defines a control within a template, including its priority and rationale.
+type TemplateControl struct {
+	ControlID string `json:"control_id"`
+	Priority  string `json:"priority"`
+	Rationale string `json:"rationale"`
+}
+
+// GetControlTemplates loads and parses the control templates from the embedded JSON file.
+func (s *Store) GetControlTemplates(ctx context.Context) ([]ControlTemplate, error) {
+	// In a real application, you might cache this file content in memory
+	// to avoid reading from disk on every request.
+	filePath := "../control-templates.json"
+	file, err := os.ReadFile(filePath)
+	if err != nil {
+		log.Printf("Error reading control-templates.json: %v", err)
+		return nil, fmt.Errorf("could not read control templates file: %w", err)
+	}
+
+	var payload struct {
+		Templates []ControlTemplate `json:"templates"`
+	}
+
+	if err := json.Unmarshal(file, &payload); err != nil {
+		log.Printf("Error unmarshaling control-templates.json: %v", err)
+		return nil, fmt.Errorf("could not parse control templates file: %w", err)
+	}
+
+	return payload.Templates, nil
 }

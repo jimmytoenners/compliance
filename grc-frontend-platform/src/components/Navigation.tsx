@@ -6,6 +6,7 @@ import { useAuthStore } from '../lib/store';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard' },
+  { name: 'Quick Start', href: '/quick-start', adminOnly: true },
   { name: 'Controls', href: '/controls' },
   { name: 'Control Library', href: '/control-library', adminOnly: true },
   { name: 'Standards', href: '/standards', adminOnly: false },

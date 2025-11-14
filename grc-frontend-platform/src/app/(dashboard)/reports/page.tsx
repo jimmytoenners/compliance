@@ -291,13 +291,13 @@ export default function ReportsPage() {
               <ResponsiveContainer width="100%" height={300}>
                 <RePieChart>
                   <Pie
-                    data={riskDistribution}
+                    data={riskDistribution as any}
                     dataKey="count"
                     nameKey="severity"
                     cx="50%"
                     cy="50%"
                     outerRadius={100}
-                    label={(entry) => `${entry.severity}: ${entry.count}`}
+                    label={(entry: any) => `${entry.severity}: ${entry.count}`}
                   >
                     {riskDistribution.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={RISK_COLORS[entry.severity as keyof typeof RISK_COLORS] || "#6b7280"} />

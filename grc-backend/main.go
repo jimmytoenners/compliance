@@ -196,6 +196,10 @@ func main() {
 	// Admin-only Standards routes
 	admin.HandleFunc("/standards/import", apiServer.HandleImportStandard).Methods("POST", "OPTIONS")
 
+	// Quick Start Template routes
+	protected.HandleFunc("/quick-start/templates", apiServer.HandleGetControlTemplates).Methods("GET", "OPTIONS")
+	admin.HandleFunc("/quick-start/templates/{id}/activate", apiServer.HandleActivateTemplate).Methods("POST", "OPTIONS")
+
 	// Start server
 	port := os.Getenv("API_PORT")
 	if port == "" {

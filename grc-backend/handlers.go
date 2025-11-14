@@ -161,8 +161,8 @@ func (s *ApiServer) HandleDashboardSummary(w http.ResponseWriter, r *http.Reques
 			"compliancePercentage": compliancePercentage,
 		},
 		"tickets": map[string]interface{}{
-			"totalTickets":       len(tickets),
-			"openTickets":        openTickets,
+			"totalTickets":      len(tickets),
+			"openTickets":       openTickets,
 			"resolvedThisMonth": resolvedTickets, // Simplified: all resolved
 		},
 		"assets": map[string]interface{}{
@@ -413,8 +413,8 @@ func (s *ApiServer) HandleImportControls(w http.ResponseWriter, r *http.Request)
 
 	// Audit log
 	changes := map[string]interface{}{
-		"total_controls":    len(req.Controls),
-		"imported_count":    count,
+		"total_controls":   len(req.Controls),
+		"imported_count":   count,
 		"replace_existing": req.ReplaceExisting,
 	}
 	entityType := "control_library"
@@ -443,9 +443,9 @@ func (s *ApiServer) HandleExportControls(w http.ResponseWriter, r *http.Request)
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Content-Disposition", "attachment; filename=control-library-export.json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"controls":      controls,
-		"exported_at":   time.Now().Format(time.RFC3339),
-		"total_count":   len(controls),
+		"controls":       controls,
+		"exported_at":    time.Now().Format(time.RFC3339),
+		"total_count":    len(controls),
 		"export_version": "1.0",
 	})
 }
@@ -494,7 +494,7 @@ func (s *ApiServer) handleActivateControl(w http.ResponseWriter, r *http.Request
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-	
+
 	// Log control activation
 	changes := map[string]interface{}{
 		"control_library_id": req.ControlLibraryID,
@@ -503,7 +503,7 @@ func (s *ApiServer) handleActivateControl(w http.ResponseWriter, r *http.Request
 	}
 	entityType := "activated_control"
 	s.store.LogAudit(r.Context(), &userID, "CONTROL_ACTIVATED", &entityType, &newControl.ID, changes, nil)
-	
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(newControl)
@@ -554,7 +554,7 @@ func (s *ApiServer) handleSubmitControlEvidence(w http.ResponseWriter, r *http.R
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-	
+
 	// Log evidence submission
 	changes := map[string]interface{}{
 		"activated_control_id": activatedControlID,
@@ -563,7 +563,7 @@ func (s *ApiServer) handleSubmitControlEvidence(w http.ResponseWriter, r *http.R
 	}
 	entityType := "control_evidence"
 	s.store.LogAudit(r.Context(), &userID, "EVIDENCE_SUBMITTED", &entityType, &newLogEntry.ID, changes, nil)
-	
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(newLogEntry)
@@ -594,16 +594,16 @@ func (s *ApiServer) HandleCreateInternalTicket(w http.ResponseWriter, r *http.Re
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-	
+
 	// Log ticket creation
 	changes := map[string]interface{}{
-		"ticket_type":  "internal",
-		"title":        req.Title,
+		"ticket_type":   "internal",
+		"title":         req.Title,
 		"sequential_id": newTicket.SequentialID,
 	}
 	entityType := "ticket"
 	s.store.LogAudit(r.Context(), &userID, "TICKET_CREATED", &entityType, &newTicket.ID, changes, nil)
-	
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(newTicket)
@@ -648,7 +648,7 @@ func (s *ApiServer) HandleCreateExternalTicket(w http.ResponseWriter, r *http.Re
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-	
+
 	// Log external ticket creation
 	changes := map[string]interface{}{
 		"ticket_type":           "external",
@@ -658,7 +658,7 @@ func (s *ApiServer) HandleCreateExternalTicket(w http.ResponseWriter, r *http.Re
 	}
 	entityType := "ticket"
 	s.store.LogAudit(r.Context(), nil, "TICKET_CREATED_EXTERNAL", &entityType, &newTicket.ID, changes, nil)
-	
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(newTicket)
@@ -822,7 +822,7 @@ func (s *ApiServer) HandleAddTicketComment(w http.ResponseWriter, r *http.Reques
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-	
+
 	// Log comment addition
 	changes := map[string]interface{}{
 		"ticket_id":        ticketID,
@@ -830,7 +830,7 @@ func (s *ApiServer) HandleAddTicketComment(w http.ResponseWriter, r *http.Reques
 	}
 	entityType := "ticket_comment"
 	s.store.LogAudit(r.Context(), &userID, "TICKET_COMMENT_ADDED", &entityType, &newComment.ID, changes, nil)
-	
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(newComment)
@@ -1265,9 +1265,9 @@ func (s *ApiServer) HandleGetAssetControlMappings(w http.ResponseWriter, r *http
 	defer rows.Close()
 
 	type MappedControl struct {
-		ID               string     `json:"id"`
-		Name             string     `json:"name"`
-		Status           string     `json:"status"`
+		ID                string     `json:"id"`
+		Name              string     `json:"name"`
+		Status            string     `json:"status"`
 		NextReviewDueDate *time.Time `json:"next_review_due_date,omitempty"`
 	}
 
@@ -1414,8 +1414,8 @@ func (s *ApiServer) HandleCreateDocumentVersion(w http.ResponseWriter, r *http.R
 
 	// Log version creation
 	changes := map[string]interface{}{
-		"document_id":      documentID,
-		"version_number":   version.VersionNumber,
+		"document_id":        documentID,
+		"version_number":     version.VersionNumber,
 		"change_description": req.ChangeDescription,
 	}
 	entityType := "document_version"
@@ -2553,8 +2553,109 @@ func (s *ApiServer) HandleImportStandard(w http.ResponseWriter, r *http.Request)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"status":          "success",
-		"standard":        importData.Standard.Code,
+		"status":            "success",
+		"standard":          importData.Standard.Code,
 		"controls_imported": len(importData.Controls),
+	})
+}
+
+// ============================================================================
+// Quick Start Template Handlers
+// ============================================================================
+
+// HandleGetControlTemplates handles GET /api/v1/quick-start/templates
+func (s *ApiServer) HandleGetControlTemplates(w http.ResponseWriter, r *http.Request) {
+	templates, err := s.store.GetControlTemplates(r.Context())
+	if err != nil {
+		http.Error(w, "Failed to load control templates", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{"templates": templates})
+}
+
+// HandleActivateTemplate handles POST /api/v1/quick-start/templates/{id}/activate
+func (s *ApiServer) HandleActivateTemplate(w http.ResponseWriter, r *http.Request) {
+	templateID := mux.Vars(r)["id"]
+	userID := r.Context().Value(UserIDKey).(string)
+
+	var req struct {
+		OwnerID string `json:"owner_id"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request body: missing owner_id", http.StatusBadRequest)
+		return
+	}
+	if req.OwnerID == "" {
+		http.Error(w, "owner_id is required", http.StatusBadRequest)
+		return
+	}
+
+	templates, err := s.store.GetControlTemplates(r.Context())
+	if err != nil {
+		http.Error(w, "Failed to load control templates", http.StatusInternalServerError)
+		return
+	}
+
+	var targetTemplate *ControlTemplate
+	for i := range templates {
+		if templates[i].ID == templateID {
+			targetTemplate = &templates[i]
+			break
+		}
+	}
+
+	if targetTemplate == nil {
+		http.Error(w, "Template not found", http.StatusNotFound)
+		return
+	}
+
+	activatedCount := 0
+	var activationErrors []string
+	for _, control := range targetTemplate.Controls {
+		activateReq := ActivateControlRequest{
+			ControlLibraryID:   control.ControlID,
+			OwnerID:            req.OwnerID,
+			ReviewIntervalDays: 90, // Default 90-day review interval
+		}
+		newControl, err := s.store.ActivateControl(r.Context(), activateReq)
+		if err != nil {
+			// Log the error but continue trying to activate other controls
+			errMsg := fmt.Sprintf("Failed to activate control %s: %v", control.ControlID, err)
+			log.Println(errMsg)
+			activationErrors = append(activationErrors, errMsg)
+			continue
+		}
+
+		// Log successful activation
+		changes := map[string]interface{}{
+			"template_id":          templateID,
+			"control_library_id":   control.ControlID,
+			"owner_id":             req.OwnerID,
+			"review_interval_days": 90,
+		}
+		entityType := "activated_control"
+		s.store.LogAudit(r.Context(), &userID, "CONTROL_ACTIVATED_FROM_TEMPLATE", &entityType, &newControl.ID, changes, nil)
+		activatedCount++
+	}
+
+	// Log the overall template activation event
+	auditChanges := map[string]interface{}{
+		"template_id":       templateID,
+		"activated_count":   activatedCount,
+		"total_in_template": len(targetTemplate.Controls),
+		"errors":            len(activationErrors),
+	}
+	entityType := "control_template"
+	s.store.LogAudit(r.Context(), &userID, "TEMPLATE_ACTIVATED", &entityType, &templateID, auditChanges, nil)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"status":            "activation process completed",
+		"activated_count":   activatedCount,
+		"total_in_template": len(targetTemplate.Controls),
+		"errors":            activationErrors,
 	})
 }
