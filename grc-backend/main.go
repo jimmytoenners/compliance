@@ -223,6 +223,11 @@ func main() {
 	protected.HandleFunc("/evidence/files/{file_id}/download", apiServer.HandleDownloadEvidenceFile).Methods("GET", "OPTIONS")
 	admin.HandleFunc("/evidence/files/{file_id}", apiServer.HandleDeleteEvidenceFile).Methods("DELETE", "OPTIONS")
 
+	// Compliance Report Generation routes (authenticated users)
+	protected.HandleFunc("/reports/generate/pdf", apiServer.HandleGeneratePDFReport).Methods("POST", "OPTIONS")
+	protected.HandleFunc("/reports/generate/csv", apiServer.HandleGenerateCSVReport).Methods("POST", "OPTIONS")
+	protected.HandleFunc("/reports/generate/json", apiServer.HandleGenerateJSONReport).Methods("POST", "OPTIONS")
+
 	// Start server
 	port := os.Getenv("API_PORT")
 	if port == "" {

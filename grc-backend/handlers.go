@@ -2781,3 +2781,149 @@ func (s *ApiServer) HandleDeleteEvidenceFile(w http.ResponseWriter, r *http.Requ
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{"status": "deleted"})
 }
+
+// Report Generation Handlers
+
+// HandleGeneratePDFReport handles POST /api/v1/reports/generate/pdf
+func (s *ApiServer) HandleGeneratePDFReport(w http.ResponseWriter, r *http.Request) {
+	var req ComplianceReportRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	if req.StandardID == "" {
+		http.Error(w, "standard_id is required", http.StatusBadRequest)
+		return
+	}
+
+	// Parse date range if provided
+	if req.StartDate.IsZero() {
+		req.StartDate = time.Now().AddDate(0, -1, 0) // Default: 1 month ago
+	}
+	if req.EndDate.IsZero() {
+		req.EndDate = time.Now()
+	}
+
+	userID := r.Context().Value(UserIDKey).(string)
+
+	// Generate PDF
+	reportGen := NewReportGenerator(s.store)
+	pdfBytes, err := reportGen.GenerateComplianceReport(r.Context(), req)
+	if err != nil {
+		log.Printf("Failed to generate PDF report: %v", err)
+		http.Error(w, "Failed to generate report", http.StatusInternalServerError)
+		return
+	}
+
+	// Log audit
+	entityType := "compliance_report"
+	changes := map[string]interface{}{
+		"standard_id":      req.StandardID,
+		"format":           "pdf",
+		"include_evidence": req.IncludeEvidence,
+		"date_range":       fmt.Sprintf("%s to %s", req.StartDate.Format("2006-01-02"), req.EndDate.Format("2006-01-02")),
+	}
+	s.store.LogAudit(r.Context(), &userID, "REPORT_GENERATED", &entityType, nil, changes, nil)
+
+	// Set headers for PDF download
+	filename := fmt.Sprintf("compliance-report-%s.pdf", time.Now().Format("2006-01-02"))
+	w.Header().Set("Content-Type", "application/pdf")
+	w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, filename))
+	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(pdfBytes)))
+
+	w.Write(pdfBytes)
+}
+
+// HandleGenerateCSVReport handles POST /api/v1/reports/generate/csv
+func (s *ApiServer) HandleGenerateCSVReport(w http.ResponseWriter, r *http.Request) {
+	var req ComplianceReportRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	if req.StandardID == "" {
+		http.Error(w, "standard_id is required", http.StatusBadRequest)
+		return
+	}
+
+	// Parse date range if provided
+	if req.StartDate.IsZero() {
+		req.StartDate = time.Now().AddDate(0, -1, 0)
+	}
+	if req.EndDate.IsZero() {
+		req.EndDate = time.Now()
+	}
+
+	userID := r.Context().Value(UserIDKey).(string)
+
+	// Generate CSV
+	reportGen := NewReportGenerator(s.store)
+	csvData, err := reportGen.GenerateCSVReport(r.Context(), req)
+	if err != nil {
+		log.Printf("Failed to generate CSV report: %v", err)
+		http.Error(w, "Failed to generate report", http.StatusInternalServerError)
+		return
+	}
+
+	// Log audit
+	entityType := "compliance_report"
+	changes := map[string]interface{}{
+		"standard_id": req.StandardID,
+		"format":      "csv",
+	}
+	s.store.LogAudit(r.Context(), &userID, "REPORT_GENERATED", &entityType, nil, changes, nil)
+
+	// Set headers for CSV download
+	filename := fmt.Sprintf("compliance-report-%s.csv", time.Now().Format("2006-01-02"))
+	w.Header().Set("Content-Type", "text/csv")
+	w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, filename))
+
+	w.Write([]byte(csvData))
+}
+
+// HandleGenerateJSONReport handles POST /api/v1/reports/generate/json
+func (s *ApiServer) HandleGenerateJSONReport(w http.ResponseWriter, r *http.Request) {
+	var req ComplianceReportRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	if req.StandardID == "" {
+		http.Error(w, "standard_id is required", http.StatusBadRequest)
+		return
+	}
+
+	// Parse date range if provided
+	if req.StartDate.IsZero() {
+		req.StartDate = time.Now().AddDate(0, -1, 0)
+	}
+	if req.EndDate.IsZero() {
+		req.EndDate = time.Now()
+	}
+
+	userID := r.Context().Value(UserIDKey).(string)
+
+	// Generate JSON report data
+	reportGen := NewReportGenerator(s.store)
+	reportData, err := reportGen.GenerateJSONReport(r.Context(), req)
+	if err != nil {
+		log.Printf("Failed to generate JSON report: %v", err)
+		http.Error(w, "Failed to generate report", http.StatusInternalServerError)
+		return
+	}
+
+	// Log audit
+	entityType := "compliance_report"
+	changes := map[string]interface{}{
+		"standard_id":      req.StandardID,
+		"format":           "json",
+		"include_evidence": req.IncludeEvidence,
+	}
+	s.store.LogAudit(r.Context(), &userID, "REPORT_GENERATED", &entityType, nil, changes, nil)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(reportData)
+}
