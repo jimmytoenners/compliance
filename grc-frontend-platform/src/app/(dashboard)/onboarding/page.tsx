@@ -290,9 +290,9 @@ export default function OnboardingPage() {
 
   const getRecommendedTemplate = () => {
     if (!companySize) return null;
-    if (companySize === "1-10") return templates.find(t => t.maturity_level === "getting_started");
-    if (companySize === "11-50") return templates.find(t => t.maturity_level === "move_on");
-    return templates.find(t => t.maturity_level === "master");
+    if (companySize === "1-10") return templates.find(t => t.maturity_level === "foundation");
+    if (companySize === "11-50") return templates.find(t => t.maturity_level === "growth");
+    return templates.find(t => t.maturity_level === "enterprise");
   };
 
   return (

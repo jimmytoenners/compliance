@@ -1,10 +1,10 @@
 {
   "templates": [
     {
-      "id": "eu-startup-getting-started",
-      "name": "Getting Started - Essential Compliance",
+      "id": "eu-startup-foundation",
+      "name": "Foundation - Essential Compliance",
       "description": "Foundational controls for European startups. Focus on GDPR basics, essential security, and incident response. Suitable for pre-seed to seed stage (1-10 employees).",
-      "maturity_level": "getting_started",
+      "maturity_level": "foundation",
       "recommended_for": "Startups with < 10 employees, handling personal data, limited IT infrastructure",
       "estimated_time": "2-4 weeks to implement",
       "control_count": 15,
@@ -87,10 +87,10 @@
       ]
     },
     {
-      "id": "eu-startup-move-on",
-      "name": "Move On - Growth & Maturity",
+      "id": "eu-startup-growth",
+      "name": "Growth - Scaling Compliance",
       "description": "Expanded controls for growing European startups. Adds vendor management, enhanced security monitoring, and formal risk management. Suitable for Series A-B stage (10-50 employees).",
-      "maturity_level": "move_on",
+      "maturity_level": "growth",
       "recommended_for": "Growing startups with 10-50 employees, using cloud services, handling sensitive data at scale",
       "estimated_time": "1-3 months to implement",
       "control_count": 25,
@@ -223,10 +223,10 @@
       ]
     },
     {
-      "id": "eu-startup-master",
-      "name": "Master - Enterprise-Grade Compliance",
+      "id": "eu-startup-enterprise",
+      "name": "Enterprise - Complete Compliance",
       "description": "Comprehensive controls for mature European startups. Includes advanced security controls, formal ISMS, business continuity, and full regulatory compliance. Suitable for Series C+ or pre-IPO (50+ employees).",
-      "maturity_level": "master",
+      "maturity_level": "enterprise",
       "recommended_for": "Mature startups with 50+ employees, enterprise customers, regulatory scrutiny, or preparing for exit/IPO",
       "estimated_time": "3-6 months to implement",
       "control_count": 35,

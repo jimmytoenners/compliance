@@ -359,10 +359,10 @@ EXECUTE FUNCTION trigger_set_timestamp();
 -- ### 8. CONTROL ACTIVATION TEMPLATES ###
 
 CREATE TABLE control_templates (
-  id TEXT PRIMARY KEY, -- e.g., 'eu-startup-getting-started'
+  id TEXT PRIMARY KEY, -- e.g., 'eu-startup-foundation'
   name TEXT NOT NULL,
   description TEXT NOT NULL,
-  maturity_level TEXT NOT NULL, -- 'getting_started', 'move_on', 'master'
+  maturity_level TEXT NOT NULL, -- 'foundation', 'growth', 'enterprise'
   recommended_for TEXT,
   estimated_time TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),

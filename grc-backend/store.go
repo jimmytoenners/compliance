@@ -1183,14 +1183,14 @@ func (s *Store) DeleteAsset(ctx context.Context, assetID string) error {
 
 // AuditLog represents a row in 'audit_log'
 type AuditLog struct {
-	ID               string  `json:"id" db:"id"`
-	PerformedAt      string  `json:"performed_at" db:"performed_at"`
-	UserID           *string `json:"user_id,omitempty" db:"user_id"`
-	ActionType       string  `json:"action_type" db:"action_type"`
-	TargetEntityType *string `json:"target_entity_type,omitempty" db:"target_entity_type"`
-	TargetEntityID   *string `json:"target_entity_id,omitempty" db:"target_entity_id"`
-	Changes          *string `json:"changes,omitempty" db:"changes"`
-	IPAddress        *string `json:"ip_address,omitempty" db:"ip_address"`
+	ID               string    `json:"id" db:"id"`
+	PerformedAt      time.Time `json:"performed_at" db:"performed_at"`
+	UserID           *string   `json:"user_id,omitempty" db:"user_id"`
+	ActionType       string    `json:"action_type" db:"action_type"`
+	TargetEntityType *string   `json:"target_entity_type,omitempty" db:"target_entity_type"`
+	TargetEntityID   *string   `json:"target_entity_id,omitempty" db:"target_entity_id"`
+	Changes          *string   `json:"changes,omitempty" db:"changes"`
+	IPAddress        *string   `json:"ip_address,omitempty" db:"ip_address"`
 }
 
 // LogAudit logs an audit event
