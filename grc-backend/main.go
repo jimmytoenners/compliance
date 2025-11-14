@@ -78,8 +78,12 @@ func main() {
 	}
 	fmt.Printf("File storage initialized at: %s\n", uploadDir)
 
-	// Initialize cron service
-	cronService := NewCronService(store)
+	// Initialize email service
+	emailService := NewEmailService()
+	fmt.Println(emailService.GetConfigSummary())
+
+	// Initialize cron service with email
+	cronService := NewCronService(store, emailService)
 	cronService.Start()
 
 	// Initialize API server

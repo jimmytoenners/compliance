@@ -10,12 +10,14 @@ import (
 
 type CronService struct {
 	store *Store
+	email *EmailService
 	cron  *cron.Cron
 }
 
-func NewCronService(store *Store) *CronService {
+func NewCronService(store *Store, email *EmailService) *CronService {
 	return &CronService{
 		store: store,
+		email: email,
 		cron:  cron.New(),
 	}
 }
@@ -23,7 +25,8 @@ func NewCronService(store *Store) *CronService {
 func (cs *CronService) Start() {
 	// Run every hour at minute 0
 	cs.cron.AddFunc("0 * * * *", cs.checkDueControls)
-	cs.cron.AddFunc("0 9 * * *", cs.sendDailySummaryNotifications) // 9 AM daily
+	cs.cron.AddFunc("0 8 * * *", cs.sendDailyDigestEmails) // 8 AM daily
+	cs.cron.AddFunc("0 9 * * 1", cs.sendWeeklyDigestEmails) // 9 AM every Monday
 	cs.cron.Start()
 	log.Println("Cron service started")
 }
@@ -72,6 +75,18 @@ func (cs *CronService) checkDueControls() {
 			log.Printf("Error creating due control notification: %v", err)
 		} else {
 			log.Printf("Created due control notification for control %s", controlLibraryID)
+		}
+
+		// Send email notification if email is enabled and user has email
+		if cs.email.IsEnabled() && ownerEmail != nil && *ownerEmail != "" {
+			name := "User"
+			if ownerName != nil {
+				name = *ownerName
+			}
+			err = cs.email.SendDueControlReminder(*ownerEmail, name, controlLibraryID, controlID, 0)
+			if err != nil {
+				log.Printf("Error sending due control email to %s: %v", *ownerEmail, err)
+			}
 		}
 	}
 
@@ -126,8 +141,8 @@ func (cs *CronService) checkOverdueControls() {
 	}
 }
 
-func (cs *CronService) sendDailySummaryNotifications() {
-	log.Println("Sending daily summary notifications...")
+func (cs *CronService) sendDailyDigestEmails() {
+	log.Println("Sending daily digest emails...")
 
 	ctx := context.Background()
 
@@ -143,22 +158,31 @@ func (cs *CronService) sendDailySummaryNotifications() {
 	}
 	defer adminRows.Close()
 
-	// Get dashboard summary
-	summary, err := cs.store.GetDashboardSummary(ctx)
+	// Get control counts
+	var totalControls, compliantControls, overdueControls int
+	err = cs.store.db.QueryRow(ctx, `
+		SELECT 
+			COUNT(*) as total,
+			COUNT(*) FILTER (WHERE status = 'compliant') as compliant,
+			COUNT(*) FILTER (WHERE next_review_due_date < CURRENT_DATE) as overdue
+		FROM activated_controls
+	`).Scan(&totalControls, &compliantControls, &overdueControls)
 	if err != nil {
-		log.Printf("Error getting dashboard summary: %v", err)
+		log.Printf("Error getting control counts: %v", err)
 		return
 	}
 
-	// Format summary message
-	message := fmt.Sprintf(
-		"Daily Summary - Controls: %d total, %d compliant, %d overdue. Tickets: %d total, %d open.",
-		summary["controls"].(map[string]interface{})["total"],
-		summary["controls"].(map[string]interface{})["compliant"],
-		summary["controls"].(map[string]interface{})["overdue"],
-		summary["tickets"].(map[string]interface{})["totalTickets"],
-		summary["tickets"].(map[string]interface{})["openTickets"],
-	)
+	// Get open ticket count
+	var openTickets int
+	err = cs.store.db.QueryRow(ctx, `
+		SELECT COUNT(*)
+		FROM tickets
+		WHERE status IN ('new', 'in_progress')
+	`).Scan(&openTickets)
+	if err != nil {
+		log.Printf("Error getting open ticket count: %v", err)
+		return
+	}
 
 	for adminRows.Next() {
 		var adminID, adminName, adminEmail string
@@ -168,11 +192,108 @@ func (cs *CronService) sendDailySummaryNotifications() {
 			continue
 		}
 
-		err = cs.store.CreateNotification(ctx, adminID, message, "/dashboard")
-		if err != nil {
-			log.Printf("Error creating daily summary notification for admin %s: %v", adminName, err)
-		} else {
-			log.Printf("Sent daily summary notification to admin %s", adminName)
+		// Send email if email service is enabled
+		if cs.email.IsEnabled() && adminEmail != "" {
+			err = cs.email.SendDailyDigest(adminEmail, adminName, totalControls, compliantControls, overdueControls, openTickets)
+			if err != nil {
+				log.Printf("Error sending daily digest email to %s: %v", adminEmail, err)
+			} else {
+				log.Printf("Sent daily digest email to %s", adminEmail)
+			}
+		}
+	}
+
+	if err := adminRows.Err(); err != nil {
+		log.Printf("Error iterating admin users: %v", err)
+	}
+}
+
+func (cs *CronService) sendWeeklyDigestEmails() {
+	log.Println("Sending weekly digest emails...")
+
+	ctx := context.Background()
+
+	// Get all admin users
+	adminRows, err := cs.store.db.Query(ctx, `
+		SELECT id, name, email
+		FROM users
+		WHERE role = 'admin'
+	`)
+	if err != nil {
+		log.Printf("Error querying admin users: %v", err)
+		return
+	}
+	defer adminRows.Close()
+
+	// Get weekly stats
+	var totalControls, compliantControls, overdueControls int
+	err = cs.store.db.QueryRow(ctx, `
+		SELECT 
+			COUNT(*) as total,
+			COUNT(*) FILTER (WHERE status = 'compliant') as compliant,
+			COUNT(*) FILTER (WHERE next_review_due_date < CURRENT_DATE) as overdue
+		FROM activated_controls
+	`).Scan(&totalControls, &compliantControls, &overdueControls)
+	if err != nil {
+		log.Printf("Error getting control counts: %v", err)
+		return
+	}
+
+	// Get evidence submissions in the last 7 days
+	var evidenceSubmissions int
+	err = cs.store.db.QueryRow(ctx, `
+		SELECT COUNT(*)
+		FROM control_evidence_log
+		WHERE performed_at >= NOW() - INTERVAL '7 days'
+	`).Scan(&evidenceSubmissions)
+	if err != nil {
+		log.Printf("Error getting evidence count: %v", err)
+		return
+	}
+
+	// Get tickets resolved in the last 7 days
+	var ticketsResolved int
+	err = cs.store.db.QueryRow(ctx, `
+		SELECT COUNT(*)
+		FROM tickets
+		WHERE status IN ('resolved', 'closed')
+		AND resolved_at >= NOW() - INTERVAL '7 days'
+	`).Scan(&ticketsResolved)
+	if err != nil {
+		log.Printf("Error getting resolved tickets count: %v", err)
+		return
+	}
+
+	// Calculate compliance rate
+	complianceRate := 0
+	if totalControls > 0 {
+		complianceRate = (compliantControls * 100) / totalControls
+	}
+
+	stats := map[string]interface{}{
+		"total_controls":        totalControls,
+		"compliance_rate":       complianceRate,
+		"overdue_controls":      overdueControls,
+		"evidence_submissions":  evidenceSubmissions,
+		"tickets_resolved":      ticketsResolved,
+	}
+
+	for adminRows.Next() {
+		var adminID, adminName, adminEmail string
+
+		if err := adminRows.Scan(&adminID, &adminName, &adminEmail); err != nil {
+			log.Printf("Error scanning admin row: %v", err)
+			continue
+		}
+
+		// Send email if email service is enabled
+		if cs.email.IsEnabled() && adminEmail != "" {
+			err = cs.email.SendWeeklyDigest(adminEmail, adminName, stats)
+			if err != nil {
+				log.Printf("Error sending weekly digest email to %s: %v", adminEmail, err)
+			} else {
+				log.Printf("Sent weekly digest email to %s", adminEmail)
+			}
 		}
 	}
 
