@@ -73,6 +73,18 @@ type ControlEvidenceLog struct {
 	EvidenceLink       string `json:"evidence_link,omitempty" db:"evidence_link"`
 }
 
+// EvidenceFile represents a file attached to evidence
+type EvidenceFile struct {
+	ID              string `json:"id" db:"id"`
+	EvidenceLogID   string `json:"evidence_log_id" db:"evidence_log_id"`
+	Filename        string `json:"filename" db:"filename"`
+	StoredFilename  string `json:"stored_filename" db:"stored_filename"`
+	FileSize        int64  `json:"file_size" db:"file_size"`
+	ContentType     string `json:"content_type" db:"content_type"`
+	UploadedByID    string `json:"uploaded_by_id" db:"uploaded_by_id"`
+	UploadedAt      string `json:"uploaded_at" db:"uploaded_at"`
+}
+
 // SubmitEvidenceRequest is the JSON for submitting evidence
 type SubmitEvidenceRequest struct {
 	ComplianceStatus string `json:"compliance_status"`
@@ -3302,4 +3314,86 @@ func (s *Store) ActivateTemplateControls(ctx context.Context, templateID, ownerI
 	}
 
 	return activated, nil
+}
+
+// ========== EVIDENCE FILE MANAGEMENT ==========
+
+// CreateEvidenceFile creates a new evidence file record
+func (s *Store) CreateEvidenceFile(ctx context.Context, evidenceLogID, filename, storedFilename, contentType, uploadedByID string, fileSize int64) (*EvidenceFile, error) {
+	query := `
+		INSERT INTO evidence_files (evidence_log_id, filename, stored_filename, file_size, content_type, uploaded_by_id)
+		VALUES ($1, $2, $3, $4, $5, $6)
+		RETURNING id, evidence_log_id, filename, stored_filename, file_size, content_type, uploaded_by_id, uploaded_at
+	`
+
+	var file EvidenceFile
+	err := s.db.QueryRow(ctx, query, evidenceLogID, filename, storedFilename, fileSize, contentType, uploadedByID).Scan(
+		&file.ID, &file.EvidenceLogID, &file.Filename, &file.StoredFilename, &file.FileSize,
+		&file.ContentType, &file.UploadedByID, &file.UploadedAt,
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create evidence file: %w", err)
+	}
+
+	return &file, nil
+}
+
+// GetEvidenceFiles retrieves all files for a specific evidence log entry
+func (s *Store) GetEvidenceFiles(ctx context.Context, evidenceLogID string) ([]EvidenceFile, error) {
+	query := `
+		SELECT id, evidence_log_id, filename, stored_filename, file_size, content_type, uploaded_by_id, uploaded_at
+		FROM evidence_files
+		WHERE evidence_log_id = $1
+		ORDER BY uploaded_at DESC
+	`
+
+	rows, err := s.db.Query(ctx, query, evidenceLogID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var files []EvidenceFile
+	for rows.Next() {
+		var file EvidenceFile
+		err := rows.Scan(&file.ID, &file.EvidenceLogID, &file.Filename, &file.StoredFilename,
+			&file.FileSize, &file.ContentType, &file.UploadedByID, &file.UploadedAt)
+		if err != nil {
+			return nil, err
+		}
+		files = append(files, file)
+	}
+
+	if files == nil {
+		files = make([]EvidenceFile, 0)
+	}
+
+	return files, nil
+}
+
+// GetEvidenceFileByID retrieves a single evidence file by ID
+func (s *Store) GetEvidenceFileByID(ctx context.Context, fileID string) (*EvidenceFile, error) {
+	query := `
+		SELECT id, evidence_log_id, filename, stored_filename, file_size, content_type, uploaded_by_id, uploaded_at
+		FROM evidence_files
+		WHERE id = $1
+	`
+
+	var file EvidenceFile
+	err := s.db.QueryRow(ctx, query, fileID).Scan(
+		&file.ID, &file.EvidenceLogID, &file.Filename, &file.StoredFilename,
+		&file.FileSize, &file.ContentType, &file.UploadedByID, &file.UploadedAt,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &file, nil
+}
+
+// DeleteEvidenceFile removes an evidence file record from the database
+func (s *Store) DeleteEvidenceFile(ctx context.Context, fileID string) error {
+	query := `DELETE FROM evidence_files WHERE id = $1`
+	_, err := s.db.Exec(ctx, query, fileID)
+	return err
 }

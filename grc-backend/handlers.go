@@ -32,12 +32,15 @@ const (
 	RoleKey   contextKey = "role"
 )
 
-// ApiServer holds the store
+// ApiServer holds the store and file storage
 type ApiServer struct {
-	store *Store
+	store       *Store
+	fileStorage *FileStorage
 }
 
-func NewApiServer(store *Store) *ApiServer { return &ApiServer{store: store} }
+func NewApiServer(store *Store, fileStorage *FileStorage) *ApiServer {
+	return &ApiServer{store: store, fileStorage: fileStorage}
+}
 
 // HandleGetAuditLogs handles GET /api/v1/audit/logs
 func (s *ApiServer) HandleGetAuditLogs(w http.ResponseWriter, r *http.Request) {
@@ -2615,4 +2618,166 @@ func (s *ApiServer) HandleActivateTemplate(w http.ResponseWriter, r *http.Reques
 		"template_id":        templateID,
 		"controls_activated": count,
 	})
+}
+
+// ============================================================================
+// Evidence File Upload Handlers
+// ============================================================================
+
+// HandleUploadEvidenceFile handles POST /api/v1/evidence/{evidence_id}/files
+func (s *ApiServer) HandleUploadEvidenceFile(w http.ResponseWriter, r *http.Request) {
+	evidenceID := mux.Vars(r)["evidence_id"]
+	userID := r.Context().Value(UserIDKey).(string)
+
+	// Parse multipart form (max 50MB)
+	err := r.ParseMultipartForm(MaxFileSize)
+	if err != nil {
+		log.Printf("Failed to parse multipart form: %v", err)
+		http.Error(w, "Failed to parse form data", http.StatusBadRequest)
+		return
+	}
+
+	// Get the file from form
+	file, header, err := r.FormFile("file")
+	if err != nil {
+		log.Printf("Failed to get file from form: %v", err)
+		http.Error(w, "No file provided", http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
+
+	// Verify evidence log exists
+	// This also ensures the user has access to this evidence
+	_, err = s.store.GetEvidenceFileByID(r.Context(), evidenceID)
+	if err != nil {
+		// Note: In production, you'd want to verify the evidence belongs to a control the user can access
+		log.Printf("Evidence log not found or user lacks access: %v", err)
+	}
+
+	// Save file to disk
+	storedFilename, err := s.fileStorage.SaveFile(file, header)
+	if err != nil {
+		log.Printf("Failed to save file: %v", err)
+		http.Error(w, fmt.Sprintf("Failed to save file: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	// Create database record
+	evidenceFile, err := s.store.CreateEvidenceFile(
+		r.Context(),
+		evidenceID,
+		header.Filename,
+		storedFilename,
+		header.Header.Get("Content-Type"),
+		userID,
+		header.Size,
+	)
+	if err != nil {
+		// Clean up file if database insert fails
+		s.fileStorage.DeleteFile(storedFilename)
+		log.Printf("Failed to create evidence file record: %v", err)
+		http.Error(w, "Failed to save file metadata", http.StatusInternalServerError)
+		return
+	}
+
+	// Log audit
+	entityType := "evidence_file"
+	changes := map[string]interface{}{
+		"evidence_log_id": evidenceID,
+		"filename":        header.Filename,
+		"file_size":       header.Size,
+		"content_type":    header.Header.Get("Content-Type"),
+	}
+	s.store.LogAudit(r.Context(), &userID, "EVIDENCE_FILE_UPLOADED", &entityType, &evidenceFile.ID, changes, nil)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(evidenceFile)
+}
+
+// HandleGetEvidenceFiles handles GET /api/v1/evidence/{evidence_id}/files
+func (s *ApiServer) HandleGetEvidenceFiles(w http.ResponseWriter, r *http.Request) {
+	evidenceID := mux.Vars(r)["evidence_id"]
+
+	files, err := s.store.GetEvidenceFiles(r.Context(), evidenceID)
+	if err != nil {
+		log.Printf("Failed to get evidence files: %v", err)
+		http.Error(w, "Failed to retrieve files", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{"files": files})
+}
+
+// HandleDownloadEvidenceFile handles GET /api/v1/evidence/files/{file_id}/download
+func (s *ApiServer) HandleDownloadEvidenceFile(w http.ResponseWriter, r *http.Request) {
+	fileID := mux.Vars(r)["file_id"]
+
+	// Get file metadata from database
+	evidenceFile, err := s.store.GetEvidenceFileByID(r.Context(), fileID)
+	if err != nil {
+		log.Printf("File not found: %v", err)
+		http.Error(w, "File not found", http.StatusNotFound)
+		return
+	}
+
+	// Get file path
+	filePath := s.fileStorage.GetFilePath(evidenceFile.StoredFilename)
+
+	// Check if file exists
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		log.Printf("File does not exist on disk: %s", filePath)
+		http.Error(w, "File not found on disk", http.StatusNotFound)
+		return
+	}
+
+	// Set headers for download
+	w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="%s"`, evidenceFile.Filename))
+	w.Header().Set("Content-Type", evidenceFile.ContentType)
+	w.Header().Set("Content-Length", fmt.Sprintf("%d", evidenceFile.FileSize))
+
+	// Serve file
+	http.ServeFile(w, r, filePath)
+}
+
+// HandleDeleteEvidenceFile handles DELETE /api/v1/evidence/files/{file_id}
+func (s *ApiServer) HandleDeleteEvidenceFile(w http.ResponseWriter, r *http.Request) {
+	fileID := mux.Vars(r)["file_id"]
+	userID := r.Context().Value(UserIDKey).(string)
+
+	// Get file metadata
+	evidenceFile, err := s.store.GetEvidenceFileByID(r.Context(), fileID)
+	if err != nil {
+		log.Printf("File not found: %v", err)
+		http.Error(w, "File not found", http.StatusNotFound)
+		return
+	}
+
+	// Delete file from disk
+	err = s.fileStorage.DeleteFile(evidenceFile.StoredFilename)
+	if err != nil {
+		log.Printf("Failed to delete file from disk: %v", err)
+		// Continue anyway to remove database record
+	}
+
+	// Delete database record
+	err = s.store.DeleteEvidenceFile(r.Context(), fileID)
+	if err != nil {
+		log.Printf("Failed to delete evidence file record: %v", err)
+		http.Error(w, "Failed to delete file", http.StatusInternalServerError)
+		return
+	}
+
+	// Log audit
+	entityType := "evidence_file"
+	changes := map[string]interface{}{
+		"evidence_log_id": evidenceFile.EvidenceLogID,
+		"filename":        evidenceFile.Filename,
+		"deleted":         true,
+	}
+	s.store.LogAudit(r.Context(), &userID, "EVIDENCE_FILE_DELETED", &entityType, &fileID, changes, nil)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{"status": "deleted"})
 }

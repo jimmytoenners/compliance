@@ -86,6 +86,19 @@ CREATE TABLE control_evidence_log (
   evidence_link TEXT
 );
 
+-- Evidence file attachments
+CREATE TABLE evidence_files (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  evidence_log_id UUID NOT NULL REFERENCES control_evidence_log(id) ON DELETE CASCADE,
+  filename TEXT NOT NULL, -- Original filename
+  stored_filename TEXT NOT NULL UNIQUE, -- UUID-based filename on disk
+  file_size BIGINT NOT NULL, -- Size in bytes
+  content_type TEXT NOT NULL, -- MIME type (e.g., 'application/pdf', 'image/png')
+  uploaded_by_id UUID NOT NULL REFERENCES users(id),
+  uploaded_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX idx_evidence_files_evidence_log ON evidence_files(evidence_log_id);
+
 -- ### 2. DOCUMENT & ASSET TABLES ###
 
 CREATE TABLE documents (

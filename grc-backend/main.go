@@ -67,12 +67,23 @@ func main() {
 	// Initialize store
 	store := NewStore(pool)
 
+	// Initialize file storage
+	uploadDir := os.Getenv("UPLOAD_DIR")
+	if uploadDir == "" {
+		uploadDir = "./uploads" // Default upload directory
+	}
+	fileStorage := NewFileStorage(uploadDir)
+	if err := fileStorage.EnsureUploadDir(); err != nil {
+		log.Fatalf("Failed to create upload directory: %v", err)
+	}
+	fmt.Printf("File storage initialized at: %s\n", uploadDir)
+
 	// Initialize cron service
 	cronService := NewCronService(store)
 	cronService.Start()
 
 	// Initialize API server
-	apiServer := NewApiServer(store)
+	apiServer := NewApiServer(store, fileStorage)
 
 	// Setup routes
 	r := mux.NewRouter()
@@ -205,6 +216,12 @@ func main() {
 	protected.HandleFunc("/templates", apiServer.HandleGetControlTemplates).Methods("GET", "OPTIONS")
 	protected.HandleFunc("/templates/{id}", apiServer.HandleGetTemplateControls).Methods("GET", "OPTIONS")
 	admin.HandleFunc("/templates/{id}/activate", apiServer.HandleActivateTemplate).Methods("POST", "OPTIONS")
+
+	// Evidence File Upload routes
+	protected.HandleFunc("/evidence/{evidence_id}/files", apiServer.HandleGetEvidenceFiles).Methods("GET", "OPTIONS")
+	protected.HandleFunc("/evidence/{evidence_id}/files", apiServer.HandleUploadEvidenceFile).Methods("POST", "OPTIONS")
+	protected.HandleFunc("/evidence/files/{file_id}/download", apiServer.HandleDownloadEvidenceFile).Methods("GET", "OPTIONS")
+	admin.HandleFunc("/evidence/files/{file_id}", apiServer.HandleDeleteEvidenceFile).Methods("DELETE", "OPTIONS")
 
 	// Start server
 	port := os.Getenv("API_PORT")
