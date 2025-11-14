@@ -2,8 +2,10 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -519,5 +521,81 @@ func SeedTestUsers(ctx context.Context, db *pgxpool.Pool) error {
 	}
 
 	fmt.Printf("Seeded %d test users\n", len(testUsers))
+	return nil
+}
+
+// SeedControlTemplates loads control templates from JSON and populates database
+func SeedControlTemplates(ctx context.Context, db *pgxpool.Pool) error {
+	// Read control-templates.json
+	file, err := os.ReadFile("../control-templates.json")
+	if err != nil {
+		log.Printf("Warning: Could not read control-templates.json: %v", err)
+		return err
+	}
+
+	var data struct {
+		Templates []struct {
+			ID             string `json:"id"`
+			Name           string `json:"name"`
+			Description    string `json:"description"`
+			MaturityLevel  string `json:"maturity_level"`
+			RecommendedFor string `json:"recommended_for"`
+			EstimatedTime  string `json:"estimated_time"`
+			Controls       []struct {
+				ControlID string `json:"control_id"`
+				Priority  string `json:"priority"`
+				Rationale string `json:"rationale"`
+			} `json:"controls"`
+		} `json:"templates"`
+	}
+
+	if err := json.Unmarshal(file, &data); err != nil {
+		log.Printf("Error parsing control-templates.json: %v", err)
+		return err
+	}
+
+	// Insert templates and template_controls
+	for _, template := range data.Templates {
+		// Insert into control_templates
+		_, err := db.Exec(ctx, `
+			INSERT INTO control_templates (id, name, description, maturity_level, recommended_for, estimated_time)
+			VALUES ($1, $2, $3, $4, $5, $6)
+			ON CONFLICT (id) DO UPDATE SET
+				name = EXCLUDED.name,
+				description = EXCLUDED.description,
+				maturity_level = EXCLUDED.maturity_level,
+				recommended_for = EXCLUDED.recommended_for,
+				estimated_time = EXCLUDED.estimated_time,
+				updated_at = NOW()
+		`, template.ID, template.Name, template.Description, template.MaturityLevel,
+			template.RecommendedFor, template.EstimatedTime)
+		if err != nil {
+			log.Printf("Failed to insert template %s: %v", template.ID, err)
+			continue
+		}
+
+		// Delete existing template controls to handle removals
+		_, err = db.Exec(ctx, `DELETE FROM template_controls WHERE template_id = $1`, template.ID)
+		if err != nil {
+			log.Printf("Failed to delete old template controls for %s: %v", template.ID, err)
+		}
+
+		// Insert template controls
+		for _, control := range template.Controls {
+			_, err := db.Exec(ctx, `
+				INSERT INTO template_controls (template_id, control_library_id, priority, rationale)
+				VALUES ($1, $2, $3, $4)
+				ON CONFLICT (template_id, control_library_id) DO UPDATE SET
+					priority = EXCLUDED.priority,
+					rationale = EXCLUDED.rationale
+			`, template.ID, control.ControlID, control.Priority, control.Rationale)
+			if err != nil {
+				log.Printf("Failed to insert control %s for template %s: %v",
+					control.ControlID, template.ID, err)
+			}
+		}
+	}
+
+	fmt.Printf("Successfully seeded %d control templates\n", len(data.Templates))
 	return nil
 }

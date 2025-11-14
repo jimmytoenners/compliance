@@ -2575,87 +2575,44 @@ func (s *ApiServer) HandleGetControlTemplates(w http.ResponseWriter, r *http.Req
 	json.NewEncoder(w).Encode(map[string]interface{}{"templates": templates})
 }
 
+// HandleGetTemplateControls handles GET /api/v1/quick-start/templates/{id}
+func (s *ApiServer) HandleGetTemplateControls(w http.ResponseWriter, r *http.Request) {
+	templateID := mux.Vars(r)["id"]
+	controls, err := s.store.GetTemplateControls(r.Context(), templateID)
+	if err != nil {
+		log.Printf("Failed to fetch template controls: %v", err)
+		http.Error(w, "Failed to fetch template controls", http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{"controls": controls})
+}
+
 // HandleActivateTemplate handles POST /api/v1/quick-start/templates/{id}/activate
 func (s *ApiServer) HandleActivateTemplate(w http.ResponseWriter, r *http.Request) {
 	templateID := mux.Vars(r)["id"]
 	userID := r.Context().Value(UserIDKey).(string)
 
-	var req struct {
-		OwnerID string `json:"owner_id"`
-	}
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "Invalid request body: missing owner_id", http.StatusBadRequest)
-		return
-	}
-	if req.OwnerID == "" {
-		http.Error(w, "owner_id is required", http.StatusBadRequest)
-		return
-	}
-
-	templates, err := s.store.GetControlTemplates(r.Context())
+	// Activate all controls in template for the user
+	count, err := s.store.ActivateTemplateControls(r.Context(), templateID, userID)
 	if err != nil {
-		http.Error(w, "Failed to load control templates", http.StatusInternalServerError)
+		log.Printf("Failed to activate template controls: %v", err)
+		http.Error(w, "Failed to activate template", http.StatusInternalServerError)
 		return
 	}
 
-	var targetTemplate *ControlTemplate
-	for i := range templates {
-		if templates[i].ID == templateID {
-			targetTemplate = &templates[i]
-			break
-		}
-	}
-
-	if targetTemplate == nil {
-		http.Error(w, "Template not found", http.StatusNotFound)
-		return
-	}
-
-	activatedCount := 0
-	var activationErrors []string
-	for _, control := range targetTemplate.Controls {
-		activateReq := ActivateControlRequest{
-			ControlLibraryID:   control.ControlID,
-			OwnerID:            req.OwnerID,
-			ReviewIntervalDays: 90, // Default 90-day review interval
-		}
-		newControl, err := s.store.ActivateControl(r.Context(), activateReq)
-		if err != nil {
-			// Log the error but continue trying to activate other controls
-			errMsg := fmt.Sprintf("Failed to activate control %s: %v", control.ControlID, err)
-			log.Println(errMsg)
-			activationErrors = append(activationErrors, errMsg)
-			continue
-		}
-
-		// Log successful activation
-		changes := map[string]interface{}{
-			"template_id":          templateID,
-			"control_library_id":   control.ControlID,
-			"owner_id":             req.OwnerID,
-			"review_interval_days": 90,
-		}
-		entityType := "activated_control"
-		s.store.LogAudit(r.Context(), &userID, "CONTROL_ACTIVATED_FROM_TEMPLATE", &entityType, &newControl.ID, changes, nil)
-		activatedCount++
-	}
-
-	// Log the overall template activation event
-	auditChanges := map[string]interface{}{
-		"template_id":       templateID,
-		"activated_count":   activatedCount,
-		"total_in_template": len(targetTemplate.Controls),
-		"errors":            len(activationErrors),
-	}
+	// Log audit
 	entityType := "control_template"
-	s.store.LogAudit(r.Context(), &userID, "TEMPLATE_ACTIVATED", &entityType, &templateID, auditChanges, nil)
+	changes := map[string]interface{}{
+		"template_id":        templateID,
+		"controls_activated": count,
+	}
+	s.store.LogAudit(r.Context(), &userID, "TEMPLATE_ACTIVATED", &entityType, &templateID, changes, nil)
 
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"status":            "activation process completed",
-		"activated_count":   activatedCount,
-		"total_in_template": len(targetTemplate.Controls),
-		"errors":            activationErrors,
+		"status":             "success",
+		"template_id":        templateID,
+		"controls_activated": count,
 	})
 }

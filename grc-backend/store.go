@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 	"strings"
 	"time"
 
@@ -3165,25 +3164,142 @@ type TemplateControl struct {
 	Rationale string `json:"rationale"`
 }
 
-// GetControlTemplates loads and parses the control templates from the embedded JSON file.
+// TemplateControlDetail represents a control within a template with full control details
+type TemplateControlDetail struct {
+	TemplateID       string `json:"template_id" db:"template_id"`
+	ControlLibraryID string `json:"control_library_id" db:"control_library_id"`
+	ControlName      string `json:"control_name" db:"name"`
+	ControlFamily    string `json:"control_family" db:"family"`
+	Priority         string `json:"priority" db:"priority"`
+	Rationale        string `json:"rationale" db:"rationale"`
+}
+
+// GetControlTemplates retrieves all control templates from the database
 func (s *Store) GetControlTemplates(ctx context.Context) ([]ControlTemplate, error) {
-	// In a real application, you might cache this file content in memory
-	// to avoid reading from disk on every request.
-	filePath := "../control-templates.json"
-	file, err := os.ReadFile(filePath)
+	query := `
+		SELECT 
+			ct.id, ct.name, ct.description, ct.maturity_level, 
+			ct.recommended_for, ct.estimated_time,
+			COUNT(tc.control_library_id) as control_count
+		FROM control_templates ct
+		LEFT JOIN template_controls tc ON ct.id = tc.template_id
+		GROUP BY ct.id, ct.name, ct.description, ct.maturity_level, 
+				 ct.recommended_for, ct.estimated_time
+		ORDER BY 
+			CASE ct.maturity_level
+				WHEN 'getting_started' THEN 1
+				WHEN 'move_on' THEN 2
+				WHEN 'master' THEN 3
+				ELSE 4
+			END
+	`
+
+	rows, err := s.db.Query(ctx, query)
 	if err != nil {
-		log.Printf("Error reading control-templates.json: %v", err)
-		return nil, fmt.Errorf("could not read control templates file: %w", err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	var templates []ControlTemplate
+	for rows.Next() {
+		var t ControlTemplate
+		err := rows.Scan(&t.ID, &t.Name, &t.Description, &t.MaturityLevel,
+			&t.RecommendedFor, &t.EstimatedTime, &t.ControlCount)
+		if err != nil {
+			return nil, err
+		}
+		templates = append(templates, t)
 	}
 
-	var payload struct {
-		Templates []ControlTemplate `json:"templates"`
+	if templates == nil {
+		templates = make([]ControlTemplate, 0)
 	}
 
-	if err := json.Unmarshal(file, &payload); err != nil {
-		log.Printf("Error unmarshaling control-templates.json: %v", err)
-		return nil, fmt.Errorf("could not parse control templates file: %w", err)
+	return templates, nil
+}
+
+// GetTemplateControls retrieves all controls for a specific template
+func (s *Store) GetTemplateControls(ctx context.Context, templateID string) ([]TemplateControlDetail, error) {
+	query := `
+		SELECT 
+			tc.template_id, tc.control_library_id, tc.priority, tc.rationale,
+			cl.name, cl.family
+		FROM template_controls tc
+		JOIN control_library cl ON tc.control_library_id = cl.id
+		WHERE tc.template_id = $1
+		ORDER BY 
+			CASE tc.priority
+				WHEN 'critical' THEN 1
+				WHEN 'high' THEN 2
+				WHEN 'medium' THEN 3
+				WHEN 'low' THEN 4
+				ELSE 5
+			END,
+			cl.id
+	`
+
+	rows, err := s.db.Query(ctx, query, templateID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var controls []TemplateControlDetail
+	for rows.Next() {
+		var c TemplateControlDetail
+		err := rows.Scan(&c.TemplateID, &c.ControlLibraryID, &c.Priority,
+			&c.Rationale, &c.ControlName, &c.ControlFamily)
+		if err != nil {
+			return nil, err
+		}
+		controls = append(controls, c)
 	}
 
-	return payload.Templates, nil
+	if controls == nil {
+		controls = make([]TemplateControlDetail, 0)
+	}
+
+	return controls, nil
+}
+
+// ActivateTemplateControls activates all controls in a template for a specific user
+func (s *Store) ActivateTemplateControls(ctx context.Context, templateID, ownerID string) (int, error) {
+	// Get all controls in template
+	controls, err := s.GetTemplateControls(ctx, templateID)
+	if err != nil {
+		return 0, err
+	}
+
+	activated := 0
+	for _, control := range controls {
+		// Check if already activated
+		var exists bool
+		err := s.db.QueryRow(ctx,
+			"SELECT EXISTS(SELECT 1 FROM activated_controls WHERE control_library_id = $1)",
+			control.ControlLibraryID).Scan(&exists)
+		if err != nil {
+			log.Printf("Failed to check activation status for %s: %v", control.ControlLibraryID, err)
+			continue
+		}
+
+		if exists {
+			continue // Skip already activated controls
+		}
+
+		// Activate control with 90-day review interval
+		nextReview := time.Now().AddDate(0, 0, 90)
+		_, err = s.db.Exec(ctx, `
+			INSERT INTO activated_controls (control_library_id, owner_id, status, review_interval_days, next_review_due_date)
+			VALUES ($1, $2, 'active', 90, $3)
+		`, control.ControlLibraryID, ownerID, nextReview)
+
+		if err != nil {
+			log.Printf("Failed to activate control %s: %v", control.ControlLibraryID, err)
+			continue
+		}
+
+		activated++
+	}
+
+	return activated, nil
 }

@@ -59,6 +59,11 @@ func main() {
 		log.Fatalf("Failed to seed control library: %v", err)
 	}
 
+	// Seed control templates
+	if err := SeedControlTemplates(context.Background(), pool); err != nil {
+		log.Printf("Warning: Failed to seed control templates: %v", err)
+	}
+
 	// Initialize store
 	store := NewStore(pool)
 
@@ -197,8 +202,9 @@ func main() {
 	admin.HandleFunc("/standards/import", apiServer.HandleImportStandard).Methods("POST", "OPTIONS")
 
 	// Quick Start Template routes
-	protected.HandleFunc("/quick-start/templates", apiServer.HandleGetControlTemplates).Methods("GET", "OPTIONS")
-	admin.HandleFunc("/quick-start/templates/{id}/activate", apiServer.HandleActivateTemplate).Methods("POST", "OPTIONS")
+	protected.HandleFunc("/templates", apiServer.HandleGetControlTemplates).Methods("GET", "OPTIONS")
+	protected.HandleFunc("/templates/{id}", apiServer.HandleGetTemplateControls).Methods("GET", "OPTIONS")
+	admin.HandleFunc("/templates/{id}/activate", apiServer.HandleActivateTemplate).Methods("POST", "OPTIONS")
 
 	// Start server
 	port := os.Getenv("API_PORT")

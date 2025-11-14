@@ -43,7 +43,12 @@ export default function QuickStartPage() {
   useEffect(() => {
     async function fetchTemplates() {
       try {
-        const res = await fetch('/api/v1/quick-start/templates');
+        const token = localStorage.getItem('token');
+        const res = await fetch('http://localhost:8080/api/v1/templates', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
         if (!res.ok) {
           throw new Error('Failed to fetch templates');
         }
@@ -66,26 +71,33 @@ export default function QuickStartPage() {
   };
 
   const handleConfirmActivation = async () => {
-    if (!selectedTemplate || !ownerId) return;
+    if (!selectedTemplate) return;
 
     setIsActivating(true);
     setActivationResult(null);
 
     try {
-      const res = await fetch(`/api/v1/quick-start/templates/${selectedTemplate.id}/activate`, {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`http://localhost:8080/api/v1/templates/${selectedTemplate.id}/activate`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ owner_id: ownerId }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
       });
       const result = await res.json();
       if (!res.ok) {
         throw new Error(result.error || 'Activation failed');
       }
-      setActivationResult(result);
+      setActivationResult({
+        activated_count: result.controls_activated || 0,
+        total_in_template: selectedTemplate.control_count,
+        errors: result.errors || []
+      });
     } catch (err) {
       setActivationResult({
         activated_count: 0,
-        total_in_template: selectedTemplate.controls.length,
+        total_in_template: selectedTemplate.control_count,
         errors: [err instanceof Error ? err.message : 'An unknown error occurred'],
       });
     } finally {
@@ -142,9 +154,16 @@ export default function QuickStartPage() {
                 </div>
               </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex flex-col space-y-2">
               <Button className="w-full" onClick={() => handleActivateClick(template)}>
                 Activate Template
+              </Button>
+              <Button 
+                variant="outline" 
+                className="w-full" 
+                onClick={() => window.location.href = `/quick-start/${template.id}`}
+              >
+                View Controls
               </Button>
             </CardFooter>
           </Card>
@@ -162,19 +181,13 @@ export default function QuickStartPage() {
           
           {!activationResult ? (
             <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="owner">Assign Controls To</Label>
-                <Select onValueChange={setOwnerId} value={ownerId}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a user..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {/* In a real app, this would be a dynamic list of users */}
-                    <SelectItem value="a4c1c608-4101-4498-a043-629a8a8a8a8a">Admin User</SelectItem>
-                    <SelectItem value="b5d2d719-5202-5599-b154-730b9b9b9b9b">Compliance Manager</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              <Alert>
+                <Info className="h-4 w-4" />
+                <AlertTitle>Ready to Activate</AlertTitle>
+                <AlertDescription>
+                  Controls will be activated and assigned to you as the owner. You can reassign them later.
+                </AlertDescription>
+              </Alert>
             </div>
           ) : (
             <div className="py-4">
@@ -204,12 +217,17 @@ export default function QuickStartPage() {
 
           <DialogFooter>
             {!activationResult ? (
-              <Button onClick={handleConfirmActivation} disabled={!ownerId || isActivating}>
-                {isActivating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Confirm Activation
-              </Button>
+              <>
+                <Button variant="outline" onClick={() => setIsDialogOpen(false)} disabled={isActivating}>
+                  Cancel
+                </Button>
+                <Button onClick={handleConfirmActivation} disabled={isActivating}>
+                  {isActivating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Confirm Activation
+                </Button>
+              </>
             ) : (
-              <Button onClick={() => setIsDialogOpen(false)}>Close</Button>
+              <Button onClick={() => { setIsDialogOpen(false); window.location.href = '/controls'; }}>View Controls</Button>
             )}
           </DialogFooter>
         </DialogContent>
