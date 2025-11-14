@@ -53,7 +53,11 @@ export default function QuickStartPage() {
           throw new Error('Failed to fetch templates');
         }
         const data = await res.json();
-        setTemplates(data.templates || []);
+        // Sort by control count (ascending) - Foundation → Growth → Enterprise
+        const sorted = (data.templates || data || []).sort((a: ControlTemplate, b: ControlTemplate) => {
+          return (a.control_count || 0) - (b.control_count || 0);
+        });
+        setTemplates(sorted);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An unknown error occurred');
       } finally {

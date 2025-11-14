@@ -120,7 +120,13 @@ export default function OnboardingPage() {
       });
       if (response.ok) {
         const data = await response.json();
-        setTemplates(data);
+        // Sort by control count (ascending) - Foundation → Growth → Enterprise
+        const sorted = data.sort((a: ControlTemplate, b: ControlTemplate) => {
+          const countA = a.control_count || 0;
+          const countB = b.control_count || 0;
+          return countA - countB;
+        });
+        setTemplates(sorted);
       }
     } catch (error) {
       console.error("Failed to fetch templates:", error);
